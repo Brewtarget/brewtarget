@@ -119,7 +119,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
-project(brewtarget VERSION 5.3.2 LANGUAGES CXX)
+project(brewtarget VERSION 5.4.0 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION} with CMake ${CMAKE_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 
@@ -1168,6 +1168,7 @@ add_test(NAME RecipeCalcTests.testPostBoilRampTime                  COMMAND ./${
 add_test(NAME RecipeCalcTests.testIbuFormulas                       COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testIbuFormulas                      )
 add_test(NAME RecipeCalcTests.testInventory                         COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testInventory                        )
 add_test(NAME RecipeCalcTests.testMashWaterVolumes                  COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testMashWaterVolumes                 )
+add_test(NAME RecipeCalcTests.testBrewLogVolumes                    COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testBrewLogVolumes                   )
 add_test(NAME RecipeCalcTests.testEvaporationRate                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testEvaporationRate                  )
 add_test(NAME RecipeCalcTests.testEquipmentDefaultVolumes           COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testEquipmentDefaultVolumes          )
 add_test(NAME RecipeCalcTests.testMashTunHeatCapacity               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testMashTunHeatCapacity              )

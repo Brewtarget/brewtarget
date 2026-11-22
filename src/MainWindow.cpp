@@ -268,10 +268,10 @@ public:
     *        Anything creating new tables models, filter proxies and configuring the two should go in here
     */
    void setupTables() {
-      this->m_fermentableAdditionsVeriTable.setup(m_self. fermentableAdditionTable, this->m_fermentableEditor.get());
-      this->        m_hopAdditionsVeriTable.setup(m_self.         hopAdditionTable, this->        m_hopEditor.get());
-      this->       m_miscAdditionsVeriTable.setup(m_self.        miscAdditionTable, this->       m_miscEditor.get());
-      this->      m_yeastAdditionsVeriTable.setup(m_self.       yeastAdditionTable, this->      m_yeastEditor.get());
+      this->m_fermentableAdditionsVeriTable.setup(m_self. fermentableAdditionTable, this->m_fermentableEditor.get(), m_self.pushButton_removeFerm , m_self.pushButton_editFerm );
+      this->        m_hopAdditionsVeriTable.setup(m_self.         hopAdditionTable, this->        m_hopEditor.get(), m_self.pushButton_removeHop  , m_self.pushButton_editHop  );
+      this->       m_miscAdditionsVeriTable.setup(m_self.        miscAdditionTable, this->       m_miscEditor.get(), m_self.pushButton_removeMisc , m_self.pushButton_editMisc );
+      this->      m_yeastAdditionsVeriTable.setup(m_self.       yeastAdditionTable, this->      m_yeastEditor.get(), m_self.pushButton_removeYeast, m_self.pushButton_editYeast);
 
       // Make the fermentable table show grain percentages in row headers.
       this->m_fermentableAdditionsVeriTable.m_tableModel->setDisplayPercentages(true);
@@ -844,6 +844,52 @@ public:
    }
 
    /**
+    * \brief If the water in the recipe's mash will not give (roughly) the target pre-boil volume, eg because the recipe
+    *        has been scaled or its grain bill or equipment changed since the mash water was worked out, tell the user
+    *        and ask whether to go ahead anyway.  (The brew log assumes the recipe's volumes are what the brewer is
+    *        aiming for -- see BrewLog::populateNote.)
+    *
+    *        We use the same 5% tolerance as the colouring of the calculated boil volume on the recipe tab.
+    *
+    * \return \c true if we should go ahead and create the brew log, \c false otherwise
+    */
+   bool confirmMashWaterForBrewing(Recipe const & recipe) {
+      std::optional<double> const shortfall_l = recipe.mashWaterShortfall_l();
+      if (!shortfall_l) {
+         return true;
+      }
+      double const preBoil_l = recipe.boil()->preBoilSize_l().value_or(0.0);
+      if (std::abs(*shortfall_l) <= 0.05 * preBoil_l) {
+         return true;
+      }
+
+      auto const displayLiters = [](double const liters) {
+         return Measurement::displayAmount(Measurement::Amount{liters, Measurement::Units::liters});
+      };
+      QString const message = (*shortfall_l > 0.0 ?
+         MainWindow::tr("The mash in this recipe has %1 of water, but needs %2 to give the target pre-boil volume of "
+                        "%3 (allowing for grain absorption and losses in the mash tun).  So you would get less wort "
+                        "than the recipe expects.") :
+         MainWindow::tr("The mash in this recipe has %1 of water, but only needs %2 to give the target pre-boil "
+                        "volume of %3 (allowing for grain absorption and losses in the mash tun).  So you would get "
+                        "more wort than the recipe expects.")
+      ).arg(displayLiters(recipe.mash()->totalMashWater_l()),
+            displayLiters(recipe.targetTotalMashVol_l()),
+            displayLiters(preBoil_l));
+
+      QMessageBox::StandardButton const answer = QMessageBox::question(
+         &this->m_self,
+         MainWindow::tr("Mash water does not match recipe"),
+         message + "\n\n" +
+            MainWindow::tr("You can fix this with Auto-Adjust in the mash editor.  Do you want to brew this recipe "
+                           "anyway?"),
+         QMessageBox::Yes | QMessageBox::No,
+         QMessageBox::No
+      );
+      return answer == QMessageBox::Yes;
+   }
+
+   /**
     * \brief Creates a new BrewLog.  Called from MainWindow::brewItHelper().
     */
    BrewLog * createBrewLog() {
@@ -862,6 +908,10 @@ public:
 
       if (!recipe) {
          // I think this is only possible if there are no Recipes at all, but we might as well cover al the bases.
+         return nullptr;
+      }
+
+      if (!this->confirmMashWaterForBrewing(*recipe)) {
          return nullptr;
       }
 
@@ -1378,6 +1428,10 @@ void MainWindow::restoreSavedState() {
    PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_hop_headerState        , *this->treeView_hop        ->header());
    PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_misc_headerState       , *this->treeView_misc       ->header());
    PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_yeast_headerState      , *this->treeView_yeast      ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_mash_headerState       , *this->treeView_mash       ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_boil_headerState       , *this->treeView_boil       ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_fermentation_headerState, *this->treeView_fermentation->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_water_headerState      , *this->treeView_water      ->header());
 
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_boilCatalog        , *this->pimpl->m_boilCatalog        );
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_equipmentCatalog   , *this->pimpl->m_equipmentCatalog   );
@@ -1404,6 +1458,11 @@ void MainWindow::restoreSavedState() {
    this->        mashStepsWidget->restoreUiState(PersistentSettings::Names::        mashStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->        boilStepsWidget->restoreUiState(PersistentSettings::Names::        boilStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->fermentationStepsWidget->restoreUiState(PersistentSettings::Names::fermentationStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
+
+   this->pimpl->m_fermentableAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::fermentableAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->        m_hopAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::        hopAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->       m_miscAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::       miscAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->      m_yeastAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::      yeastAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
 
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_optionsDialog, *this->pimpl->m_optionDialog);
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_stockWindow  , *this->pimpl->m_stockWindow);
@@ -1619,6 +1678,7 @@ void MainWindow::setRecipe(Recipe * recipe) {
    this->pimpl->m_recipeFormatter->setRecipe(recipe);
    this->pimpl->m_ogCorrectionTool->setRecipe(recipe);
    this->recipeExtrasWidget->setRecipe(recipe);
+   this->recipeNotesWidget->setRecipe(recipe);
    this->recipeWaterWidget->setRecipe(recipe);
    this->equipmentComboBox->setItem(recipe->equipment());
    if (recipe->equipment()) {
@@ -1724,26 +1784,16 @@ void MainWindow::lockRecipe(int const state) {
 
    tabWidget_ingredients->setAcceptDrops( enabled );
 
-   // Onto the tables. Four lines each to disable edits, drag/drop and deletes
-   fermentableAdditionTable->setEnabled(enabled);
-   pushButton_addFerm->setEnabled(enabled);
-   pushButton_removeFerm->setEnabled(enabled);
-   pushButton_editFerm->setEnabled(enabled);
-
-   hopAdditionTable->setEnabled(enabled);
-   pushButton_addHop->setEnabled(enabled);
-   pushButton_removeHop->setEnabled(enabled);
-   pushButton_editHop->setEnabled(enabled);
-
-   miscAdditionTable->setEnabled(enabled);
-   pushButton_addMisc->setEnabled(enabled);
-   pushButton_removeMisc->setEnabled(enabled);
-   pushButton_editMisc->setEnabled(enabled);
-
-   yeastAdditionTable->setEnabled(enabled);
+   // Onto the tables.  The VeriTable takes care of the table itself and of the Remove and Edit buttons (which also
+   // depend on what is selected).
+   this->pimpl->m_fermentableAdditionsVeriTable.setEditable(enabled);
+   this->pimpl->        m_hopAdditionsVeriTable.setEditable(enabled);
+   this->pimpl->       m_miscAdditionsVeriTable.setEditable(enabled);
+   this->pimpl->      m_yeastAdditionsVeriTable.setEditable(enabled);
+   pushButton_addFerm ->setEnabled(enabled);
+   pushButton_addHop  ->setEnabled(enabled);
+   pushButton_addMisc ->setEnabled(enabled);
    pushButton_addYeast->setEnabled(enabled);
-   pushButton_removeYeast->setEnabled(enabled);
-   pushButton_editYeast->setEnabled(enabled);
 
    this->pimpl-> m_fermentableCatalog->setEnableAddToRecipe(enabled);
    this->pimpl->  m_hopCatalog->setEnableAddToRecipe(enabled);
@@ -1770,6 +1820,17 @@ void MainWindow::recipeChanged(QMetaProperty prop, [[maybe_unused]] QVariant val
       auto style = this->pimpl->m_recipeObs->style();
       this->pimpl->m_styleEditor->setEditItem(style);
    }
+
+   //
+   // When the recipe starts using a different equipment, style, mash etc, the change notification is for the ID
+   // property (see Recipe::impl::set).  Most of the time, the change came from the drop-down here, so it's already
+   // showing the right thing, but not always -- eg if the user clicked "Make a copy for this recipe" in the editor.
+   //
+   if      (propName == PropertyNames::Recipe::equipmentId   ) { this->updateEquipmentInUi   (); }
+   else if (propName == PropertyNames::Recipe::styleId       ) { this->updateStyleInUi       (); }
+   else if (propName == PropertyNames::Recipe::mashId        ) { this->updateMashInUi        (); }
+   else if (propName == PropertyNames::Recipe::boilId        ) { this->updateBoilInUi        (); }
+   else if (propName == PropertyNames::Recipe::fermentationId) { this->updateFermentationInUi(); }
 
    this->showChanges(&prop);
    return;
@@ -2626,6 +2687,10 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    PersistentSettings::saveUiState(PersistentSettings::Names::treeView_hop_headerState        , *this->treeView_hop        ->header());
    PersistentSettings::saveUiState(PersistentSettings::Names::treeView_misc_headerState       , *this->treeView_misc       ->header());
    PersistentSettings::saveUiState(PersistentSettings::Names::treeView_yeast_headerState      , *this->treeView_yeast      ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_mash_headerState       , *this->treeView_mash       ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_boil_headerState       , *this->treeView_boil       ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_fermentation_headerState, *this->treeView_fermentation->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_water_headerState      , *this->treeView_water      ->header());
 
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_boilCatalog           , *this->pimpl->m_boilCatalog           );
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_equipmentCatalog      , *this->pimpl->m_equipmentCatalog      );
@@ -2652,6 +2717,11 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    this->        mashStepsWidget->saveUiState(PersistentSettings::Names::        mashStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->        boilStepsWidget->saveUiState(PersistentSettings::Names::        boilStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->fermentationStepsWidget->saveUiState(PersistentSettings::Names::fermentationStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
+
+   this->pimpl->m_fermentableAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::fermentableAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->        m_hopAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::        hopAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->       m_miscAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::       miscAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->      m_yeastAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::      yeastAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
 
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_optionsDialog, *this->pimpl->m_optionDialog);
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_stockWindow  , *this->pimpl->m_stockWindow);

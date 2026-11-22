@@ -884,6 +884,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2679,6 +2686,17 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4076,7 +4094,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">转换</translation>
+        <translation type="obsolete">转换</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4605,6 +4623,18 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">以下原料在配方和库存中的计量方式不同，因此用量无法（全部）从库存中扣除。</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">将 %1 添加到配方</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5631,6 +5661,12 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
             <numerusform>%1 被 %n 个配方使用：%2。</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -5674,19 +5710,19 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">无法读取输入</translation>
+        <translation type="obsolete">无法读取输入</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">实测比重需要一个有效值</translation>
+        <translation type="obsolete">实测比重需要一个有效值</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">未选择配方</translation>
+        <translation type="obsolete">未选择配方</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">配方没有设备</translation>
+        <translation type="obsolete">配方没有设备</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -5694,7 +5730,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">配方没有煮沸</translation>
+        <translation type="obsolete">配方没有煮沸</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -5702,7 +5738,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">麦汁体积需要一个有效值</translation>
+        <translation type="obsolete">麦汁体积需要一个有效值</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8267,11 +8303,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">编辑品尝笔记</translation>
+        <translation type="obsolete">编辑品尝笔记</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">编辑备注</translation>
+        <translation type="obsolete">编辑备注</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -8570,6 +8606,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">编辑备注</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">编辑品尝笔记</translation>
+    </message>
+</context>
+<context>
     <name>RecipeWaterWidget</name>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
@@ -8658,7 +8705,7 @@ The final volume in the primary is %1.</source>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>OG不匹配</translation>
+        <translation type="vanished">OG不匹配</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -9401,7 +9448,7 @@ The final volume in the primary is %1.</source>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">将 %1 添加到配方</translation>
+        <translation type="obsolete">将 %1 添加到配方</translation>
     </message>
 </context>
 <context>
@@ -9435,7 +9482,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">转换</translation>
+        <translation type="obsolete">转换</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -11426,15 +11473,15 @@ Tabs</source>
     </message>
     <message>
         <source>Percentage of malt that is &quot;mealy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">“粉状”麦芽的百分比</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;plump&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">“饱满”籽粒的百分比</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;tine&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">“瘦小”籽粒的百分比</translation>
     </message>
     <message>
         <source>Friability</source>
@@ -11446,7 +11493,7 @@ Tabs</source>
     </message>
     <message>
         <source>Viscosity of this malt in a &quot;congress mash&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">该麦芽在“协定糖化”中的黏度</translation>
     </message>
     <message>
         <source>Fermentability</source>
@@ -11458,23 +11505,23 @@ Tabs</source>
     </message>
     <message>
         <source>Beta-glucans</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-葡聚糖</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">干基细粉浸出率</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">干基粗粉浸出率</translation>
     </message>
     <message>
         <source>Total alpha-amylase in malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">发芽谷物中的 α-淀粉酶总量</translation>
     </message>
     <message>
         <source>Total alpha-amylase in the malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">发芽谷物中的 α-淀粉酶总量</translation>
     </message>
     <message>
         <source>Free Amino Nitrogen (FAN)</source>
@@ -11510,7 +11557,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentable Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">可发酵原料类型</translation>
     </message>
     <message>
         <source>Total Inventory</source>
@@ -11518,38 +11565,38 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">库存总量</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加采购</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">为此可发酵原料新建库存采购记录</translation>
     </message>
     <message>
         <source>% Lactic Acid (by weight)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">乳酸含量 %（按重量）</translation>
     </message>
     <message>
         <source>For aciduated malts (aka acid malts)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">用于酸化麦芽（即酸麦芽）</translation>
     </message>
     <message>
         <source>% Fermentable by yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">可被酵母发酵的 %</translation>
     </message>
     <message>
         <source>Percentage of this ingredient&apos;s extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">该原料浸出物中可被酿酒酵母发酵的百分比。留空表示 100%。乳糖设为 0，麦芽糊精约为 10。麦芽通常无需设置。</translation>
     </message>
 </context>
 <context>
     <name>fermentationEditor</name>
     <message>
         <source>Fermentation Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">发酵编辑器</translation>
     </message>
     <message>
         <source>Required</source>
@@ -11577,7 +11624,7 @@ Tabs</source>
     </message>
     <message>
         <source>New fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新建发酵</translation>
     </message>
     <message>
         <source>New</source>
@@ -11601,22 +11648,22 @@ Tabs</source>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">泡盖（发酵中啤酒表面的泡沫）的处理方式，泡盖会带走部分苦味。仅用于 SMPH IBU 公式。</translation>
     </message>
     <message>
         <source>Krausen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">泡盖</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  If the krausen is skimmed, choose one of the &quot;blown off&quot; options, according to how much is removed.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">泡盖（发酵中啤酒表面的泡沫）的处理方式，泡盖会带走部分苦味。如果撇除泡盖，请根据撇除量选择某个“溢出”选项。仅用于 SMPH IBU 公式。</translation>
     </message>
 </context>
 <context>
     <name>fermentationStepEditor</name>
     <message>
         <source>Fermentation Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">发酵步骤编辑器</translation>
     </message>
     <message>
         <source>Name</source>
@@ -11676,7 +11723,7 @@ Tabs</source>
     </message>
     <message>
         <source>Optional description of this fermentation step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">此发酵步骤的描述（可选）</translation>
     </message>
     <message>
         <source>Description</source>
@@ -11704,11 +11751,11 @@ Tabs</source>
     </message>
     <message>
         <source>Free rise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">自由升温</translation>
     </message>
     <message>
         <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">自由升温表示在该发酵步骤中允许发酵放热不受限制地提高温度</translation>
     </message>
     <message>
         <source>Start Gravity</source>
@@ -11883,19 +11930,19 @@ Tabs</source>
     </message>
     <message>
         <source>Cohumulone %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">合葎草酮 %</translation>
     </message>
     <message>
         <source>Myrcene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">月桂烯 %</translation>
     </message>
     <message>
         <source>Humulene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">葎草烯 %</translation>
     </message>
     <message>
         <source>Caryophyllene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">石竹烯 %</translation>
     </message>
     <message>
         <source>Substitutes</source>
@@ -11907,7 +11954,7 @@ Tabs</source>
     </message>
     <message>
         <source>New hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新建啤酒花</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -11919,11 +11966,11 @@ Tabs</source>
     </message>
     <message>
         <source>Hop Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">啤酒花类型</translation>
     </message>
     <message>
         <source>Hop Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">啤酒花形态</translation>
     </message>
     <message>
         <source>Year</source>
@@ -11939,7 +11986,7 @@ Tabs</source>
     </message>
     <message>
         <source>Linalool %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">芳樟醇 %</translation>
     </message>
     <message>
         <source>Linalool</source>
@@ -11947,7 +11994,7 @@ Tabs</source>
     </message>
     <message>
         <source>Limonene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">柠檬烯 %</translation>
     </message>
     <message>
         <source>Limonene</source>
@@ -11955,7 +12002,7 @@ Tabs</source>
     </message>
     <message>
         <source>Nerol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">橙花醇 %</translation>
     </message>
     <message>
         <source>Nerol</source>
@@ -11963,7 +12010,7 @@ Tabs</source>
     </message>
     <message>
         <source>Farnesene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">金合欢烯 %</translation>
     </message>
     <message>
         <source>Farnesene</source>
@@ -11971,7 +12018,7 @@ Tabs</source>
     </message>
     <message>
         <source>Polyphenols %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">多酚 %</translation>
     </message>
     <message>
         <source>Polyphenols</source>
@@ -11979,7 +12026,7 @@ Tabs</source>
     </message>
     <message>
         <source>Geraniol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">香叶醇 %</translation>
     </message>
     <message>
         <source>Geraniol</source>
@@ -11987,7 +12034,7 @@ Tabs</source>
     </message>
     <message>
         <source>Xanthohumol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">黄腐酚 %</translation>
     </message>
     <message>
         <source>Xanthohumol</source>
@@ -11995,15 +12042,15 @@ Tabs</source>
     </message>
     <message>
         <source>β-pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-蒎烯 %</translation>
     </message>
     <message>
         <source>β-pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-蒎烯</translation>
     </message>
     <message>
         <source>Total Oil ml/100g</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">总油含量 ml/100g</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -12019,7 +12066,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">库存总量</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -12051,11 +12098,11 @@ Tabs</source>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加采购</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">为此啤酒花新建库存采购记录</translation>
     </message>
     <message>
         <source>Alpha Acid</source>
@@ -12063,47 +12110,47 @@ Tabs</source>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">实际</translation>
     </message>
     <message>
         <source>Typical Range</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">典型范围</translation>
     </message>
     <message>
         <source>Min alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α 酸最小质量百分比</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>Max alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α 酸最大质量百分比</translation>
     </message>
     <message>
         <source>Beta Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β 酸</translation>
     </message>
     <message>
         <source>Min beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β 酸最小质量百分比</translation>
     </message>
     <message>
         <source>Max beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β 酸最大质量百分比</translation>
     </message>
     <message>
         <source>6 Month Alpha Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">6 个月 α 酸损失</translation>
     </message>
     <message>
         <source>α-Pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-蒎烯 %</translation>
     </message>
     <message>
         <source>α-Pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-蒎烯</translation>
     </message>
 </context>
 <context>
@@ -12850,7 +12897,7 @@ Tabs</source>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">导出为 BBCode(&amp;B)</translation>
     </message>
     <message>
         <source>Water</source>
@@ -12858,19 +12905,19 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">名称(&amp;N)</translation>
     </message>
     <message>
         <source>E&amp;quipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">设备(&amp;Q)</translation>
     </message>
     <message>
         <source>&amp;Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">风格(&amp;S)</translation>
     </message>
     <message>
         <source>Recipe Locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">配方已锁定</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -12882,59 +12929,59 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Export to File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">导出到文件(&amp;E)</translation>
     </message>
     <message>
         <source>M&amp;iscs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">其他原料(&amp;I)</translation>
     </message>
     <message>
         <source>&amp;Print and preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">打印和预览(&amp;P)</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+P</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">退出(&amp;X)</translation>
     </message>
     <message>
         <source>&amp;Import from File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从文件导入(&amp;I)</translation>
     </message>
     <message>
         <source>Optio&amp;ns</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">选项(&amp;N)</translation>
     </message>
     <message>
         <source>Ti&amp;mers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">计时器(&amp;M)</translation>
     </message>
     <message>
         <source>Strike &amp;Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">投料水计算器(&amp;W)</translation>
     </message>
     <message>
         <source>&amp;Hydrometer Temp Adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">比重计温度校正(&amp;H)</translation>
     </message>
     <message>
         <source>Alcohol Percentage Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酒精度工具</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">撤销</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">重做</translation>
     </message>
     <message>
         <source>Ancestors</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">祖先</translation>
     </message>
     <message>
         <source>Brew It!</source>
@@ -12950,7 +12997,7 @@ Tabs</source>
     </message>
     <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">煮沸</translation>
     </message>
     <message>
         <source>Fermentation</source>
@@ -12958,15 +13005,15 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">发酵</translation>
     </message>
     <message>
         <source>See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">参见下方“煮沸”选项卡</translation>
     </message>
     <message>
         <source>&amp;Copy Selected Item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">复制所选项目(&amp;C)</translation>
     </message>
     <message>
         <source>Mash Profiles</source>
@@ -12982,15 +13029,15 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Mash Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化方案(&amp;M)</translation>
     </message>
     <message>
         <source>&amp;Boil Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">煮沸方案(&amp;B)</translation>
     </message>
     <message>
         <source>&amp;Fermentation Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">发酵方案(&amp;F)</translation>
     </message>
     <message>
         <source>Mash Designer</source>
@@ -13006,47 +13053,47 @@ Tabs</source>
     </message>
     <message>
         <source>Step-by-step instructions for brew day</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酿造日分步操作说明</translation>
     </message>
     <message>
         <source>W&amp;aters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">水(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Unit Conversion Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">单位换算工具(&amp;U)</translation>
     </message>
     <message>
         <source>&amp;Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">比重校正工具(&amp;G)</translation>
     </message>
     <message>
         <source>Edit this style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑此风格</translation>
     </message>
     <message>
         <source>Edit this equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑此设备</translation>
     </message>
     <message>
         <source>Edit this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑此糖化</translation>
     </message>
     <message>
         <source>Edit this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑此煮沸</translation>
     </message>
     <message>
         <source>Edit this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑此发酵</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑(&amp;E)</translation>
     </message>
     <message>
         <source>Efficienc&amp;y</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">效率(&amp;Y)</translation>
     </message>
     <message>
         <source>Target</source>
@@ -13054,11 +13101,11 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">计算值</translation>
     </message>
     <message>
         <source>Calculated final volume into the primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">计算得出的进入主发酵罐的最终体积</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
@@ -13066,26 +13113,34 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated preboil volume - See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">计算得出的煮沸前体积 - 参见下方“煮沸”选项卡</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">此糖化的信息及存在的问题</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">此煮沸的信息及存在的问题</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">此发酵的信息及存在的问题</translation>
     </message>
     <message>
         <source>Use mash profile in FG calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">FG 计算中使用糖化方案</translation>
     </message>
     <message>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
+        <translation type="unfinished">估算最终比重时，考虑糖化温度和时间对麦汁可发酵性的影响。如果你已按自己的糖化情况设置了酵母发酵度，请关闭此项。</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13236,7 +13291,7 @@ Tabs</source>
     </message>
     <message>
         <source>Tun specific heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化锅比热容</translation>
     </message>
     <message>
         <source>New</source>
@@ -13260,7 +13315,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total Mash Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化总用水量</translation>
     </message>
     <message>
         <source>Total Time</source>
@@ -13268,31 +13323,31 @@ Tabs</source>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">旧版设置</translation>
     </message>
     <message>
         <source>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">这些是旧的设置，目前仍然有效，但由于现在已有其他方式实现相同效果，可能会在软件的未来版本中移除。</translation>
     </message>
     <message>
         <source>It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最好在洗糟步骤本身中设置此项。</translation>
     </message>
     <message>
         <source>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe&apos;s equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最好在设备（“糖化锅”选项卡）中设置此项。仅当配方的设备包含未设置重量和比热容的糖化锅时才使用此值。如果设备没有单独的糖化锅（即在煮沸锅中糖化），则忽略此值，因为此时投料水与糖化在同一容器中加热。</translation>
     </message>
     <message>
         <source>Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">洗糟</translation>
     </message>
     <message>
         <source>Batches</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">批次数</translation>
     </message>
     <message>
         <source>Number of batch sparges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">批次洗糟次数</translation>
     </message>
     <message>
         <source>Calculate</source>
@@ -13300,47 +13355,47 @@ Tabs</source>
     </message>
     <message>
         <source>Initial temperature of the mash tun.  Used when calculating the strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化锅的初始温度。用于计算投料水温度，以考虑投料水对糖化锅的加热。如果留空，则假定糖化锅与谷物温度相同。</translation>
     </message>
     <message>
         <source>Adjust water amounts and temperatures</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">调整水量和水温</translation>
     </message>
     <message>
         <source>Change the amounts and temperatures of the strike water and other infusions, the amounts of any decoctions, and the amounts and temperatures of sparge water, to suit this recipe&apos;s grain bill and equipment.  Values you have pinned in a step are not changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">根据此配方的谷物配比和设备，更改投料水及其他注水的水量和温度、各次煮出的量，以及洗糟水的水量和温度。步骤中已固定的值不会更改。</translation>
     </message>
     <message>
         <source>Used as the target grain bed temperature for new sparge steps when adjusting the mash.  It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">调整糖化时，用作新洗糟步骤的目标麦床温度。最好在洗糟步骤本身中设置此项。</translation>
     </message>
     <message>
         <source>How the grain will be rinsed after the mash.  Changing this and clicking Auto-Adjust replaces any existing sparge steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化后冲洗谷物的方式。更改此项并点击“自动调整”将替换所有现有的洗糟步骤。</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">自动调整</translation>
     </message>
     <message>
         <source>Available when mash is used by exactly one recipe.  Keep mash in sync with recipe by doing an auto-adjust whenever changes happen, eg to the recipe&apos;s grain bill or equipment.  (Changing the steps themselves does not trigger an adjustment, so pin any values you want to keep.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">仅当糖化只被一个配方使用时可用。每当发生变化（例如配方的谷物配比或设备改变）时自动调整，使糖化与配方保持同步。（更改步骤本身不会触发调整，因此请固定你想保留的值。）</translation>
     </message>
     <message>
         <source>Keep mash in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化与配方更改保持同步</translation>
     </message>
     <message>
         <source>How full the mash tun gets, and how much wort you can expect to collect from the mash, for the recipe using this mash.  Shown when the mash is used by exactly one recipe.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">对于使用此糖化的配方，糖化锅的装满程度，以及预计可从糖化中收集的麦汁量。仅当糖化只被一个配方使用时显示。</translation>
     </message>
     <message>
         <source>Target mash thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">目标料水比</translation>
     </message>
     <message>
         <source>Volume of strike water per mass of grain (not counting any water that sits below the grain bed) to aim for when adjusting the mash.  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash, nor if the amount of strike water is pinned.  The Water:Grain column in the table of steps shows what the steps actually give.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">调整糖化时的目标投料水体积与谷物质量之比（不计谷物床下方的水）。通常约为 2.5 至 3.2 L/kg（1.2 至 1.5 qt/lb）。不洗糟时（此时所有水都用于糖化）或投料水量已固定时不使用此值。步骤表中的“水:谷物”列显示各步骤的实际值。</translation>
     </message>
 </context>
 <context>
@@ -13435,11 +13490,11 @@ Tabs</source>
     </message>
     <message>
         <source>Thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">料水比</translation>
     </message>
     <message>
         <source>Mash thickness, aka liquor-to-grist ratio, is the volume of strike water divided by the mass of grist.  In metric units (liters and kilograms), its practical range is 2 to 4 and most often is around 2.5 to 3.2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化料水比（又称液料比）是投料水体积除以麦芽粉质量。以公制单位（升和千克）计，实际范围为 2 至 4，最常见约为 2.5 至 3.2。</translation>
     </message>
     <message>
         <source>Start Acidity</source>
@@ -13451,7 +13506,7 @@ Tabs</source>
     </message>
     <message>
         <source>Optional description of this mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">此糖化步骤的描述（可选）</translation>
     </message>
     <message>
         <source>Description</source>
@@ -13479,19 +13534,19 @@ Tabs</source>
     </message>
     <message>
         <source>Step Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">步骤编号</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this amount (but will use it to work out other values, eg the water temperature).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">勾选后，（在糖化编辑器中）调整糖化时不会更改此水量（但会用它计算其他值，例如水温）。</translation>
     </message>
     <message>
         <source>Pinned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">已固定</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this temperature (but will use it to work out other values, eg the amount of water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">勾选后，（在糖化编辑器中）调整糖化时不会更改此温度（但会用它计算其他值，例如水量）。</translation>
     </message>
 </context>
 <context>
@@ -13605,7 +13660,7 @@ Tabs</source>
     </message>
     <message>
         <source>Use for</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">用途</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -13657,23 +13712,23 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">库存总量</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加采购</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">为此原料新建库存采购记录</translation>
     </message>
     <message>
         <source>Water Agent Properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">水处理剂属性</translation>
     </message>
     <message>
         <source>Percent Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酸含量百分比</translation>
     </message>
 </context>
 <context>
@@ -13846,23 +13901,23 @@ Tabs</source>
     <name>ogCorrectionTool</name>
     <message>
         <source>Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">比重校正工具</translation>
     </message>
     <message>
         <source>Target OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">目标 OG</translation>
     </message>
     <message>
         <source>Measured Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">实测比重</translation>
     </message>
     <message>
         <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">柏拉图度值将按原样使用。SG 值可根据实际温度与校准温度进行校正。</translation>
     </message>
     <message>
         <source>@ temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">@ 温度</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
@@ -13870,11 +13925,11 @@ Tabs</source>
     </message>
     <message>
         <source>Calibrated at</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">校准温度</translation>
     </message>
     <message>
         <source>Temperature to which the hydrometer is calibrated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">比重计的校准温度</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -13930,35 +13985,35 @@ Tabs</source>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">计算Calculate</translation>
+        <translation type="obsolete">计算Calculate</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">如果实际效率高于或低于预期，此工具可帮助你在煮沸中校正 OG。</translation>
     </message>
     <message>
         <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">注意：此工具假定煮沸后不再加水。</translation>
     </message>
     <message>
         <source>From current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">来自当前配方</translation>
     </message>
     <message>
         <source>Actual SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">实际 SG</translation>
     </message>
     <message>
         <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">由柏拉图度/Brix 换算，或按比重计校准温度校正</translation>
     </message>
     <message>
         <source>Predicted OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">预测 OG</translation>
     </message>
     <message>
         <source>OG if you take no action, ie boil as originally planned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">不采取任何措施（即按原计划煮沸）时的 OG</translation>
     </message>
     <message>
         <source>Remedy: Add Water To Boil</source>
@@ -13974,19 +14029,19 @@ Tabs</source>
     </message>
     <message>
         <source>-- OR --</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-- 或 --</translation>
     </message>
     <message>
         <source>Remedy: Add Sugar or DME</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">补救：添加糖或 DME</translation>
     </message>
     <message>
         <source>Amount To Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加量</translation>
     </message>
     <message>
         <source>Amount of Sugar or DME to add to the boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">需添加到煮沸中的糖或 DME 的量</translation>
     </message>
 </context>
 <context>
@@ -14145,43 +14200,43 @@ Tabs</source>
     </message>
     <message>
         <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化投花 (%)</translation>
     </message>
     <message>
         <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">头道麦汁投花 (%)</translation>
     </message>
     <message>
         <source>Databases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数据库</translation>
     </message>
     <message>
         <source>Engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">引擎</translation>
     </message>
     <message>
         <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RDBMS 引擎</translation>
     </message>
     <message>
         <source>Test Connection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">测试连接</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">配置</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">恢复默认值</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">主机名</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">端口</translation>
     </message>
     <message>
         <source>Schema</source>
@@ -14201,95 +14256,95 @@ Tabs</source>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">保存密码</translation>
     </message>
     <message>
         <source>Data Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数据目录</translation>
     </message>
     <message>
         <source>Backup Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">备份目录</translation>
     </message>
     <message>
         <source>Number of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">备份数量</translation>
     </message>
     <message>
         <source>Frequency of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">备份频率</translation>
     </message>
     <message>
         <source>PostgresSQL&apos;s host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PostgreSQL 的主机名或 IP 地址</translation>
     </message>
     <message>
         <source>Port the PostgreSQL is listening on</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PostgreSQL 监听的端口</translation>
     </message>
     <message>
         <source>The schema containing the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">包含数据库的模式</translation>
     </message>
     <message>
         <source>User with create/delete table access</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">具有创建/删除表权限的用户</translation>
     </message>
     <message>
         <source>Password for the user</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">该用户的密码</translation>
     </message>
     <message>
         <source>The name of the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数据库名称</translation>
     </message>
     <message>
         <source>Where your database file is</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数据库文件所在位置</translation>
     </message>
     <message>
         <source>Where to save your backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">备份保存位置</translation>
     </message>
     <message>
         <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">要保留的备份数量：-1 表示从不删除，0 表示从不备份</translation>
     </message>
     <message>
         <source>Logging</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">日志</translation>
     </message>
     <message>
         <source>Logging Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">日志级别</translation>
     </message>
     <message>
         <source>Log file location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">日志文件位置</translation>
     </message>
     <message>
         <source>Use Default location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">使用默认位置</translation>
     </message>
     <message>
         <source>Recipe Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">配方快照</translation>
     </message>
     <message>
         <source>Enable Automatic Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">启用自动快照</translation>
     </message>
     <message>
         <source>Deleting a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">删除配方时</translation>
     </message>
     <message>
         <source>Deletes all the snapshots too</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">同时删除所有快照</translation>
     </message>
     <message>
         <source>Deletes only the recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">仅删除配方</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -14299,15 +14354,21 @@ Tabs</source>
   &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;
+   &lt;b&gt;懂其他语言？&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   或者，想改进现有翻译？欢迎帮助我们
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  提供翻译&lt;/a&gt;，让你的朋友也能使用 Brewtarget！
+&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>How many times %1 needs to be run to trigger another backup: 1 means always backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 需要运行多少次才会触发下一次备份：1 表示每次都备份</translation>
     </message>
     <message>
         <source>Default Values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">默认值</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -14315,7 +14376,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default batch size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新配方的默认批次量</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
@@ -14323,7 +14384,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default pre-boil size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新配方的默认煮沸前体积</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -14331,7 +14392,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新配方的默认效率</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -14339,27 +14400,27 @@ Tabs</source>
     </message>
     <message>
         <source>Default boil time to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新配方的默认煮沸时间</translation>
     </message>
     <message>
         <source>Show snapshots by default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">默认显示快照</translation>
     </message>
     <message>
         <source>Units &amp;&amp; Precision</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">单位 &amp;&amp; 精度</translation>
     </message>
     <message>
         <source>Decimal places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">小数位数</translation>
     </message>
     <message>
         <source>By default, use mash profile in FG calculation for new and imported recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新建和导入的配方默认在 FG 计算中使用糖化方案</translation>
     </message>
     <message>
         <source>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新建和导入的配方在估算最终比重时是否考虑糖化温度和时间。（可在每个配方的“糖化”选项卡中更改。）</translation>
     </message>
     <message>
         <source>How bitterness (IBUs) is estimated from the recipe&apos;s hop additions.
@@ -14371,15 +14432,23 @@ Tabs</source>
  • mIBU: John-Paul Hosom&apos;s extension of Tinseth, adding bitterness from hops in hot wort after flameout.
  • SMPH: Hosom&apos;s detailed model, which also allows for oxidized alpha acids, polyphenols, hopping rate, wort pH and yeast flocculation.
 Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using the post-boil steps of the boil profile.  For formulas other than Garetz, Daniels and SMPH, pellets are assumed to give 10% more IBUs than whole hops (plugs 2%).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">如何根据配方中的啤酒花添加估算苦度 (IBU)。
+ • Tinseth：最常用的公式。考虑煮沸时间和麦汁比重。
+ • Rager：较早的公式；通常比 Tinseth 得出更高的 IBU。
+ • Noonan：出自 Greg Noonan 的《New Brewing Lager Beer》。
+ • Garetz：出自 Mark Garetz 的《Using Hops》。通常 IBU 较低，煮沸 10 分钟及以下时为零，并考虑高投花量。
+ • Daniels：出自 Ray Daniels 的《Designing Great Beers》。颗粒和整花分别使用不同数值。
+ • mIBU：John-Paul Hosom 对 Tinseth 的扩展，增加了熄火后热麦汁中啤酒花贡献的苦度。
+ • SMPH：Hosom 的详细模型，还考虑氧化 α 酸、多酚、投花量、麦汁 pH 和酵母絮凝性。
+只有 mIBU 和 SMPH 会利用煮沸方案中的煮沸后步骤，计算熄火后（例如回旋沉淀时）添加的啤酒花的 IBU。对于 Garetz、Daniels 和 SMPH 以外的公式，假定颗粒比整花多产生 10% 的 IBU（压缩块为 2%）。</translation>
     </message>
     <message>
         <source>IBUs from hops added to the mash, as a percentage of what the same hops would give if they were added at the start of the boil and boiled for its full length.  Mash hops contribute little or no bitterness, because alpha acids isomerize very slowly at mash temperatures and much of the hop material stays behind with the grain.  The default is 0%, ie mash hops are assumed to give no IBUs.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化中添加的啤酒花产生的 IBU，以同样的啤酒花在煮沸开始时添加并煮满全程所产生 IBU 的百分比表示。糖化投花几乎不贡献苦度，因为 α 酸在糖化温度下异构化非常缓慢，且大部分啤酒花物质会随谷物留下。默认值为 0%，即假定糖化投花不产生 IBU。无论选择哪种 IBU 公式均适用。</translation>
     </message>
     <message>
         <source>IBUs from first wort hops (hops put in the kettle as the wort is run off, before the boil starts), as a percentage of what the same hops would give if they were added at the start of the boil.  The default of 110% reflects the commonly reported finding that first wort hopping gives about 10% more bitterness than a full-length boil addition.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">头道麦汁投花（在麦汁流出时放入煮沸锅、煮沸开始前的啤酒花）产生的 IBU，以同样的啤酒花在煮沸开始时添加所产生 IBU 的百分比表示。默认值 110% 反映了普遍报道的结论：头道麦汁投花比全程煮沸添加多产生约 10% 的苦度。无论选择哪种 IBU 公式均适用。</translation>
     </message>
 </context>
 <context>
@@ -14474,47 +14543,47 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">麦汁体积</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">麦汁的初始比重</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">充氧方式</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">生产日期（最佳食用日期减去三个月）</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酵母的估计活力</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">期望接种率</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">加入扩培液的管装/拍包酵母数量</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">所需酵母量</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">达到接种率所需的拍包或管装酵母数量</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">达到接种率所需的干酵母量</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">达到接种率所需的扩培液体积</translation>
     </message>
 </context>
 <context>
@@ -14581,7 +14650,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>计算Calculate</translation>
+        <translation type="vanished">计算Calculate</translation>
     </message>
 </context>
 <context>
@@ -14648,19 +14717,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>味道注意事项Taste Notes</translation>
+        <translation type="vanished">味道注意事项Taste Notes</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>说明Notes</translation>
+        <translation type="vanished">说明Notes</translation>
     </message>
     <message>
         <source>Final beer pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">成品啤酒 pH</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">总表观发酵度</translation>
     </message>
     <message>
         <source>Date Created</source>
@@ -14680,10 +14749,33 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Expected wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">预期麦汁澄清度</translation>
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;预计麦汁进入发酵罐时的澄清程度（例如取决于是否使用煮沸澄清剂或回旋沉淀）。&lt;/p&gt;&lt;p&gt;麦汁越浑浊，发酵过程中损失的苦度越多。&lt;/p&gt;&lt;p&gt;仅用于 SMPH IBU 公式。&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -14695,15 +14787,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit base water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑基础水质</translation>
     </message>
     <message>
         <source>% RO in Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化中 RO 水 %</translation>
     </message>
     <message>
         <source>% RO in Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">洗糟中 RO 水 %</translation>
     </message>
     <message>
         <source>Target Profile</source>
@@ -14711,39 +14803,39 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit target water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑目标水质</translation>
     </message>
     <message>
         <source>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there&apos;s no lactic acid in the database).  If not ticked, acids are left alone.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">勾选后，“自动调整”还会计算达到此糖化 pH 所需的加酸量。如果配方中已有酸，则使用该酸，否则使用乳酸（如果数据库中没有乳酸，则使用其他酸）。如果不勾选，则不改动酸。</translation>
     </message>
     <message>
         <source>Adjust acid for mash pH of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">调整酸量以达到糖化 pH</translation>
     </message>
     <message>
         <source>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">目标糖化 pH。大多数酿酒师的目标在 5.2 至 5.6 之间，通常为 5.4。</translation>
     </message>
     <message>
         <source>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don&apos;t want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">计算需添加的酿造矿物盐量，使水质尽可能接近目标水质；如果上方已勾选，还会计算达到目标糖化 pH 所需的加酸量。如果配方中已有矿物盐，则只使用这些盐并更改其用量（因此请先移除不需要的盐，或只添加需要的盐）。否则，会按需添加常用矿物盐。白垩和熟石灰不作改动。可一次性撤销这些更改。</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">自动调整</translation>
     </message>
     <message>
         <source>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">每当其依赖的内容发生变化（例如水质、糖化用水量或谷物配比）时，自动重新执行“自动调整”。届时你手动对矿物盐或酸用量所做的更改将被覆盖，因此最好在选定要使用的矿物盐后再启用此项。撤销“自动调整”会关闭此项。</translation>
     </message>
     <message>
         <source>Keep water agents in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">水处理剂与配方更改保持同步</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">实际</translation>
     </message>
     <message>
         <source>Ca</source>
@@ -14775,43 +14867,43 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Water Agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">水处理剂</translation>
     </message>
     <message>
         <source>Water Agents (Miscellaneous)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">水处理剂（其他原料）</translation>
     </message>
     <message>
         <source>Add a water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加水处理剂</translation>
     </message>
     <message>
         <source>Remove selected water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">移除所选水处理剂</translation>
     </message>
     <message>
         <source>Acid Malts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酸麦芽</translation>
     </message>
     <message>
         <source>Acid Malts (Fermentables)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酸麦芽（可发酵原料）</translation>
     </message>
     <message>
         <source>Add an acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加酸麦芽</translation>
     </message>
     <message>
         <source>Remove selected acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">移除所选酸麦芽</translation>
     </message>
     <message>
         <source>Auto-Adjust Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">自动调整备注</translation>
     </message>
     <message>
         <source>Things to check after the last Auto-Adjust, eg ions that couldn&apos;t be brought close to the target, and why</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">上次“自动调整”后需要检查的事项，例如无法接近目标的离子及其原因</translation>
     </message>
 </context>
 <context>
@@ -14838,7 +14930,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>计算Calculate</translation>
+        <translation type="vanished">计算Calculate</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -14870,15 +14962,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">实测原始柏拉图度</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">实测原始比重</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">当前实测柏拉图度</translation>
     </message>
 </context>
 <context>
@@ -14958,7 +15050,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">已订购</translation>
     </message>
     <message>
         <source>Date</source>
@@ -14974,19 +15066,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">订购数量</translation>
     </message>
     <message>
         <source>Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">已收货</translation>
     </message>
     <message>
         <source>Amount received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">收货数量</translation>
     </message>
     <message>
         <source>Whether the amount is weight or volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数量是重量还是体积</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -14994,7 +15086,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Uses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">使用记录</translation>
     </message>
     <message>
         <source>Amount Remaining</source>
@@ -15002,7 +15094,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best Before</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最佳食用日期</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -15172,7 +15264,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Change type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">更改类型</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -15180,7 +15272,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">已用数量</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -15292,63 +15384,63 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">投料水计算器</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">初始注水</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">谷物初始温度</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">目标糖化温度</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">谷物重量</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">水的体积</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化注水</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">总水量</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">谷物重量</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">实际糖化温度</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">注水温度</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>计算Calculate</translation>
+        <translation type="vanished">计算Calculate</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">投料水温度</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加体积</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">注意：此计算器假定糖化锅已预热。</translation>
     </message>
 </context>
 <context>
@@ -15495,11 +15587,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Ranges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">范围</translation>
     </message>
     <message>
         <source>New style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新建风格</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -15557,7 +15649,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加：</translation>
     </message>
     <message>
         <source>Notes...</source>
@@ -15565,11 +15657,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>At:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">时间：</translation>
     </message>
     <message>
         <source>mins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">分钟</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -15581,11 +15673,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Set Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">设置声音</translation>
     </message>
     <message>
         <source>Play Alarm Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">播放闹铃声音</translation>
     </message>
 </context>
 <context>
@@ -15626,7 +15718,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编辑水质</translation>
     </message>
     <message>
         <source>Alkalinity</source>
@@ -15634,7 +15726,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Alkalinity measured as</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">碱度计量方式</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -15646,7 +15738,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新建水质</translation>
     </message>
     <message>
         <source>New</source>
@@ -15845,7 +15937,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">新建酵母</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -15857,19 +15949,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Min Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最小发酵度 (%)</translation>
     </message>
     <message>
         <source>Minimum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最小表观发酵度，以 OG 点数的百分比表示</translation>
     </message>
     <message>
         <source>Max Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最大发酵度 (%)</translation>
     </message>
     <message>
         <source>Maximum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最大表观发酵度，以 OG 点数的百分比表示</translation>
     </message>
     <message>
         <source>Alcohol Tolerance</source>
@@ -15877,15 +15969,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Recommended limit of ABV by the culture producer before attenuation stops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">菌种生产商建议的发酵停止前的 ABV 上限</translation>
     </message>
     <message>
         <source>Phenolic Off-Flavor Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酚类异味阳性</translation>
     </message>
     <message>
         <source>Whether culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">菌种是否能产生酚类物质，这是赛松和酒香酵母 (Brett) 的常见特征</translation>
     </message>
     <message>
         <source>Glucoamylase Positive</source>
@@ -15893,39 +15985,39 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">糖化酶阳性菌种能够产生糖化酶（由糖化基因表达产生的酶），使酵母能够发酵糊精和淀粉，从而得到很低的 FG。部分赛松/酒香酵母以及 Omega Yeast Labs 新推出的 Gulo 杂交酵母为阳性。</translation>
     </message>
     <message>
         <source>K1 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">K1 杀手</translation>
     </message>
     <message>
         <source>Produces K1 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">产生 K1 杀手毒素</translation>
     </message>
     <message>
         <source>K2 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">K2 杀手</translation>
     </message>
     <message>
         <source>Produces K2 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">产生 K2 杀手毒素</translation>
     </message>
     <message>
         <source>K28 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">K28 杀手</translation>
     </message>
     <message>
         <source>Produces K28 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">产生 K28 杀手毒素</translation>
     </message>
     <message>
         <source>Klus Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klus 杀手</translation>
     </message>
     <message>
         <source>Produces Klus killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">产生 Klus 杀手毒素</translation>
     </message>
     <message>
         <source>Killer Neutral</source>
@@ -15933,11 +16025,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">中性菌株既不产生毒素，也不会被毒素杀死</translation>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">库存总量</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -15969,11 +16061,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">添加采购</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">为此酵母新建库存采购记录</translation>
     </message>
 </context>
 </TS>

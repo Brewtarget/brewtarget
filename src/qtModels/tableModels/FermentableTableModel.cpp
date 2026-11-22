@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/FermentableTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/FermentableTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -50,12 +50,16 @@
 
 COLUMN_INFOS(
    FermentableTableModel,
-   TABLE_MODEL_HEADER(Fermentable, Name            , PropertyNames::NamedEntity::name              ), // "Name"
-   TABLE_MODEL_HEADER(Fermentable, Type            , PropertyNames::Fermentable::type              ), // "Type"
-   TABLE_MODEL_HEADER(Fermentable, Yield           , PropertyNames::Fermentable::fineGrindYield_pct), // "Yield (DBFG) %"
-   TABLE_MODEL_HEADER(Fermentable, Color           , PropertyNames::Fermentable::color_srm         ), // "Color"
-   TABLE_MODEL_HEADER(Fermentable, TotalInventory  , PropertyNames::Ingredient::totalInventory     ), // "Inventory"
-   TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn  ), // "N° Recipes"
+   TABLE_MODEL_HEADER(Fermentable, Name            , PropertyNames::NamedEntity::name                  ), // "Name"
+   TABLE_MODEL_HEADER(Fermentable, Type            , PropertyNames::Fermentable::type                  ), // "Type"
+   TABLE_MODEL_HEADER(Fermentable, Yield           , PropertyNames::Fermentable::fineGrindYield_pct    ), // "Yield (DBFG) %"
+   TABLE_MODEL_HEADER(Fermentable, Color           , PropertyNames::Fermentable::color_srm             ), // "Color"
+   TABLE_MODEL_HEADER(Fermentable, TotalInventory  , PropertyNames::Ingredient::totalInventory         ), // "Inventory"
+   TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn      ), // "N° Recipes"
+   TABLE_MODEL_HEADER(Fermentable, DiastaticPower  , PropertyNames::Fermentable::diastaticPower_lintner),
+   TABLE_MODEL_HEADER(Fermentable, Protein         , PropertyNames::Fermentable::protein_pct           ),
+   TABLE_MODEL_HEADER(Fermentable, Producer        , PropertyNames::Fermentable::producer              ),
+   TABLE_MODEL_HEADER(Fermentable, Origin          , PropertyNames::Fermentable::origin                ),
 )
 
 //=====================CLASS FermentableTableModel==============================
@@ -65,6 +69,11 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) 
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &FermentableTableModel::contextMenu);
+   // Less commonly-used columns are only shown if the user asks for them (via the header context menu)
+   this->setColumnsHiddenByDefault({static_cast<int>(ColumnIndex::DiastaticPower),
+                                    static_cast<int>(ColumnIndex::Protein),
+                                    static_cast<int>(ColumnIndex::Producer),
+                                    static_cast<int>(ColumnIndex::Origin)});
    this->connectInventorySignals<StockPurchaseFermentable>();
    return;
 }

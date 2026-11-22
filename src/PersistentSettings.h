@@ -91,18 +91,26 @@ AddSettingName(mashHopAdjustment)
 AddSettingName(        mashStepTableWidget_headerState)  // MainWindow section
 AddSettingName(        boilStepTableWidget_headerState)  // MainWindow section
 AddSettingName(fermentationStepTableWidget_headerState)  // MainWindow section
+AddSettingName( fermentableAdditionTable_headerState)  // MainWindow section
+AddSettingName(         hopAdditionTable_headerState)  // MainWindow section
+AddSettingName(        miscAdditionTable_headerState)  // MainWindow section
+AddSettingName(       yeastAdditionTable_headerState)  // MainWindow section
 AddSettingName(maximum)                          // backups section
 AddSettingName(productionDate)
 AddSettingName(recipeKey)
 AddSettingName(showsnapshots)
 AddSettingName(splitter_horizontal_State)        // MainWindow section
 AddSettingName(splitter_vertical_State  )        // MainWindow section
+AddSettingName(treeView_boil_headerState       ) // MainWindow section
 AddSettingName(treeView_equipment_headerState  ) // MainWindow section
+AddSettingName(treeView_fermentation_headerState) // MainWindow section
 AddSettingName(treeView_fermentable_headerState) // MainWindow section
 AddSettingName(treeView_hop_headerState        ) // MainWindow section
+AddSettingName(treeView_mash_headerState       ) // MainWindow section
 AddSettingName(treeView_misc_headerState       ) // MainWindow section
 AddSettingName(treeView_recipe_headerState     ) // MainWindow section
 AddSettingName(treeView_style_headerState      ) // MainWindow section
+AddSettingName(treeView_water_headerState      ) // MainWindow section
 AddSettingName(treeView_yeast_headerState      ) // MainWindow section
 AddSettingName(uiState_boilCatalog        )  // MainWindow section
 AddSettingName(uiState_equipmentCatalog   )  // MainWindow section

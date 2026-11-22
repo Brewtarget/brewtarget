@@ -24,7 +24,6 @@
 
 #include <QEvent>
 #include <QDebug>
-#include <QMessageBox>
 #include <QString>
 
 #include "calculations/Algorithms.h"
@@ -49,7 +48,13 @@ RefractoDialog::RefractoDialog(QWidget* parent) : QDialog(parent) {
    SMART_FIELD_INIT_FS   (RefractoDialog, label_abv    , lineEdit_abv    , double, NonPhysicalQuantity::Percentage       ); // Alcohol by volume
    SMART_FIELD_INIT_FS   (RefractoDialog, label_abw    , lineEdit_abw    , double, NonPhysicalQuantity::Percentage       ); // Alcohol by weight
 
-   connect(this->pushButton_calculate, &QAbstractButton::clicked, this, &RefractoDialog::calculate );
+   // We recalculate whenever an input changes, so there is no need for a "Calculate" button
+   connect(this->lineEdit_op     , &SmartLineEdit::textModified, this, &RefractoDialog::calculate);
+   connect(this->lineEdit_inputOG, &SmartLineEdit::textModified, this, &RefractoDialog::calculate);
+   connect(this->lineEdit_cp     , &SmartLineEdit::textModified, this, &RefractoDialog::calculate);
+
+   this->label_warning->setStyleSheet("color : #C62828;");
+   this->label_warning->setVisible(false);
    return;
 }
 
@@ -68,10 +73,8 @@ void RefractoDialog::calculate() {
 
    this->clearOutputFields();
 
-   // Abort if we don't have the current plato.
-   // I really dislike just doing nothing as the user is POUNDING on the
-   // calculate button, waiting for something to happen. Maybe we should
-   // provide some ... oh ... feedback that they are doing something wrong?
+   // Can't do anything without the current Plato.  (Since we recalculate whenever an input changes, the user may just
+   // not have entered it yet.)
    if (!haveCP) {
       return;
    }
@@ -79,15 +82,17 @@ void RefractoDialog::calculate() {
    double const ri = Algorithms::refractiveIndex(currentPlato);
    this->lineEdit_ri->setText(Measurement::displayQuantity(ri, 3));
 
-   if (!haveOG && haveOP) {
-      inputOG = Algorithms::PlatoToSG_20C20C(originalPlato);
-      this->lineEdit_inputOG->setQuantity(inputOG);
-   } else if (!haveOP && haveOG) {
-      originalPlato = Algorithms::SG_20C20C_toPlato(inputOG);
-      this->lineEdit_op->setQuantity(inputOG);
-   } else if (!haveOP && !haveOG) {
+   //
+   // The user can give us the original gravity either in Plato or as SG.  We used to copy whichever one we calculated
+   // into the other input field, but, now that we recalculate as soon as an input changes, that would get in the way
+   // of the user changing their inputs.
+   //
+   if (!haveOP && !haveOG) {
       qDebug() << Q_FUNC_INFO << "no plato or og";
       return; // Can't do much if we don't have OG or OP.
+   }
+   if (!haveOP) {
+      originalPlato = Algorithms::SG_20C20C_toPlato(inputOG);
    }
 
    double const og = Algorithms::PlatoToSG_20C20C( originalPlato );
@@ -102,14 +107,13 @@ void RefractoDialog::calculate() {
    double const abv = Algorithms::getABVBySGPlato(sg, currentPlato);
    double const abw = Algorithms::getABWBySGPlato(sg, currentPlato);
 
-   // Warn the user if the inputOG and calculated og don't match.
-   if ( qAbs(og - inputOG) > 0.002 ) {
-      QMessageBox::warning(
-         this,
-         tr("OG Mismatch"),
+   // Warn the user if they gave us both original Plato and original gravity and the two don't match.
+   if (haveOP && haveOG && qAbs(og - inputOG) > 0.002) {
+      this->label_warning->setText(
          tr("Based on the given original plato, the OG should be %1, but you have entered %2. "
             "Continuing with the calculated OG.").arg(og,0,'f',3).arg(inputOG,0,'f',3)
       );
+      this->label_warning->setVisible(true);
    }
 
    this->lineEdit_og->setQuantity(og);
@@ -123,6 +127,8 @@ void RefractoDialog::calculate() {
 }
 
 void RefractoDialog::clearOutputFields() {
+   this->label_warning->clear();
+   this->label_warning->setVisible(false);
    this->lineEdit_ri ->clear();
    this->lineEdit_og ->clear();
    this->lineEdit_sg ->clear();

@@ -19,6 +19,9 @@
  =====================================================================================================================*/
 #include "tools/StrikeWaterDialog.h"
 
+#include <algorithm>
+#include <initializer_list>
+
 #include <QEvent>
 
 #include <limits>
@@ -78,19 +81,44 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
    SMART_FIELD_INIT_FS(StrikeWaterDialog, initialResultLbl  , initialResultTxt  , double, Measurement::PhysicalQuantity::Temperature); // Result: Strike Water Temperature
    SMART_FIELD_INIT_FS(StrikeWaterDialog, mashResultLbl     , mashResultTxt     , double, Measurement::PhysicalQuantity::Volume     ); // Result: Volume to add
 
-   connect(pushButton_calculate, &QAbstractButton::clicked, this, &StrikeWaterDialog::calculate);
+   // We recalculate whenever an input changes, so there is no need for a "Calculate" button
+   for (SmartLineEdit * input : {this->grainTempVal  ,
+                                 this->targetMashVal ,
+                                 this->grainWeightInitVal,
+                                 this->waterVolumeVal,
+                                 this->mashVolVal    ,
+                                 this->grainWeightVal,
+                                 this->actualMashVal ,
+                                 this->targetMashInfVal,
+                                 this->infusionWaterVal}) {
+      connect(input, &SmartLineEdit::textModified, this, &StrikeWaterDialog::calculate);
+   }
    return;
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() = default;
 
 void StrikeWaterDialog::calculate() {
-  double const strikeWaterTemp = computeInitialInfusion();
-  double const volumeToAdd     = computeMashInfusion();
+   //
+   // The two calculations are independent, and the user may only want one of them, so we only show a result once all
+   // the inputs for it have been filled in.
+   //
+   auto allFilledIn = [](std::initializer_list<SmartLineEdit const *> inputs) {
+      return std::ranges::none_of(inputs, [](SmartLineEdit const * input) { return input->isBlank(); });
+   };
 
-  this->initialResultTxt->setQuantity(strikeWaterTemp);
-  this->mashResultTxt   ->setQuantity(volumeToAdd);
-  return;
+   if (allFilledIn({this->grainTempVal, this->targetMashVal, this->grainWeightInitVal, this->waterVolumeVal})) {
+      this->initialResultTxt->setQuantity(this->computeInitialInfusion());
+   } else {
+      this->initialResultTxt->clear();
+   }
+
+   if (allFilledIn({this->mashVolVal, this->grainWeightVal, this->actualMashVal, this->targetMashInfVal, this->infusionWaterVal})) {
+      this->mashResultTxt->setQuantity(this->computeMashInfusion());
+   } else {
+      this->mashResultTxt->clear();
+   }
+   return;
 }
 
 double StrikeWaterDialog::computeInitialInfusion() {

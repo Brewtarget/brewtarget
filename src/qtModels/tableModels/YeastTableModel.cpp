@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/YeastTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/YeastTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -44,6 +44,10 @@ COLUMN_INFOS(
    TABLE_MODEL_HEADER(Yeast, Form            , PropertyNames::Yeast::form                  ), // "Form"
    TABLE_MODEL_HEADER(Yeast, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
    TABLE_MODEL_HEADER(Yeast, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
+   TABLE_MODEL_HEADER(Yeast, Attenuation     , PropertyNames::Yeast::attenuationTypical_pct),
+   TABLE_MODEL_HEADER(Yeast, AlcoholTolerance, PropertyNames::Yeast::alcoholTolerance_pct  ),
+   TABLE_MODEL_HEADER(Yeast, MinTemperature  , PropertyNames::Yeast::minTemperature_c      ),
+   TABLE_MODEL_HEADER(Yeast, MaxTemperature  , PropertyNames::Yeast::maxTemperature_c      ),
 )
 
 YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
@@ -52,6 +56,10 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
+   // Less commonly-used columns are only shown if the user asks for them (via the header context menu)
+   this->setColumnsHiddenByDefault({static_cast<int>(ColumnIndex::AlcoholTolerance),
+                                    static_cast<int>(ColumnIndex::MinTemperature),
+                                    static_cast<int>(ColumnIndex::MaxTemperature)});
    this->connectInventorySignals<StockPurchaseYeast>();
    return;
 }

@@ -19,12 +19,15 @@
 
 #include <QAbstractButton>
 #include <QEvent>
+#include <QItemSelectionModel>
+#include <QMenu>
 #include <QTableView>
 
 #include "model/Recipe.h"
 #include "undoRedo/Undoable.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/WindowDistributor.h"
+#include "widgets/TableViewKeys.h"
 
 /**
  * \brief CRTP base class for \c EnumeratedItemsWidget subclasses
@@ -86,10 +89,70 @@ public:
          }
       );
 
+      //
+      // Keep the buttons in step with what is selected.  Rows can also come and go, or move, without the selection
+      // changing, so we listen for those too.
+      //
+      auto updateButtons = [&]() { this->updateButtonStates(); return; };
+      this->derived().connect(this->derived().m_tableView_items->selectionModel(),
+                              &QItemSelectionModel::selectionChanged,
+                              &this->derived(),
+                              updateButtons);
+      this->derived().connect(this->m_itemTableModel.get(), &QAbstractItemModel::modelReset  , &this->derived(), updateButtons);
+      this->derived().connect(this->m_itemTableModel.get(), &QAbstractItemModel::rowsRemoved , &this->derived(), updateButtons);
+      this->derived().connect(this->m_itemTableModel.get(), &QAbstractItemModel::rowsInserted, &this->derived(), updateButtons);
+      this->derived().connect(this->m_itemTableModel.get(), &QAbstractItemModel::rowsMoved   , &this->derived(), updateButtons);
+      this->derived().connect(this->m_itemTableModel.get(), &QAbstractItemModel::layoutChanged, &this->derived(), updateButtons);
+      this->updateButtonStates();
+
+      //
+      // Right-click offers the same things as the buttons, and the Delete key removes the selected item.  (If the owner
+      // is locked, the whole widget is disabled, so neither will do anything.)
+      //
+      this->derived().m_tableView_items->setContextMenuPolicy(Qt::CustomContextMenu);
+      this->derived().connect(this->derived().m_tableView_items.get(),
+                              &QWidget::customContextMenuRequested,
+                              &this->derived(),
+                              [&](QPoint const & pos) { this->showContextMenu(pos); return; });
+      TableViewKeys::handleDeleteKey(*this->derived().m_tableView_items, [&]() { this->removeSelectedItem(); return; });
 
       return;
    }
    ~EnumeratedItemsWidgetBase() = default;
+
+   /**
+    * \brief Context menu for the table rows.  Rather than duplicate the logic and text of the buttons, each menu entry
+    *        just mirrors a button (including whether it is enabled).
+    */
+   void showContextMenu(QPoint const & pos) {
+      QMenu menu{&this->derived()};
+      for (QAbstractButton * button : {static_cast<QAbstractButton *>(this->derived().m_pushButton_addItem     .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_editItem    .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_removeItem  .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_moveItemUp  .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_moveItemDown.get())}) {
+         QAction * action = menu.addAction(button->icon(), button->toolTip(), button, &QAbstractButton::click);
+         action->setEnabled(button->isEnabled());
+      }
+      menu.exec(this->derived().m_tableView_items->viewport()->mapToGlobal(pos));
+      return;
+   }
+
+   /**
+    * \brief Enable/disable the buttons according to whether there is an owner and what is selected.  (If the owner is
+    *        locked, our owner disables the whole widget, so we don't need to worry about that here.)
+    */
+   void updateButtonStates() {
+      bool const hasOwner = this->m_owner ? true : false;
+      int  const row      = this->getSelectedRowNum();
+      int  const numRows  = this->m_itemTableModel->rowCount();
+      this->derived().m_pushButton_addItem     ->setEnabled(hasOwner);
+      this->derived().m_pushButton_removeItem  ->setEnabled(hasOwner && row >= 0);
+      this->derived().m_pushButton_editItem    ->setEnabled(hasOwner && row >= 0);
+      this->derived().m_pushButton_moveItemUp  ->setEnabled(hasOwner && row >= 1);
+      this->derived().m_pushButton_moveItemDown->setEnabled(hasOwner && row >= 0 && row < numRows - 1);
+      return;
+   }
 
    /**
     * \brief Call this when the \c EnumeratedItemsWidget is being used in an editor (eg \c MashStepsWidget in \c MashEditor).
@@ -97,6 +160,7 @@ public:
    void setOwner(std::shared_ptr<Owner> owner) {
       this->m_owner = owner;
       this->m_itemTableModel->setEnumeratedItemOwner(owner);
+      this->updateButtonStates();
       return;
    }
 

@@ -15,6 +15,10 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <!-- Says which recipes use this equipment, and offers to make a copy for the current recipe -->
+    <widget class="LockAndShareBar" name="lockAndShareBar"/>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_equipments">
      <item>
       <spacer name="horizontalSpacer">
@@ -1329,7 +1333,7 @@ Tabs</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
-         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+         <normaloff>:/images/cancel.svg</normaloff>:/images/cancel.svg</iconset>
        </property>
       </widget>
      </item>
@@ -1360,6 +1364,11 @@ Tabs</string>
    <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>
    <header>widgets/SmartLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LockAndShareBar</class>
+   <extends>QFrame</extends>
+   <header>widgets/LockAndShareBar.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

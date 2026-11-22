@@ -617,6 +617,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CurrencyInfo</name>
     <message>
         <source>United Arab Emirates Dirham</source>
@@ -2269,6 +2276,17 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -3179,10 +3197,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Convert</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Measured gravity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3571,6 +3585,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4284,6 +4310,12 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
             <numerusform></numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -4326,35 +4358,11 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Couldn&apos;t read input</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No Recipe Selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No Equipment on Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No Boil on Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Need a valid value for Wort Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6401,14 +6409,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Edit Taste Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change pH</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6657,6 +6657,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RecipeWaterWidget</name>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
@@ -6743,10 +6754,6 @@ The final volume in the primary is %1.</source>
 </context>
 <context>
     <name>RefractoDialog</name>
-    <message>
-        <source>OG Mismatch</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
         <translation type="unfinished"></translation>
@@ -7347,13 +7354,6 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>Undoable</name>
-    <message>
-        <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -7380,10 +7380,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Convert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9866,6 +9862,14 @@ Tabs</source>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashEditor</name>
@@ -10284,10 +10288,6 @@ Tabs</source>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10813,10 +10813,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <source>How much priming ingredient to use</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Calculate</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
@@ -10842,14 +10838,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Taste Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10882,6 +10870,29 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11032,10 +11043,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Current Plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11285,10 +11292,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

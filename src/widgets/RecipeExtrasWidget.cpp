@@ -66,8 +66,6 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
    connect(this->spinBox_tasteRating     , QOverload<int>::of(&QSpinBox::valueChanged), this, &RecipeExtrasWidget::changeRatings      );
    connect(this->spinBox_tasteRating     , &QAbstractSpinBox::editingFinished         , this, &RecipeExtrasWidget::updateTasteRating  );
    connect(this->dateEdit_date           , &BtOptionalDateEdit::optionalDateChanged   , this, &RecipeExtrasWidget::updateDate         );
-   connect(this->btTextEdit_notes        , &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateNotes        );
-   connect(this->btTextEdit_tasteNotes   , &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateTasteNotes   );
    connect(this->lineEdit_acidity        , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAcidity      );
    connect(this->lineEdit_attenuation    , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAttenuation  );
 
@@ -169,24 +167,6 @@ void RecipeExtrasWidget::updateCarbonation() {
    return;
 }
 
-void RecipeExtrasWidget::updateTasteNotes() {
-   if (!this->m_recipeObs) { return; }
-
-   Undoable::doOrRedoUpdate(*m_recipeObs,
-                                         TYPE_INFO(Recipe, tasteNotes),
-                                         btTextEdit_tasteNotes->toPlainText(),
-                                         tr("Edit Taste Notes"));
-}
-
-void RecipeExtrasWidget::updateNotes() {
-   if (!this->m_recipeObs) { return; }
-
-   Undoable::doOrRedoUpdate(*m_recipeObs,
-                                         TYPE_INFO(Recipe, notes),
-                                         btTextEdit_notes->toPlainText(),
-                                         tr("Edit Notes"));
-}
-
 void RecipeExtrasWidget::updateAcidity() {
    if (!this->m_recipeObs) { return; }
 
@@ -224,8 +204,6 @@ void RecipeExtrasWidget::saveAll() {
    this->updateAgeTemp();
    this->updateDate(dateEdit_date->optionalDate());
    this->updateCarbonation();
-   this->updateTasteNotes();
-   this->updateNotes();
    this->updateAcidity();
    this->updateAttenuation();
 
@@ -260,8 +238,6 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
    if (updateAll || propName == PropertyNames::Recipe::wortClarity     ) { this->comboBox_wortClarity ->setValue    (m_recipeObs->wortClarity     ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::tasteRating     ) { this->spinBox_tasteRating  ->setValue       (m_recipeObs->tasteRating  ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::date            ) { this->dateEdit_date        ->setOptionalDate(m_recipeObs->date         ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::notes           ) { this->btTextEdit_notes     ->setPlainText(m_recipeObs->notes           ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::tasteNotes      ) { this->btTextEdit_tasteNotes->setPlainText(m_recipeObs->tasteNotes      ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::beerAcidity_pH  ) { this->lineEdit_acidity     ->setQuantity (m_recipeObs->beerAcidity_pH  ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::apparentAttenuation_pct) { this->lineEdit_attenuation->setQuantity (m_recipeObs->apparentAttenuation_pct()); if (!updateAll) { return; } }
 

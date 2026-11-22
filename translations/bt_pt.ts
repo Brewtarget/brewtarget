@@ -929,6 +929,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2819,6 +2826,17 @@ Clique em &apos;OK&apos; para encerrar o %2 e poder atualizar para uma versão m
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4301,7 +4319,7 @@ Clique em &apos;OK&apos; para encerrar o %2 e poder atualizar para uma versão m
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Converter</translation>
+        <translation type="obsolete">Converter</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4864,6 +4882,18 @@ Se precisar de ajuda, abra um chamado em %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">O(s) seguinte(s) ingrediente(s) é(são) medido(s) de forma diferente na receita e no inventário, por isso a(s) quantidade(s) usada(s) não pôde(puderam) ser (totalmente) deduzida(s) do inventário.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Adicionar %1 à receita</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5932,6 +5962,13 @@ Deseja fazer uma cópia desta mostura para essa receita, de modo a não afetar m
             <numerusform>%1 é usado por %n receitas: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -5975,19 +6012,19 @@ Deseja fazer uma cópia desta mostura para essa receita, de modo a não afetar m
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Não foi possível ler os dados de entrada</translation>
+        <translation type="obsolete">Não foi possível ler os dados de entrada</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">É necessário um valor válido para a Densidade Medida</translation>
+        <translation type="obsolete">É necessário um valor válido para a Densidade Medida</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Nenhuma Receita Selecionada</translation>
+        <translation type="obsolete">Nenhuma Receita Selecionada</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Nenhum Equipamento na Receita</translation>
+        <translation type="obsolete">Nenhum Equipamento na Receita</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -5995,7 +6032,7 @@ Deseja fazer uma cópia desta mostura para essa receita, de modo a não afetar m
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Nenhuma Fervura na Receita</translation>
+        <translation type="obsolete">Nenhuma Fervura na Receita</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -6003,7 +6040,7 @@ Deseja fazer uma cópia desta mostura para essa receita, de modo a não afetar m
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">É necessário um valor válido para o Volume de Mosto</translation>
+        <translation type="obsolete">É necessário um valor válido para o Volume de Mosto</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8741,11 +8778,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Editar Notas de Degustação</translation>
+        <translation type="obsolete">Editar Notas de Degustação</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Editar Notas</translation>
+        <translation type="obsolete">Editar Notas</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -9068,6 +9105,17 @@ O volume final do fermentador primário é %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Editar Notas</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Editar Notas de Degustação</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9194,7 +9242,7 @@ O volume final do fermentador primário é %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Incompatibilidade de OG</translation>
+        <translation type="vanished">Incompatibilidade de OG</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -10060,7 +10108,7 @@ O volume final do fermentador primário é %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Adicionar %1 à receita</translation>
+        <translation type="obsolete">Adicionar %1 à receita</translation>
     </message>
 </context>
 <context>
@@ -10094,7 +10142,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Converter</translation>
+        <translation type="obsolete">Converter</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13851,6 +13899,14 @@ Opcionais</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Leva em conta como as temperaturas e os tempos da mostura tornam o mosto mais ou menos fermentável ao estimar a densidade final.  Deixe desativado se você definiu a atenuação da levedura para refletir a sua própria mostura.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14705,7 +14761,7 @@ Opcionais</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Calcular</translation>
+        <translation type="obsolete">Calcular</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15382,7 +15438,7 @@ Apenas mIBU e SMPH dão IBUs para lúpulos adicionados após desligar o fogo (po
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcular</translation>
+        <translation type="vanished">Calcular</translation>
     </message>
 </context>
 <context>
@@ -15449,11 +15505,11 @@ Apenas mIBU e SMPH dão IBUs para lúpulos adicionados após desligar o fogo (po
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Provar Notas</translation>
+        <translation type="vanished">Provar Notas</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notas</translation>
+        <translation type="vanished">Notas</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15486,6 +15542,29 @@ Apenas mIBU e SMPH dão IBUs para lúpulos adicionados após desligar o fogo (po
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Quão límpido você espera que o mosto esteja ao entrar no fermentador (por exemplo, conforme use clarificantes na panela ou whirlpool).&lt;/p&gt;&lt;p&gt;Mostos mais turvos perdem mais amargor durante a fermentação.&lt;/p&gt;&lt;p&gt;Usado apenas pela fórmula de IBU SMPH.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15639,7 +15718,7 @@ Apenas mIBU e SMPH dão IBUs para lúpulos adicionados após desligar o fogo (po
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcular</translation>
+        <translation type="vanished">Calcular</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16177,7 +16256,7 @@ Apenas mIBU e SMPH dão IBUs para lúpulos adicionados após desligar o fogo (po
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcular</translation>
+        <translation type="vanished">Calcular</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/StyleEditor.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * editors/StyleEditor.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -27,7 +27,7 @@
 #include "editors/EditorBase.h"
 #include "model/Style.h"
 
-#define StyleEditorOptions EditorBaseOptions{ .idDisplay = true, .numRecipesUsing = true }
+#define StyleEditorOptions EditorBaseOptions{ .idDisplay = true, .numRecipesUsing = true, .sharingBar = true }
 /*!
  * \class StyleEditor
  *
@@ -42,6 +42,10 @@ class StyleEditor : public QDialog,
    Q_OBJECT
 
    EDITOR_COMMON_DECL(Style, StyleEditorOptions)
+
+private:
+   //! Needed by \c EditorBase because we have the \c sharingBar option
+   Recipe * currentRecipeForSharing() const;
 };
 
 #endif

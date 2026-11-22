@@ -22,7 +22,6 @@
 #include <QEvent>
 #include <QLabel>
 #include <QLineEdit>
-#include <QPushButton>
 #include <QWidget>
 
 /*!
@@ -35,7 +34,6 @@ public:
 
    //! \name Public UI Variables
    //! @{
-   QPushButton * pushButton_convert;
    QLabel *      inputLabel;
    QLineEdit *   inputLineEdit;
    QLabel *      outputLabel;

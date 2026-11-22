@@ -26,7 +26,6 @@
 
 class QEvent;
 class QGroupBox;
-class QPushButton;
 class QWidget;
 
 class HydrometerTool : public QDialog {
@@ -36,7 +35,6 @@ public:
 
    //! \name Public UI Variables
    //! @{
-   QPushButton   * pushButton_convert;
    SmartLabel    * label_inputSg;
    SmartLineEdit * lineEdit_inputSg;
    SmartLabel    * label_outputSg;

@@ -94,7 +94,8 @@ namespace RecipeUtils {
    // to help the UI make clear when changing something will affect more than one Recipe, and to protect things that
    // should not be changed (see model/LockablePropertyBase.h).
    //
-   // Implementations are in the .cpp file, with explicit instantiations for Mash, Boil and Fermentation.
+   // Implementations are in the .cpp file, with explicit instantiations for Mash, Boil and Fermentation, plus, for the
+   // functions that don't involve locking, Equipment and Style (which can be shared between Recipes but not locked).
    //===================================================================================================================
 
    /**
@@ -119,9 +120,9 @@ namespace RecipeUtils {
    template<class NE> LockReason lockReason(NE const & item);
 
    /**
-    * \brief Make a copy of \c recipe's \c NE (ie \c Mash, \c Boil or \c Fermentation), and set \c recipe to use the
-    *        copy rather than the original.  The copy is not locked (see \c LockablePropertyBase copy constructor), and
-    *        its name says what it is a copy for.
+    * \brief Make a copy of \c recipe's \c NE (ie \c Mash, \c Boil, \c Fermentation, \c Equipment or \c Style), and set
+    *        \c recipe to use the copy rather than the original.  The copy is not locked (see \c LockablePropertyBase
+    *        copy constructor), and its name says what it is a copy for.
     *
     *        It is a coding error to call this if \c recipe does not have an \c NE or if \c recipe is locked.
     *

@@ -48,6 +48,10 @@ class EquipmentEditor : public QDialog,
 
    EDITOR_COMMON_DECL(Equipment, EquipmentEditorOptions)
 
+private:
+   //! Needed by \c EditorBase because we have the \c sharingBar option
+   Recipe * currentRecipeForSharing() const;
+
 public slots:
    void hideOrShowOptionalVessels();
    void resetAbsorption();

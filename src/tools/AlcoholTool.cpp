@@ -283,7 +283,6 @@ public:
    QLabel        * corrected_fg;
    SmartLabel    * label_calibration_temperature;
    SmartLineEdit * input_calibration_temperature;
-   QPushButton   * pushButton_convert;
    QLabel        * label_result;
    QLabel        * output_result;
    QGridLayout   * gridLayout;
