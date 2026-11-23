@@ -388,15 +388,29 @@ def fixUpAppBundle(appDir: pathlib.Path, executableName: str, extraSearchDirs: l
    # is killed on launch.  So we do an ad hoc signature.  This is not a substitute for proper signing and notarisation
    # (users will still have to get past Gatekeeper), but it means the bundle is at least internally consistent.
    #
+   # If signing fails, or the result does not verify, we stop the build: on Apple Silicon the app would just be killed
+   # on launch, which is a much less helpful way to find out.
+   #
    btLogger.log.info('Ad hoc signing ' + bundle.appDir.as_posix())
    signResult = subprocess.run(['codesign', '--force', '--deep', '--sign', '-', bundle.appDir.as_posix()],
                                capture_output=True)
    if signResult.returncode != 0:
-      btLogger.log.warning('Ad hoc signing failed: ' + signResult.stderr.decode('UTF-8'))
-   else:
-      verifyResult = subprocess.run(['codesign', '--verify', '--deep', '--strict', '--verbose=2', bundle.appDir.as_posix()],
-                                    capture_output=True)
-      btLogger.log.info('codesign --verify: ' + verifyResult.stderr.decode('UTF-8'))
+      btLogger.log.critical('Ad hoc signing failed: ' + signResult.stderr.decode('UTF-8'))
+      sys.exit(1)
+   verifySignature(bundle.appDir)
+   return
+
+def verifySignature(appDir: pathlib.Path):
+   """
+   Check the (ad hoc) code signature of the whole bundle.  Exits with an error if it does not verify.
+   """
+   verifyResult = subprocess.run(['codesign', '--verify', '--deep', '--strict', '--verbose=2', appDir.as_posix()],
+                                 capture_output=True)
+   output = verifyResult.stderr.decode('UTF-8')
+   if verifyResult.returncode != 0:
+      btLogger.log.critical('codesign --verify failed for ' + appDir.as_posix() + ': ' + output)
+      sys.exit(1)
+   btLogger.log.info('codesign --verify: ' + output)
    return
 
 def createDmg(appDir: pathlib.Path, dmgPath: pathlib.Path, volumeName: str):
@@ -426,20 +440,96 @@ def createDmg(appDir: pathlib.Path, dmgPath: pathlib.Path, volumeName: str):
    shutil.rmtree(stagingDir)
    return
 
+#
+# dyld prints one line per image loaded when DYLD_PRINT_LIBRARIES is set.  The format has varied between dyld versions:
+#    dyld: loaded: /usr/lib/libSystem.B.dylib                                     (dyld3 and earlier)
+#    dyld[12345]: <B1A2...-UUID> /usr/lib/libSystem.B.dylib                        (dyld4, macOS 12+)
+#    dyld[12345]: /usr/lib/libSystem.B.dylib
+#
+DYLD_LOADED_LINE = re.compile(r'^dyld(?:\[\d+\])?:\s+(?:loaded:\s+)?(?:<[^>]*>\s+)?(/.+?)\s*$', flags=re.MULTILINE)
+
+#
+# Things dyld can legitimately load from outside the bundle.  As well as SYSTEM_PREFIXES, this covers Apple's own
+# system extensions.
+#
+SMOKE_TEST_ALLOWED_PREFIXES = SYSTEM_PREFIXES + ('/Library/Apple/',)
+
+def parseDyldPrintLibraries(output: str) -> list[str]:
+   """
+   Given output produced with DYLD_PRINT_LIBRARIES=1, return the paths of all the images dyld loaded.
+   """
+   return DYLD_LOADED_LINE.findall(output)
+
 def smokeTest(executable: pathlib.Path):
    """
    Run the executable with --version.  This constructs the QApplication (so loads the platform plugin) and then exits,
    so it will catch dyld failures ("Library not loaded", "duplicate LC_RPATH", etc) and signature problems.
+
+   The build machine has Homebrew (and so all our dependencies) installed, which could mask a library missing from the
+   bundle.  verify() above should already have caught any reference to something outside the bundle, but there are
+   other routes by which something can get loaded from outside it -- eg a library dlopen()ed by leaf name, found via
+   dyld's fallback search path (which includes /usr/local/lib, where Homebrew lives on Intel Macs), or a Qt plugin found
+   via the Homebrew Qt's compiled-in plugin path.  So we:
+     - clear the environment variables that could point dyld or Qt somewhere else, and restrict dyld's fallback search
+       path to /usr/lib;
+     - set DYLD_PRINT_LIBRARIES so that dyld logs every image it loads, and then fail if any of them came from outside
+       the bundle and the OS.
+   (DYLD_* variables are ignored for binaries signed with the hardened runtime.  Our ad hoc signature does not enable
+   the hardened runtime, so they work here.  If we ever do proper signing with `--options runtime`, the "loaded from
+   outside" check will see no dyld output and just log a warning.)
+
+   We also re-check the code signature on the bundle as shipped (ie on the mounted disk image).
    """
+   appDir = executable.parents[2]  # .../Foo.app/Contents/MacOS/Foo -> .../Foo.app
+   verifySignature(appDir)
+
+   env = {k: v for k, v in os.environ.items()
+          if not k.startswith('DYLD_') and k not in ('QT_PLUGIN_PATH', 'QT_QPA_PLATFORM_PLUGIN_PATH', 'QT_QPA_PLATFORM')}
+   env['DYLD_FALLBACK_LIBRARY_PATH'] = '/usr/lib'
+   env['DYLD_PRINT_LIBRARIES'] = '1'
+   env['QT_DEBUG_PLUGINS'] = '1'
+
    btLogger.log.info('Smoke testing ' + executable.as_posix())
    try:
-      result = subprocess.run([executable.as_posix(), '--version'], capture_output=True, timeout=120)
+      # Run from a neutral directory so nothing relative to the build tree can be picked up
+      result = subprocess.run([executable.as_posix(), '--version'], capture_output=True, timeout=120, env=env, cwd='/')
    except subprocess.TimeoutExpired:
-      btLogger.log.warning('Smoke test timed out (but did not crash on load)')
-      return
-   output = result.stdout.decode('UTF-8') + result.stderr.decode('UTF-8')
-   btLogger.log.info('Smoke test exit code ' + str(result.returncode) + ', output: ' + output)
-   if result.returncode != 0:
-      btLogger.log.critical('Smoke test of packaged app failed')
+      btLogger.log.critical('Smoke test timed out: the application did not exit within 2 minutes of being run with --version')
       sys.exit(1)
+   stdout = result.stdout.decode('UTF-8', errors='replace')
+   stderr = result.stderr.decode('UTF-8', errors='replace')
+
+   # Don't flood the log with the (several hundred) dyld lines; we report the interesting ones below.
+   btLogger.log.info('Smoke test exit code ' + str(result.returncode) + ', stdout: ' + stdout)
+   otherStderr = '\n'.join(line for line in stderr.splitlines() if not DYLD_LOADED_LINE.match(line))
+   btLogger.log.info('Smoke test stderr (excluding dyld load messages): ' + otherStderr)
+
+   if result.returncode != 0:
+      if result.returncode < 0:
+         btLogger.log.critical(
+            'Smoke test of packaged app failed: killed by signal ' + str(-result.returncode) +
+            ('.  (On Apple Silicon, SIGKILL on launch usually means a code signature problem.)' if result.returncode == -9 else '')
+         )
+      else:
+         btLogger.log.critical('Smoke test of packaged app failed with exit code ' + str(result.returncode))
+      sys.exit(1)
+
+   loaded = parseDyldPrintLibraries(stderr)
+   if not loaded:
+      btLogger.log.warning('Smoke test: dyld did not report any loaded images, so cannot check where they came from')
+      return
+   appPrefix = appDir.resolve().as_posix() + '/'
+   outside = sorted({path for path in loaded
+                     if not path.startswith(SMOKE_TEST_ALLOWED_PREFIXES)
+                     and not pathlib.Path(path).resolve().as_posix().startswith(appPrefix)})
+   btLogger.log.info('Smoke test: dyld loaded ' + str(len(loaded)) + ' image(s)')
+   if outside:
+      for path in outside:
+         btLogger.log.error('Smoke test: loaded from outside the app bundle: ' + path)
+      btLogger.log.critical(
+         'Smoke test of packaged app failed: ' + str(len(outside)) + ' image(s) were loaded from outside the bundle, ' +
+         'so the app would probably not start on a machine without them'
+      )
+      sys.exit(1)
+   btLogger.log.info('Smoke test passed: everything loaded from inside the bundle or the OS')
    return
