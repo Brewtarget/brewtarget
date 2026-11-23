@@ -1229,8 +1229,16 @@ def doPackage():
             'librsvg-2'    , # SVG rendering library -- see https://wiki.gnome.org/Projects/LibRsvg
             'libwinpthread',
             'libxml2'      ,
+            #
+            # ZLib compression library.  As of zlib 1.4 (in MSYS2 from 2026-11), the main DLL is libz-1.dll, with
+            # zlib1.dll kept for backwards compatibility.  Libraries built against the newer zlib (which may include
+            # libxml2, libpng, Qt etc) need libz-1.dll, whereas older ones need zlib1.dll, so we ship both.  Note that the
+            # 'libz' glob also catches libzlibwapi.dll and libzstd.dll, but the regex check filters those out.  See
+            # https://github.com/Brewtarget/brewtarget/issues/1198
+            #
+            'libz'         ,
             'libzstd'      , # ZStandard (aka zstd) = fast lossless compression algorithm
-            'zlib'         , # ZLib compression library
+            'zlib'         ,
          ]
          btUtils.findAndCopyLibs(pathsToSearch, extraLibs, 'dll', '-?[0-9]*.dll', dir_packages_win_bin)
 
