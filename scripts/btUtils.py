@@ -85,6 +85,110 @@ def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, libRegex, targetDire
          sys.exit(1)
    return
 
+#-----------------------------------------------------------------------------------------------------------------------
+# Helper function for Windows packaging: returns the names of the DLLs listed in the import table of the supplied
+# executable or DLL, using `objdump -p` (which is part of binutils, so always present in an MSYS2 build environment).
+#
+# The relevant lines of objdump output look like:
+#
+#       DLL Name: libxml2-16.dll
+#
+# NB: This does not tell us about DLLs that are loaded at run-time via LoadLibrary() / QLibrary.
+#-----------------------------------------------------------------------------------------------------------------------
+def getDllImports(peFile):
+   result = subprocess.run(['objdump', '-p', str(peFile)], capture_output=True, text=True)
+   if (result.returncode != 0):
+      btLogger.log.critical('Unable to read import table of ' + str(peFile) + ': ' + result.stderr)
+      sys.exit(1)
+   return re.findall(r'^\s*DLL Name:\s*(\S+)\s*$', result.stdout, flags=re.MULTILINE)
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Helper function for Windows packaging: starting from every .exe and .dll already in packageBinDir (including those in
+# subdirectories, which is where windeployqt puts Qt plugins), recursively find every DLL they import and copy into
+# packageBinDir any that are not already in the package and not part of Windows itself.
+#
+#    packageBinDir  = pathlib.Path of the bin directory of the package we are building
+#    pathsToSearch  = array of directories to search for DLLs (typically the PATH environment variable).  We search
+#                     these in order, so the MSYS2 bin directory (eg C:\msys64\ucrt64\bin) should come before anything
+#                     else that might contain a same-named DLL.  Any Windows directories in this list are ignored here
+#                     (see below).
+#
+# For each imported DLL name, we:
+#    - skip API set names (api-ms-win-*, ext-ms-*), which are virtual DLLs resolved by the Windows loader;
+#    - skip anything already in the package;
+#    - copy it from the first non-Windows directory in pathsToSearch where it exists, then also examine its imports;
+#    - otherwise, skip it if it exists in the Windows system directories (eg KERNEL32.dll, USER32.dll), since every
+#      Windows machine will have it;
+#    - otherwise, record it as missing.
+#
+# Note that we look in the MSYS2 directories _before_ the Windows ones.  This is because third-party software sometimes
+# drops copies of common DLLs (eg zlib1.dll) into System32, which would otherwise make us wrongly think they are part
+# of Windows and don't need shipping.  Conversely, the MSYS2 directories should never contain genuine Windows system
+# DLLs.
+#
+# If anything is missing, we log every missing DLL (with what needs it) and abort, because the resulting installer
+# would not work.
+#-----------------------------------------------------------------------------------------------------------------------
+def findAndCopyDllDependencies(packageBinDir, pathsToSearch):
+   systemRoot = os.environ.get('SystemRoot', 'C:\\Windows')
+   systemDirs = [os.path.join(systemRoot, 'System32'), systemRoot]
+
+   def isUnderDir(path, root):
+      path = os.path.normcase(os.path.abspath(path))
+      root = os.path.normcase(os.path.abspath(root))
+      return path == root or path.startswith(root + os.sep)
+
+   searchDirs = [d for d in pathsToSearch if d and os.path.isdir(d) and not isUnderDir(d, systemRoot)]
+   btLogger.log.debug('Searching for DLL dependencies in: ' + ', '.join(searchDirs))
+
+   # Map from lower-case file name to path of every executable/DLL already in the package.  (DLL names are
+   # case-insensitive on Windows and import tables are not consistent about case -- eg KERNEL32.dll vs kernel32.dll.)
+   inPackage = {}
+   for peFile in packageBinDir.rglob('*'):
+      if peFile.is_file() and peFile.suffix.lower() in ('.exe', '.dll'):
+         inPackage[peFile.name.lower()] = peFile
+
+   toExamine = list(inPackage.values())
+   examined  = set()
+   copied    = []
+   missing   = {} # Map from missing DLL name to list of files that need it
+   while toExamine:
+      peFile = toExamine.pop()
+      if peFile in examined:
+         continue
+      examined.add(peFile)
+      for dllName in getDllImports(peFile):
+         key = dllName.lower()
+         if key.startswith(('api-ms-win-', 'ext-ms-')) or key in inPackage:
+            continue
+         sourcePath = next(
+            (os.path.join(d, dllName) for d in searchDirs if os.path.isfile(os.path.join(d, dllName))), None
+         )
+         if sourcePath is not None:
+            btLogger.log.debug('Copying ' + sourcePath + ' (needed by ' + peFile.name + ') to ' + packageBinDir.as_posix())
+            shutil.copy2(sourcePath, packageBinDir)
+            copiedPath = packageBinDir.joinpath(os.path.basename(sourcePath))
+            inPackage[key] = copiedPath
+            toExamine.append(copiedPath)
+            copied.append(dllName)
+         elif any(os.path.isfile(os.path.join(d, dllName)) for d in systemDirs):
+            continue
+         else:
+            missing.setdefault(dllName, []).append(peFile.name)
+
+   btLogger.log.info(
+      'Examined ' + str(len(examined)) + ' executable(s)/DLL(s); copied ' + str(len(copied)) + ' extra DLL(s): ' +
+      ', '.join(sorted(copied, key=str.lower))
+   )
+   if missing:
+      for dllName, neededBy in sorted(missing.items(), key=lambda item: item[0].lower()):
+         btLogger.log.critical(
+            'Cannot find ' + dllName + ' (needed by ' + ', '.join(sorted(set(neededBy))) + ') in any of: ' +
+            ', '.join(searchDirs + systemDirs)
+         )
+      sys.exit(1)
+   return
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Helper function to get Linux distro name and release number
