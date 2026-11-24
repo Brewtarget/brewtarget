@@ -1146,6 +1146,26 @@ def doPackage():
          os.chdir(previousWorkingDirectory)
 
          #
+         # windeployqt copies in every Qt SQL driver plugin that the Qt installation has (Firebird/InterBase, MySQL/
+         # MariaDB, ODBC, etc), but we only use SQLite and PostgreSQL (see src/database/Database.cpp).  The others are
+         # just dead weight in the installer, and, because their client libraries (fbclient.dll, libmariadb.dll, etc) are
+         # not installed, they would also make findAndCopyDllDependencies() below fail the build.  So we remove them.
+         #
+         # We list the ones we keep, rather than the ones we remove, so that any new driver that appears in a future Qt
+         # version is also removed.
+         #
+         sqlDriversToKeep = ['qsqlite.dll', 'qsqlpsql.dll']
+         dir_packages_win_sqldrivers = dir_packages_win_bin.joinpath('sqldrivers')
+         for sqlDriver in sorted(dir_packages_win_sqldrivers.glob('*.dll')):
+            if sqlDriver.name.lower() not in sqlDriversToKeep:
+               btLogger.log.info('Removing unused SQL driver plugin ' + sqlDriver.as_posix())
+               sqlDriver.unlink()
+         for sqlDriver in sqlDriversToKeep:
+            if not dir_packages_win_sqldrivers.joinpath(sqlDriver).exists():
+               btLogger.log.critical('windeployqt did not deploy SQL driver plugin ' + sqlDriver)
+               sys.exit(1)
+
+         #
          # We're not finished with shared libraries.  Although windeployqt is theoretically capable of detecting all the
          # shared libraries we need, including non-Qt ones, it doesn't, in practice, seem to be that good on the non-Qt
          # bit.  And although, somewhere in the heart of the Meson implementation, you would think it would or could
