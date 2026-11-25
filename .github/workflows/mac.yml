@@ -175,6 +175,8 @@ jobs:
       #  - GitHub's macOS runners have a logged-in GUI session, so the app can create its windows.
       #  - The main GUI run passes if the app is still running after 30 seconds (or has exited normally by then).  It
       #    fails if the app dies, eg because it is killed for a code signature problem (SIGKILL, exit status 137).
+      #  - GitHub runs bash steps with -e, but we turn that off (set +e) because we check exit statuses ourselves.  (With
+      #    -e, eg, the `wait` on the app after we have killed it returns 143 (128 + SIGTERM), which would end the step.)
       #  - macOS does not have a `timeout` command (it is in Homebrew's coreutils, which we are hiding), so we use
       #    Perl's alarm() for the --version run.
       #  - We stop dyld from searching /usr/local/lib (part of its default fallback path) by setting
@@ -186,7 +188,7 @@ jobs:
       - name: Smoke test installed app
         shell: bash
         run: |
-           set -uo pipefail
+           set +e -uo pipefail
            dmg=$(ls ${{github.workspace}}/mbuild/packages/darwin/brewtarget*.dmg | head -1)
            mountPoint=$(mktemp -d /tmp/smoketest-dmg.XXXXXX)
            hdiutil attach -nobrowse -readonly -mountpoint "$mountPoint" "$dmg" || exit 1
