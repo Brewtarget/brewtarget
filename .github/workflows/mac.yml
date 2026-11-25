@@ -159,6 +159,101 @@ jobs:
              ${{github.workspace}}/mbuild/packages/darwin/brewtarget*.dmg.sha256sum
           retention-days: 7
 
+      #
+      # Smoke test the installed app, as a user would get it: copy the app out of the disk image into /Applications,
+      # hide Homebrew (so that nothing we forgot to bundle can be found there), and then start it.  This complements the
+      # checks that `bt package` already does (see scripts/btMacBundle.py):
+      #   - `bt package` checks the code signature of every file in the bundle and runs the app with --version, but
+      #     --version exits before most Qt plugins are loaded.  Here we also start the app normally and leave it running
+      #     for a while, so that it creates its main window and loads the plugins it needs for that (eg the SVG icon
+      #     engine).
+      #   - Hiding Homebrew is a stronger check than looking at what dyld loaded, and also covers things that are looked
+      #     up by path at run-time (eg Qt plugins via Homebrew Qt's compiled-in plugin path).
+      # Homebrew is put back afterwards (via the trap) because the failure-handling steps below use it.
+      #
+      # Notes:
+      #  - GitHub's macOS runners have a logged-in GUI session, so the app can create its windows.
+      #  - The main GUI run passes if the app is still running after 30 seconds (or has exited normally by then).  It
+      #    fails if the app dies, eg because it is killed for a code signature problem (SIGKILL, exit status 137).
+      #  - GitHub runs bash steps with -e, but we turn that off (set +e) because we check exit statuses ourselves.  (With
+      #    -e, eg, the `wait` on the app after we have killed it returns 143 (128 + SIGTERM), which would end the step.)
+      #  - macOS does not have a `timeout` command (it is in Homebrew's coreutils, which we are hiding), so we use
+      #    Perl's alarm() for the --version run.
+      #  - We stop dyld from searching /usr/local/lib (part of its default fallback path) by setting
+      #    DYLD_FALLBACK_LIBRARY_PATH, as anything found there would not be on a user's machine.
+      #  - This copies the app with ditto rather than drag-and-drop in Finder, so it does not get the quarantine
+      #    attribute that a downloaded disk image would have, and therefore does not test Gatekeeper.  Since we only
+      #    ad hoc sign, Gatekeeper will always object on a user's machine until we do proper signing and notarisation.
+      #
+      - name: Smoke test installed app
+        shell: bash
+        run: |
+           set +e -uo pipefail
+           dmg=$(ls ${{github.workspace}}/mbuild/packages/darwin/brewtarget*.dmg | head -1)
+           mountPoint=$(mktemp -d /tmp/smoketest-dmg.XXXXXX)
+           hdiutil attach -nobrowse -readonly -mountpoint "$mountPoint" "$dmg" || exit 1
+           appName=$(cd "$mountPoint" && ls -d *.app | head -1)
+           app="/Applications/$appName"
+           echo "Installing $appName from $dmg to /Applications"
+           rm -rf "$app"
+           ditto "$mountPoint/$appName" "$app" || exit 1
+           hdiutil detach "$mountPoint" || exit 1
+           exe="$app/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$app/Contents/Info.plist")"
+
+           codesign --verify --deep --strict --verbose=2 "$app" || { echo "Code signature of $app does not verify"; exit 1; }
+
+           if [[ -d /opt/homebrew ]]; then
+              echo "Hiding /opt/homebrew"
+              sudo mv /opt/homebrew /opt/homebrew.smoketest-hidden
+              trap 'echo "Restoring /opt/homebrew"; sudo mv /opt/homebrew.smoketest-hidden /opt/homebrew' EXIT
+           fi
+           unset QT_PLUGIN_PATH QT_QPA_PLATFORM_PLUGIN_PATH QT_QPA_PLATFORM DYLD_LIBRARY_PATH DYLD_FRAMEWORK_PATH
+           export DYLD_FALLBACK_LIBRARY_PATH=/usr/lib
+           export QT_DEBUG_PLUGINS=1
+
+           crashReportsBefore=$(ls ~/Library/Logs/DiagnosticReports /Library/Logs/DiagnosticReports 2>/dev/null | sort)
+           showNewCrashReports() {
+              for dir in ~/Library/Logs/DiagnosticReports /Library/Logs/DiagnosticReports; do
+                 for report in "$dir"/*; do
+                    [[ -f "$report" ]] || continue
+                    if ! grep -qxF "$(basename "$report")" <<< "$crashReportsBefore"; then
+                       echo "===== New crash report: $report"; head -c 20000 "$report"; echo
+                    fi
+                 done
+              done
+           }
+
+           echo "===== Running $exe --version"
+           /usr/bin/perl -e 'alarm shift; exec @ARGV' 120 "$exe" --version
+           status=$?
+           if [[ $status -ne 0 ]]; then
+              echo "Smoke test failed: $exe --version exited with status $status"
+              showNewCrashReports
+              exit 1
+           fi
+
+           echo "===== Starting $exe normally for 30 seconds"
+           "$exe" > /tmp/smoketest-app.log 2>&1 &
+           pid=$!
+           sleep 30
+           if kill -0 $pid 2>/dev/null; then
+              echo "App still running after 30 seconds -- stopping it"
+              kill $pid
+              wait $pid
+              status=0
+           else
+              wait $pid
+              status=$?
+           fi
+           echo "===== App output (last 300 lines)"
+           tail -n 300 /tmp/smoketest-app.log
+           if [[ $status -ne 0 ]]; then
+              echo "Smoke test failed: app exited with status $status (137 = SIGKILL, eg from a code signature problem)"
+              showNewCrashReports
+              exit 1
+           fi
+           echo "Smoke test passed"
+
       - name: Post-processing on any core dump
         if: ${{ failure() }}
         # It's all very well capturing core files, but if you don't have a Mac to analyse them on they are not a fat lot

@@ -41,11 +41,14 @@
 # Python built-in modules we use
 #-----------------------------------------------------------------------------------------------------------------------
 import glob
+import hashlib
 import os
 import pathlib
+import plistlib
 import re
 import shutil
 import stat
+import struct
 import subprocess
 import sys
 
@@ -385,32 +388,177 @@ def fixUpAppBundle(appDir: pathlib.Path, executableName: str, extraSearchDirs: l
 
    #
    # install_name_tool invalidates any existing code signature, and on Apple Silicon unsigned (or invalidly signed) code
-   # is killed on launch.  So we do an ad hoc signature.  This is not a substitute for proper signing and notarisation
-   # (users will still have to get past Gatekeeper), but it means the bundle is at least internally consistent.
+   # is killed.  So we do an ad hoc signature.  This is not a substitute for proper signing and notarisation (users will
+   # still have to get past Gatekeeper), but it means the bundle is at least internally consistent.
    #
-   # If signing fails, or the result does not verify, we stop the build: on Apple Silicon the app would just be killed
-   # on launch, which is a much less helpful way to find out.
-   #
-   btLogger.log.info('Ad hoc signing ' + bundle.appDir.as_posix())
-   signResult = subprocess.run(['codesign', '--force', '--deep', '--sign', '-', bundle.appDir.as_posix()],
-                               capture_output=True)
-   if signResult.returncode != 0:
-      btLogger.log.critical('Ad hoc signing failed: ' + signResult.stderr.decode('UTF-8'))
-      sys.exit(1)
-   verifySignature(bundle.appDir)
+   signAppBundle(bundle.appDir)
+   verifyAllSignatures(bundle.appDir)
    return
 
-def verifySignature(appDir: pathlib.Path):
+#
+# Mach-O code signature constants.  See Apple's cs_blobs.h (in the XNU sources) for the definitions.
+#
+_FAT_MAGICS              = (0xcafebabe, 0xcafebabf)        # Big-endian; 32-bit and 64-bit offsets respectively
+_THIN_MAGICS             = (0xfeedface, 0xfeedfacf)        # Little-endian; 32-bit and 64-bit
+_LC_CODE_SIGNATURE       = 0x1d
+_CSMAGIC_EMBEDDED_SIGNATURE = 0xfade0cc0
+_CSMAGIC_CODEDIRECTORY      = 0xfade0c02
+_CS_HASH_FUNCTIONS = {1: hashlib.sha1, 2: hashlib.sha256, 3: hashlib.sha256, 4: hashlib.sha384}
+
+def _machOSlices(data: bytes):
    """
-   Check the (ad hoc) code signature of the whole bundle.  Exits with an error if it does not verify.
+   Yields (arch, sliceBytes) for each architecture in a Mach-O file (one for a thin file, several for a universal one).
    """
-   verifyResult = subprocess.run(['codesign', '--verify', '--deep', '--strict', '--verbose=2', appDir.as_posix()],
-                                 capture_output=True)
-   output = verifyResult.stderr.decode('UTF-8')
-   if verifyResult.returncode != 0:
-      btLogger.log.critical('codesign --verify failed for ' + appDir.as_posix() + ': ' + output)
+   bigEndianMagic = struct.unpack('>I', data[:4])[0]
+   if bigEndianMagic in _FAT_MAGICS:
+      numSlices = struct.unpack('>I', data[4:8])[0]
+      for ii in range(numSlices):
+         if bigEndianMagic == _FAT_MAGICS[0]:
+            cpuType, _, offset, size, _ = struct.unpack('>iiIII', data[8 + 20 * ii : 28 + 20 * ii])
+         else:
+            cpuType, _, offset, size, _, _ = struct.unpack('>iiQQII', data[8 + 32 * ii : 40 + 32 * ii])
+         yield 'cpu ' + hex(cpuType & 0xffffffff), data[offset : offset + size]
+   elif struct.unpack('<I', data[:4])[0] in _THIN_MAGICS:
+      yield 'cpu ' + hex(struct.unpack('<i', data[4:8])[0] & 0xffffffff), data
+
+def checkPageHashes(path: pathlib.Path) -> list[str]:
+   """
+   Check that every page of every architecture in the Mach-O file at path matches the hashes in its embedded code
+   signature.  Returns a list of problems (empty if all is well).
+
+   This is the check the kernel does, page by page, as code is loaded on Apple Silicon, and a failure is fatal: the
+   process is killed with "CODESIGNING ... Invalid Page".  We do it ourselves, rather than relying solely on codesign,
+   because codesign --verify --deep on the bundle does not check every file -- see comment in signAppBundle().
+   """
+   problems = []
+   data = path.read_bytes()
+   for arch, machO in _machOSlices(data):
+      magic, _, _, _, numCommands, _, _ = struct.unpack('<IiiIIII', machO[:28])
+      offset = 32 if magic == _THIN_MAGICS[1] else 28
+      signature = None
+      for _ in range(numCommands):
+         command, commandSize = struct.unpack('<II', machO[offset : offset + 8])
+         if command == _LC_CODE_SIGNATURE:
+            signature = struct.unpack('<II', machO[offset + 8 : offset + 16])
+         offset += commandSize
+      if signature is None:
+         problems.append(path.as_posix() + ' [' + arch + '] is not signed')
+         continue
+      dataOffset, dataSize = signature
+      superBlob = machO[dataOffset : dataOffset + dataSize]
+      superMagic, _, numBlobs = struct.unpack('>III', superBlob[:12])
+      if superMagic != _CSMAGIC_EMBEDDED_SIGNATURE:
+         problems.append(path.as_posix() + ' [' + arch + '] has a malformed code signature')
+         continue
+      numCodeDirectories = 0
+      for ii in range(numBlobs):
+         _, blobOffset = struct.unpack('>II', superBlob[12 + 8 * ii : 20 + 8 * ii])
+         codeDirectory = superBlob[blobOffset:]
+         if struct.unpack('>I', codeDirectory[:4])[0] != _CSMAGIC_CODEDIRECTORY:
+            continue
+         numCodeDirectories += 1
+         (_, _, _, _, hashOffset, _, _, numCodeSlots, codeLimit,
+          hashSize, hashType, _, pageSizeLog2) = struct.unpack('>IIIIIIIIIBBBB', codeDirectory[:40])
+         hashFunction = _CS_HASH_FUNCTIONS.get(hashType)
+         if hashFunction is None:
+            problems.append(path.as_posix() + ' [' + arch + '] uses unknown code signature hash type ' + str(hashType))
+            continue
+         pageSize = (1 << pageSizeLog2) if pageSizeLog2 else codeLimit
+         badPages = []
+         for page in range(numCodeSlots):
+            start = page * pageSize
+            expected = codeDirectory[hashOffset + page * hashSize : hashOffset + (page + 1) * hashSize]
+            if hashFunction(machO[start : min(start + pageSize, codeLimit)]).digest()[:hashSize] != expected:
+               badPages.append(page)
+         if badPages:
+            problems.append(
+               path.as_posix() + ' [' + arch + '] has ' + str(len(badPages)) + ' page(s) that do not match the code ' +
+               'signature (eg page ' + str(badPages[0]) + ') -- probably modified after signing'
+            )
+      if numCodeDirectories == 0:
+         problems.append(path.as_posix() + ' [' + arch + '] code signature has no CodeDirectory')
+   return problems
+
+def _codesign(args: list[str]):
+   result = subprocess.run(['codesign'] + args, capture_output=True)
+   if result.returncode != 0:
+      btLogger.log.critical('codesign ' + ' '.join(args) + ' failed: ' + result.stderr.decode('UTF-8'))
       sys.exit(1)
-   btLogger.log.info('codesign --verify: ' + output)
+   return
+
+def _frameworkMainBinary(path: pathlib.Path) -> bool:
+   """
+   True if path is the main binary of a framework, ie Foo.framework/Versions/X/Foo
+   """
+   parts = path.parts
+   return len(parts) >= 4 and parts[-3] == 'Versions' and parts[-4] == parts[-1] + '.framework'
+
+def signAppBundle(appDir: pathlib.Path):
+   """
+   Ad hoc sign everything in the bundle, from the inside out.
+
+   We used to do this in one go with `codesign --force --deep --sign -` on the bundle, but this is not recommended by
+   Apple and doesn't work properly: --deep only re-signs nested code in the places it recognises as such, and it treats
+   the plugin dylibs under Contents/Plugins/<type>/ as ordinary resources.  This meant plugins we modify with
+   install_name_tool retained their original (now invalid) signatures, so the app was killed as soon as Qt loaded one of
+   them.  (Unhelpfully, `codesign --verify --deep` on the bundle still passed, because it only checks that resources
+   match the hashes recorded when the bundle was signed.)
+
+   Now, we sign:
+     1. every Mach-O file that is not the main binary of a framework or the app, deepest first
+     2. every framework, deepest first
+     3. the app bundle itself (which signs the main executable and seals everything else as resources)
+   """
+   contentsDir = appDir.joinpath('Contents')
+   depth = lambda path: len(path.parts)
+   mainExecutable = contentsDir.joinpath('MacOS', _bundleExecutableName(appDir))
+
+   machOFiles = [p for p in contentsDir.rglob('*') if _isMachO(p)]
+   looseFiles = [p for p in machOFiles if not _frameworkMainBinary(p) and p != mainExecutable]
+   frameworks = [p for p in contentsDir.rglob('*.framework') if p.is_dir() and not p.is_symlink()]
+
+   btLogger.log.info(
+      'Ad hoc signing ' + str(len(looseFiles)) + ' library/plugin file(s), ' + str(len(frameworks)) +
+      ' framework(s) and then ' + appDir.as_posix()
+   )
+   for file in sorted(looseFiles, key=depth, reverse=True):
+      _codesign(['--force', '--sign', '-', file.as_posix()])
+   for framework in sorted(frameworks, key=depth, reverse=True):
+      _codesign(['--force', '--sign', '-', framework.as_posix()])
+   _codesign(['--force', '--sign', '-', appDir.as_posix()])
+   return
+
+def _bundleExecutableName(appDir: pathlib.Path) -> str:
+   with open(appDir.joinpath('Contents', 'Info.plist'), 'rb') as infoPlist:
+      return plistlib.load(infoPlist)['CFBundleExecutable']
+
+def verifyAllSignatures(appDir: pathlib.Path):
+   """
+   Check the code signature of every Mach-O file in the bundle, every framework, and the bundle as a whole.  Exits with
+   an error if anything does not verify.  (On Apple Silicon, a bad signature on any library or plugin gets the app
+   killed when that file is loaded, which may be well after startup.)
+   """
+   contentsDir = appDir.joinpath('Contents')
+   machOFiles = sorted(p for p in contentsDir.rglob('*') if _isMachO(p))
+   problems = []
+   for file in machOFiles:
+      problems += checkPageHashes(file)
+      result = subprocess.run(['codesign', '--verify', '--strict', '--verbose=2', file.as_posix()], capture_output=True)
+      if result.returncode != 0:
+         problems.append('codesign --verify failed for ' + file.as_posix() + ': ' + result.stderr.decode('UTF-8').strip())
+   for framework in sorted(p for p in contentsDir.rglob('*.framework') if p.is_dir() and not p.is_symlink()):
+      result = subprocess.run(['codesign', '--verify', '--strict', '--verbose=2', framework.as_posix()], capture_output=True)
+      if result.returncode != 0:
+         problems.append('codesign --verify failed for ' + framework.as_posix() + ': ' + result.stderr.decode('UTF-8').strip())
+   result = subprocess.run(['codesign', '--verify', '--deep', '--strict', '--verbose=2', appDir.as_posix()], capture_output=True)
+   if result.returncode != 0:
+      problems.append('codesign --verify failed for ' + appDir.as_posix() + ': ' + result.stderr.decode('UTF-8').strip())
+   if problems:
+      for problem in problems:
+         btLogger.log.error(problem)
+      btLogger.log.critical('Code signature problems in ' + appDir.as_posix() + ' (' + str(len(problems)) + ' above)')
+      sys.exit(1)
+   btLogger.log.info('Code signatures OK for all ' + str(len(machOFiles)) + ' Mach-O file(s) in ' + appDir.as_posix())
    return
 
 def createDmg(appDir: pathlib.Path, dmgPath: pathlib.Path, volumeName: str):
@@ -478,10 +626,10 @@ def smokeTest(executable: pathlib.Path):
    the hardened runtime, so they work here.  If we ever do proper signing with `--options runtime`, the "loaded from
    outside" check will see no dyld output and just log a warning.)
 
-   We also re-check the code signature on the bundle as shipped (ie on the mounted disk image).
+   We also re-check the code signatures of everything in the bundle as shipped (ie on the mounted disk image).
    """
    appDir = executable.parents[2]  # .../Foo.app/Contents/MacOS/Foo -> .../Foo.app
-   verifySignature(appDir)
+   verifyAllSignatures(appDir)
 
    env = {k: v for k, v in os.environ.items()
           if not k.startswith('DYLD_') and k not in ('QT_PLUGIN_PATH', 'QT_QPA_PLATFORM_PLUGIN_PATH', 'QT_QPA_PLATFORM')}
