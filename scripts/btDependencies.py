@@ -591,6 +591,13 @@ def installDependencies():
                         'mingw-w64-ucrt-' + arch + '-harfbuzz',
                         'mingw-w64-ucrt-' + arch + '-librsvg', # Possibly needed to include in packaging for SVG display
                         'mingw-w64-ucrt-' + arch + '-openssl', # OpenSSL headers and library
+                        #
+                        # We need libpq.dll (the PostgreSQL client library) to ship with the Qt PostgreSQL driver
+                        # (sqldrivers/qsqlpsql.dll), which loads it.  In MSYS2, there is no separate libpq package; it
+                        # comes as part of the full PostgreSQL package.  (We only ship libpq.dll and its dependencies, not
+                        # the server or the client tools.)
+                        #
+                        'mingw-w64-ucrt-' + arch + '-postgresql',
                         'mingw-w64-ucrt-' + arch + '-qt6-base',
                         'mingw-w64-ucrt-' + arch + '-qt6-declarative', # Also needed for lupdate?
                         'mingw-w64-ucrt-' + arch + '-qt6-multimedia',

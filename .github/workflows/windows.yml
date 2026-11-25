@@ -363,6 +363,68 @@ jobs:
             windows/signed/*.*
           retention-days: 7
 
+      #
+      # Smoke test of the installer: install it silently into a scratch directory, then start the installed application
+      # with a minimal PATH (just the Windows system directories), so that nothing from MSYS2 can mask a DLL that we
+      # omitted to ship.  This is a backstop for the automatic DLL detection in scripts/buildTool.py, which cannot see
+      # DLLs that are only loaded at run-time.
+      #
+      # We run with --version, which makes the application exit straight after constructing QApplication.  This is
+      # enough to check that the executable and all the DLLs it imports can be loaded (which happens before main() is
+      # reached), and that the Qt platform plugin loads.  A missing DLL gives exit code 0xC0000135
+      # (STATUS_DLL_NOT_FOUND), which is -1073741515 as a signed 32-bit integer.
+      #
+      # Notes:
+      #  - We do NOT set QT_QPA_PLATFORM=offscreen here (as we do for the unit tests) because windeployqt only ships
+      #    the "windows" platform plugin, and we want to test the plugin we actually ship.
+      #  - In a GUI-subsystem application, QCommandLineParser on Windows can show --version output in a message box
+      #    instead of printing it, which would hang the step.  QT_COMMAND_LINE_PARSER_NO_GUI_MESSAGE_BOXES should stop
+      #    that; the timeout is a further safeguard (eg in case Windows shows a "DLL not found" dialog).
+      #  - We run from an empty working directory, because Windows also searches the current directory for DLLs.
+      #  - The NSIS /D= option must be the last argument and must not be quoted.
+      #  - Accessing $process.Handle straight after starting it is a workaround for a PowerShell quirk where ExitCode
+      #    can otherwise come back empty.
+      #
+      - name: Smoke test installer
+        shell: pwsh
+        run: |
+          $executableName = 'brewtarget.exe'
+          $installDir = 'C:\_smoketest\install'
+          $workDir    = 'C:\_smoketest\work'
+          New-Item -ItemType Directory -Force -Path $workDir | Out-Null
+
+          $installer = Get-ChildItem -Path C:/_/mbuild/packages/windows -Filter 'Brewtarget*Installer.exe' | Select-Object -First 1
+          if (-not $installer) { throw 'Could not find installer' }
+          Write-Host "Installing $($installer.FullName) to $installDir"
+          $install = Start-Process -FilePath $installer.FullName -ArgumentList '/S', "/D=$installDir" -Wait -PassThru
+          if ($install.ExitCode -ne 0) { throw "Installer exited with code $($install.ExitCode)" }
+          Get-ChildItem -Path $installDir -Recurse | Select-Object -ExpandProperty FullName
+
+          $exe = Join-Path $installDir "bin\$executableName"
+          if (-not (Test-Path $exe)) { throw "$exe not found after install" }
+
+          $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot;$env:SystemRoot\System32\Wbem"
+          $env:QT_COMMAND_LINE_PARSER_NO_GUI_MESSAGE_BOXES = '1'
+          $env:QT_DEBUG_PLUGINS = '1'
+          Write-Host "Running $exe --version with PATH=$env:PATH"
+          $process = Start-Process -FilePath $exe -ArgumentList '--version' -WorkingDirectory $workDir -NoNewWindow -PassThru `
+                                   -RedirectStandardOutput "$workDir\stdout.txt" -RedirectStandardError "$workDir\stderr.txt"
+          $null = $process.Handle
+          if (-not $process.WaitForExit(120000)) {
+             $process.Kill()
+             throw 'Application did not exit within 2 minutes (possibly blocked on a "DLL not found" or other dialog)'
+          }
+          Write-Host '--- stdout ---'; Get-Content "$workDir\stdout.txt"
+          Write-Host '--- stderr ---'; Get-Content "$workDir\stderr.txt"
+          $exitCode = $process.ExitCode
+          if ($exitCode -eq -1073741515) {
+             throw 'Application failed to start: a DLL it needs is not in the installer (STATUS_DLL_NOT_FOUND)'
+          }
+          if ($exitCode -ne 0) {
+             throw ('Application exited with code {0} (0x{0:X8})' -f $exitCode)
+          }
+          Write-Host 'Smoke test passed'
+
       - name: Upload CMake error info from failed build
         if: ${{ failure() }}
         uses: actions/upload-artifact@v7

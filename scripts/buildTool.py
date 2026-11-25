@@ -1146,93 +1146,65 @@ def doPackage():
          os.chdir(previousWorkingDirectory)
 
          #
+         # windeployqt copies in every Qt SQL driver plugin that the Qt installation has (Firebird/InterBase, MySQL/
+         # MariaDB, ODBC, etc), but we only use SQLite and PostgreSQL (see src/database/Database.cpp).  The others are
+         # just dead weight in the installer, and, because their client libraries (fbclient.dll, libmariadb.dll, etc) are
+         # not installed, they would also make findAndCopyDllDependencies() below fail the build.  So we remove them.
+         #
+         # We list the ones we keep, rather than the ones we remove, so that any new driver that appears in a future Qt
+         # version is also removed.
+         #
+         sqlDriversToKeep = ['qsqlite.dll', 'qsqlpsql.dll']
+         dir_packages_win_sqldrivers = dir_packages_win_bin.joinpath('sqldrivers')
+         for sqlDriver in sorted(dir_packages_win_sqldrivers.glob('*.dll')):
+            if sqlDriver.name.lower() not in sqlDriversToKeep:
+               btLogger.log.info('Removing unused SQL driver plugin ' + sqlDriver.as_posix())
+               sqlDriver.unlink()
+         for sqlDriver in sqlDriversToKeep:
+            if not dir_packages_win_sqldrivers.joinpath(sqlDriver).exists():
+               btLogger.log.critical('windeployqt did not deploy SQL driver plugin ' + sqlDriver)
+               sys.exit(1)
+
+         #
          # We're not finished with shared libraries.  Although windeployqt is theoretically capable of detecting all the
          # shared libraries we need, including non-Qt ones, it doesn't, in practice, seem to be that good on the non-Qt
          # bit.  And although, somewhere in the heart of the Meson implementation, you would think it would or could
          # know the full paths to the shared libraries on which we depend, this is not AFAICT extractable in the
-         # meson.build script.  So, here, we have a list of libraries that we know we depend on and we search for them
-         # in the paths listed in the PATH environment variable.  It's a bit less painful than you might think to
-         # construct and maintain this list of libraries, because, for the most part, if you miss a needed DLL from the
-         # package, Windows will give you an error message at start-up telling you which DLL(s) it needed but could not
-         # find.
+         # meson.build script.
          #
-         # There are also various platform-specific free-standing tools that claim to examine an executable and
-         # tell you what shared libraries it depends on.  In particular ntldd
-         # (see https://packages.msys2.org/packages/mingw-w64-x86_64-ntldd) seems useful.  Note that you need to run it
-         # with the `-R` (recursive) option to catch all the dependencies.  (Unlike with Linux packaging, we can't just
-         # specify the top level dependencies and rely on everything else to get pulled in automatically.)  Eg, the
-         # following is a useful starting point:
+         # We therefore run our own search for the DLLs we need, by reading the import tables of the executable and
+         # every DLL in the package (including the Qt plugins that windeployqt put there), and recursively copying in
+         # whatever they need from the MSYS2 bin directories.  (Anything that is needed but cannot be found either there
+         # or in the Windows system directories is a fatal error.)
+         #
+         # Even so, this cannot detect is a DLL that is only ever loaded at run-time (eg via LoadLibrary() or QLibrary),
+         # because such DLLs do not appear in any import table.  Those still need to be listed by hand, below, so they
+         # get copied in first (and then their own dependencies get picked up by the automatic search).
+         #
+         # If you want to see the full dependency tree by hand, ntldd
+         # (https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-ntldd) is useful:
          #
          #    ntldd -R brewtarget.exe | grep -v "not found" | grep -v ext | grep -v WINDOWS | sed -e 's/^[\t ]*//; s/\.dll.*$//' | sort -u
-         #
-         # We assume that the library 'foo' has a dll called 'libfoo.dll' or 'libfoo-X.dll' or 'libfooX.dll' where X is
-         # a (possibly multi-digit) version number present on some, but not all, libraries.  If we find more matches
-         # than we were expecting, we log a warning and just include everything we found.  (Sometimes we include the
-         # version number in the library name because we really are looking for a specific version or there are always
-         # multiple versions)  It's not super pretty, but it should work.
-         #
-         # Note that there are libraries with names of form 'libfoo-Y-X.dll'.  For the moment, we require the '-Y' part
-         # to be included in the list below, rather than adding more logic to deduce it.
          #
          # Just to keep us on our toes, the Python os module has two similarly-named but different things:
          #    - os.pathsep is the separator between paths (usually ';' or ':') eg in the PATH environment variable
          #    - os.sep is the separator between directories (usually '/' or '\\') in a path
          #
-         # The comments below about the source of libraries are just FYI.  In almost all cases, we are actually
-         # installing these things on the build machine via pacman, so we don't have to go directly to the upstream
-         # project.
-         #
          pathsToSearch = os.environ['PATH'].split(os.pathsep)
-         extraLibs = [
+         runTimeLoadedLibs = [
             #
-            # Following should have been handled automatically by windeployqt
-            #
-            #'Qt6Core'        ,
-            #'Qt6Gui'         ,
-            #'Qt6Multimedia'  ,
-            #'Qt6Network'     ,
-            #'Qt6PrintSupport',
-            #'Qt6Sql'         ,
-            #'Qt6Widgets'     ,
-            #
-            # Following are not handled by windeployqt.  The application will install and run without them, but it just
-            # won't show any .svg icons (and won't log any errors about them either).
+            # Not handled by windeployqt.  The application will install and run without them, but it just won't show any
+            # .svg icons (and won't log any errors about them either).
             # See also https://stackoverflow.com/questions/76047551/icons-shown-in-qt5-not-showing-in-qt6
+            #
+            # TBD: These may now be picked up automatically via the import table of the iconengines/qsvgicon.dll plugin,
+            #      in which case we can remove them from here.
             #
             'Qt6SvgWidgets', # See https://doc.qt.io/qt-6/qsvgwidget.html
             'Qt6Svg'       , # Needed for Qt6SvgWidgets.dll to display .svg icons
-            #
-            #
-            'libb2'               , # BLAKE hash functions -- https://en.wikipedia.org/wiki/BLAKE_(hash_function)
-            'libbrotlicommon'     , # Brotli compression -- see https://en.wikipedia.org/wiki/Brotli
-            'libbrotlidec'        , # Brotli compression
-            'libbrotlienc'        , # Brotli compression
-            'libbz2'              , # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
-            'libdouble-conversion', # Binary-decimal & decimal-binary routines for IEEE doubles -- see https://github.com/google/double-conversion
-            'libfreetype'         , # Font rendering -- see https://freetype.org/
-            'libgcc_s_seh' , # 64-bit GCC library
-            'libglib-2.0'  ,
-            'libgraphite'  ,
-            'libharfbuzz'  , # HarfBuzz text shaping engine -- see https://github.com/harfbuzz/harfbuzz
-            'libiconv'     , # See https://www.gnu.org/software/libiconv/
-            'libicudt'     , # Part of International Components for Unicode
-            'libicuin'     , # Part of International Components for Unicode
-            'libicuuc'     , # Part of International Components for Unicode
-            'libintl'      , # See https://www.gnu.org/software/gettext/
-            'libmd4c'      , # Markdown for C -- see https://github.com/mity/md4c
-            'libpcre2-8'   , # Perl Compatible Regular Expressions
-            'libpcre2-16'  , # Perl Compatible Regular Expressions
-            'libpcre2-32'  , # Perl Compatible Regular Expressions
-            'libpng16'     , # Official PNG reference library -- see http://www.libpng.org/pub/png/libpng.html
-            'libsqlite3'   , # Need this IN ADDITION to bin/sqldrivers/qsqlite.dll, which gets installed by windeployqt
-            'libstdc++'    ,
-            'librsvg-2'    , # SVG rendering library -- see https://wiki.gnome.org/Projects/LibRsvg
-            'libwinpthread',
-            'libxml2'      ,
-            'libzstd'      , # ZStandard (aka zstd) = fast lossless compression algorithm
-            'zlib'         , # ZLib compression library
          ]
-         btUtils.findAndCopyLibs(pathsToSearch, extraLibs, 'dll', '-?[0-9]*.dll', dir_packages_win_bin)
+         btUtils.findAndCopyLibs(pathsToSearch, runTimeLoadedLibs, 'dll', '-?[0-9]*.dll', dir_packages_win_bin)
+         btUtils.findAndCopyDllDependencies(dir_packages_win_bin, pathsToSearch)
 
          # Copy the NSIS installer script to where it belongs
          shutil.copy2(btFileSystem.dir_build.joinpath('NsisInstallerScript.nsi'), btFileSystem.dir_packages_platform)
