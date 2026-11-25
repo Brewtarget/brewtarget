@@ -117,6 +117,14 @@ private slots:
    void testBrewLogVolumes();
 
    /**
+    * \brief Check that wort lost with kettle hops (Equipment hop absorption rates) is counted as a kettle loss, that
+    *        only boil-stage hops of the relevant forms count, and that a calculated pre-boil size follows the kettle
+    *        hops, but a pre-boil size the user has chosen, or a locked boil, does not.  See
+    *        https://github.com/Brewtarget/brewtarget/issues/616
+    */
+   void testKettleHopAbsorption();
+
+   /**
     * \brief Check that the BeerXML-style evaporation rate (percent per hour) is relative to the boil size, and is kept
     *        consistent with the evaporation rate we actually use (liters per hour).
     */

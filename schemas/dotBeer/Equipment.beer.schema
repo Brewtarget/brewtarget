@@ -12,9 +12,9 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.1.0/Equipment.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.2.0/Equipment.beer.schema",
   "type": "object",
-  "description": "Groups together all the vessels in a set of brewing equipment.  There is an entry for each \"role\" a vessel can play (hot liquor tank, mash tun, lauter tun, boil kettle, fermentation vessel, aging vessel, packaging vessel).  Only the boil kettle is required.  If a role is absent, it is not played by a separate vessel: there is no transfer to or from such a vessel, and so no loss, and the role (if it happens at all) is played by a neighbouring vessel, as set out in the description of each role.  In particular, if there is no mash tun, the mash happens in the boil kettle, as in single-vessel set-ups such as all-in-one systems (eg Grainfather, BrewZilla) and brew-in-a-bag.\n\nThe properties of the mash that relate to the equipment as a whole, rather than to a particular vessel (`grain_absorption_rate` and `foundation_volume`), are at the top level, so that they are in the same place whether the mash happens in a separate mash tun or in the kettle.",
+  "description": "Groups together all the vessels in a set of brewing equipment.  There is an entry for each \"role\" a vessel can play (hot liquor tank, mash tun, lauter tun, boil kettle, fermentation vessel, aging vessel, packaging vessel).  Only the boil kettle is required.  If a role is absent, it is not played by a separate vessel: there is no transfer to or from such a vessel, and so no loss, and the role (if it happens at all) is played by a neighbouring vessel, as set out in the description of each role.  In particular, if there is no mash tun, the mash happens in the boil kettle, as in single-vessel set-ups such as all-in-one systems (eg Grainfather, BrewZilla) and brew-in-a-bag.\n\nThe properties of the mash that relate to the equipment as a whole, rather than to a particular vessel (`grain_absorption_rate` and `foundation_volume`), are at the top level, so that they are in the same place whether the mash happens in a separate mash tun or in the kettle.  Likewise `hop_absorption_rate`, which applies to hops wherever they are left behind (the kettle or the vessel used for dry hopping).",
   "properties": {
     //
     // NB: BeerJSON has a list of `equipment_items`, each with a `form` saying what it is (eg "Mash Tun"), whereas we have
@@ -59,7 +59,7 @@
     // `grain_absorption_rate`.)
     //
     "grain_absorption_rate": {
-      "description": "The apparent volume absorbed by grain in the mash (whether in the mash tun or, if there is none, the kettle).  Typical values are 0.125 gal/lb (1.04 l/kg) for a conventional mash tun, about 0.8 l/kg (0.1 gal/lb) for an all-in-one system with a malt pipe, and 0.08 gal/lb (0.66 l/kg) for brew-in-a-bag with the bag squeezed.",
+      "description": "The apparent volume absorbed by grain in the mash (whether in the mash tun or, if there is none, the kettle).  Typical values are 0.125 gal/lb (1.04 l/kg) for a conventional mash tun, about 0.8 l/kg (0.1 gal/lb) for an all-in-one system with a malt pipe, and 0.08 gal/lb (0.66 l/kg) for brew-in-a-bag with the bag squeezed.  If absent, nothing is known about it, and a program may assume a typical value.",
       "$ref": "Measurement.beer.schema#/$defs/VolumePerMass"
     },
     //
@@ -91,6 +91,28 @@
     "foundation_volume": {
       "description": "Volume of liquid in the vessel where the mash happens (the mash tun or, if there is none, the kettle) that is outside the grain bed -- typically below a false bottom, screen or malt pipe -- and so is needed in addition to the water that wets the grain, but which drains out with the wort and is recovered (eg into the boil).  Typical of all-in-one systems: eg 3.5 l for a Grainfather G30.\n\nRelationship to other fields:<br>• The mash tun's **`loss`** is the volume that never leaves the mash tun (eg below the outlet); `foundation_volume` is the volume that does leave it.  No volume is counted in both, so, eg, for a cooler with a false bottom and an outlet above the floor, the volume below the outlet is `loss` and the volume between the outlet and the false bottom is `foundation_volume`.  (Where the mash happens in the kettle, the kettle's `loss` is about what is left after the boil, so is not relevant here.)<br>• The **`max_volume`** of the vessel where the mash happens is its total usable capacity, so it includes `foundation_volume` (and, for a mash tun, `loss`).  Thus these must add up to less than `max_volume`, and the room left for the mash itself is what remains.<br>• **`grain_absorption_rate`** is separate: it covers liquid retained by the grain, not by the vessel.\n\nUsing it: strike water = (grain mass × mash thickness) + `foundation_volume` (+ the mash tun's `loss`, if there is a mash tun), where mash thickness is the ratio of water to grain *in the grain bed*.  `foundation_volume` is not subtracted from the wort collected, whereas `loss` is.  If absent, treat it as 0, which is also the right value where there is no separate space below the grain (eg brew-in-a-bag with no false bottom).",
       "$ref": "Measurement.beer.schema#/$defs/Volume"
+    },
+    //
+    // Like `grain_absorption_rate`, this is a per-brewery figure -- what the brewer typically loses, given their
+    // process -- rather than a property of a vessel or of the hops, so it is at the top level.  How much liquid a hop
+    // product can absorb in its own right does vary with its form, and, for pellets, with grade (eg T90 versus T45) and
+    // variety.  But brewers rarely know (or could easily find out) those figures, and what they actually measure is the
+    // net loss, which also depends on their process.  So we only record the net figure, with separate rates for the two
+    // common forms of hops.  (We use named properties rather than a rate for each value of Hop `form` because there are
+    // no reliable figures for the other forms.)
+    //
+    // Neither BeerJSON nor BeerXML has an equivalent of this field.  Brewer's Friend has a single "hops absorption
+    // rate" on its equipment profile, which it applies only to kettle hops.
+    //
+    // For now, one rate covers both kettle hops and dry hops, because few brewers measure them separately.  If needed,
+    // a later version could add an optional separate rate for dry hops, falling back to this one when absent.  Likewise,
+    // a rate for wet (ie fresh, unkilned) hops could be added if reliable figures emerge.
+    //
+    "hop_absorption_rate": {
+      "x-since": "1.2.0",
+      "description": "The typical volume of wort or beer that this brewery loses with hop material, per mass of hops (as weighed when added): ie what is retained in or with the hops when the liquid is transferred off them.  This is a net figure that depends on the brewer's process as well as on the hops (eg loose hops versus a hop spider or bag, whether the hops are squeezed or left to drain, whirlpooling and settling time, and how dry hops are separated), so it is best measured -- eg by weighing the wet hop material left behind, or from the shortfall in volume on a hoppy brew.\n\nIt applies both to hops left in the kettle and to dry hops left in the vessel they were added to.  It is counted in addition to that vessel's `loss`, so `loss` should not also include an allowance for hops.  (Where, eg, loose pellets settle into space that is already counted in the kettle's `loss`, this rate should cover only the extra volume lost because of the hops.)\n\n`pellet` is used for hops of form `pellet` and `powder`, and `leaf` for `leaf` and `plug`.  Hop extract is assumed to leave no liquid behind.  No rate is defined for `leaf (wet)`, for which there are no reliable figures; a program should not simply apply the `leaf` rate, which, per mass as weighed, would likely overstate the loss.\n\nReported figures vary widely.  Around 7 ml/g (6.7 floz/oz) for pellets and 5 ml/g (4.8 floz/oz) for leaf hops are reasonable starting points.  (Fully swollen pellets can hold more: 10 - 14 ml/g in tests in water.)  If this field, or one of its rates, is absent, nothing is known about it, and a program may assume a typical value.",
+      "$ref": "#/$defs/HopAbsorptionRate",
+      "unevaluatedProperties": false
     },
     "hlt": {
       "description": "Hot Liquor Tank.  If absent, water is heated in one of the other vessels (eg the kettle), and no loss is assumed.",
@@ -152,6 +174,20 @@
     //
     // See comment above for why we don't put the `"unevaluatedProperties": false` property on these local types
     //
+    "HopAbsorptionRate": {
+      "type": "object",
+      "description": "Typical net retention of wort or beer by hops, for each of the two common forms of hops.  See `hop_absorption_rate` on [Equipment](#equipment) for how other forms map on to these.",
+      "properties": {
+        "pellet": {
+          "description": "Typical net retention for pellet (and powder) hops.",
+          "$ref": "Measurement.beer.schema#/$defs/VolumePerMass"
+        },
+        "leaf": {
+          "description": "Typical net retention for leaf (whole cone) and plug hops.",
+          "$ref": "Measurement.beer.schema#/$defs/VolumePerMass"
+        }
+      }
+    },
     "Vessel": {
       "type": "object",
       "description": "An individual vessel (eg mash tun, boil kettle) that forms part of brewing equipment.",

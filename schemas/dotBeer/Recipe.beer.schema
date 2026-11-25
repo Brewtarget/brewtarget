@@ -14,7 +14,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.1.0/Recipe.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.2.0/Recipe.beer.schema",
   "type": "object",
   "description": "The information stored in a beer recipe.",
   "properties": {

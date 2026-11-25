@@ -28,6 +28,7 @@
 #include <QSqlRecord>
 
 #include "model/FolderPropertyBase.h"
+#include "model/Hop.h"
 #include "model/NamedEntity.h"
 
 class EquipmentCatalog;
@@ -77,6 +78,8 @@ AddPropertyName(lauterTunVolume_l          )
 AddPropertyName(lauterTunWeight_kg         )
 AddPropertyName(foundationVolume_l         )
 AddPropertyName(grainAbsorption_LKg        )
+AddPropertyName(hopAbsorptionLeaf_LKg      )
+AddPropertyName(hopAbsorptionPellet_LKg    )
 AddPropertyName(mashTunLoss_l              )
 AddPropertyName(mashTunNotes               )
 AddPropertyName(mashTunSpecificHeat_calGC  )
@@ -155,6 +158,11 @@ AddPropertyName(topUpWater_l               )
  *        Grain absorption (\c grainAbsorption_LKg) is separate from all of these: it is water retained by the
  *        grain rather than by the vessel.
  *
+ *        Likewise, hop absorption (\c hopAbsorptionPellet_LKg and \c hopAbsorptionLeaf_LKg) is wort or beer lost with
+ *        hop material, over and above the loss of whichever vessel the hops are left in.  As in dotBeer, it is a
+ *        per-brewery figure (what the brewer typically loses, given their process) rather than a property of a vessel
+ *        or of the hops.  See \c hopAbsorption_LKg.
+ *
  *        Similarly, vessel capacities (\c kettleVolume_l, \c fvVolume_l, \c mashTunVolume_l etc) are distinct from the
  *        default volumes a new recipe using this equipment should start with (\c kettleBoilSize_l for pre-boil and
  *        \c fvBatchSize_l for batch size).
@@ -209,6 +217,8 @@ public:
    static QString localisedName_lauterTunWeight_kg         ();
    static QString localisedName_foundationVolume_l         ();
    static QString localisedName_grainAbsorption_LKg        ();
+   static QString localisedName_hopAbsorptionLeaf_LKg      ();
+   static QString localisedName_hopAbsorptionPellet_LKg    ();
    static QString localisedName_mashTunLoss_l              ();
    static QString localisedName_mashTunNotes               ();
    static QString localisedName_mashTunSpecificHeat_calGC  ();
@@ -252,6 +262,9 @@ public:
    static constexpr double default_hopUtilization_pct         = 100.0;
    static constexpr double default_kettleEvaporationPerHour_l = 4.0;
    static constexpr double default_grainAbsorption_LKg        = 1.086; // See also PhysicalConstants::grainAbsorption_Lkg
+   //! Typical net hop absorption (7 ml/g and 5 ml/g respectively) -- see dotBeer \c hop_absorption_rate
+   static constexpr double default_hopAbsorptionPellet_LKg    = 7.0;
+   static constexpr double default_hopAbsorptionLeaf_LKg      = 5.0;
    static constexpr double default_mashTunSpecificHeat_calGC  = 0.0;
    static constexpr double default_mashTunWeight_kg           = 0.0;
    static constexpr double default_topUpKettle_l              = 0.0;
@@ -396,6 +409,21 @@ public:
     *        tun.  In BeerXML, it is our ABSORPTION extension tag.
     */
    Q_PROPERTY(std::optional<double> grainAbsorption_LKg          READ grainAbsorption_LKg          WRITE setGrainAbsorption_LKg          )
+   /**
+    * \brief The typical volume of wort or beer that the brewer loses with pellet (and powder) hops, per mass of hops,
+    *        over and above the loss of the vessel the hops are left in.  Applies to hops left in the kettle and to dry
+    *        hops (though, for now, we only use it for the former).  If not set, we use
+    *        \c default_hopAbsorptionPellet_LKg.
+    *
+    *        In dotBeer, this is \c hop_absorption_rate/pellet (added in dotBeer 1.2.0).  There is no equivalent in
+    *        BeerJSON or BeerXML.
+    */
+   Q_PROPERTY(std::optional<double> hopAbsorptionPellet_LKg      READ hopAbsorptionPellet_LKg      WRITE setHopAbsorptionPellet_LKg      )
+   /**
+    * \brief As \c hopAbsorptionPellet_LKg, but for leaf (whole cone) and plug hops.  If not set, we use
+    *        \c default_hopAbsorptionLeaf_LKg.  In dotBeer, this is \c hop_absorption_rate/leaf.
+    */
+   Q_PROPERTY(std::optional<double> hopAbsorptionLeaf_LKg        READ hopAbsorptionLeaf_LKg        WRITE setHopAbsorptionLeaf_LKg        )
    /**
     * \brief Volume of liquid in the mash tun that is outside the grain bed -- typically below a false bottom, screen or
     *        malt pipe.  It is needed as well as the water that wets the grain, but, unlike \c mashTunLoss_l, it drains
@@ -550,6 +578,8 @@ public:
    std::optional<double> hopUtilization_pct         () const;
    QString               kettleNotes                () const;
    std::optional<double> grainAbsorption_LKg        () const;
+   std::optional<double> hopAbsorptionPellet_LKg    () const;
+   std::optional<double> hopAbsorptionLeaf_LKg      () const;
    double                foundationVolume_l         () const;
    double                boilingPoint_c             () const;
    std::optional<double> kettleInternalDiameter_cm  () const;
@@ -602,6 +632,8 @@ public:
    void setHopUtilization_pct         (std::optional<double> const   val);
    void setKettleNotes                (QString               const & val);
    void setGrainAbsorption_LKg        (std::optional<double> const   val);
+   void setHopAbsorptionPellet_LKg    (std::optional<double> const   val);
+   void setHopAbsorptionLeaf_LKg      (std::optional<double> const   val);
    void setFoundationVolume_l         (double                const   val);
    void setBoilingPoint_c             (double                const   val);
    void setKettleInternalDiameter_cm  (std::optional<double> const   val);
@@ -732,6 +764,17 @@ public:
    double defaultPreBoilSize_l(double const boilTime_mins) const;
 
    /**
+    * \brief The hop absorption rate (in liters per kilogram, ie ml/g) to use for hops of the given form, as in dotBeer:
+    *        the pellet rate for pellet and powder hops, and the leaf rate for leaf and plug hops.  Extract is assumed to
+    *        absorb nothing, and we have no figure for wet (ie fresh, unkilned) hops, so we also return 0 for those.  If
+    *        the form is not set, we assume pellets, as the most common case.
+    *
+    *        Where the relevant rate is not set, we use the typical value (\c default_hopAbsorptionPellet_LKg or
+    *        \c default_hopAbsorptionLeaf_LKg).
+    */
+   double hopAbsorption_LKg(std::optional<Hop::Form> const form) const;
+
+   /**
     * \brief Calculate how much wort is left immediately at knockout.
     *
     * \param kettleWort_l
@@ -760,6 +803,8 @@ private:
    std::optional<double> m_hopUtilization_pct        ;
    QString               m_kettleNotes               ;
    std::optional<double> m_grainAbsorption_LKg       ;
+   std::optional<double> m_hopAbsorptionPellet_LKg   ;
+   std::optional<double> m_hopAbsorptionLeaf_LKg     ;
    double                m_foundationVolume_l        ;
    double                m_boilingPoint_c            ;
    std::optional<double> m_kettleInternalDiameter_cm ;

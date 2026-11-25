@@ -2027,6 +2027,7 @@ test('Test IBU formulas'                     , testRunner, args : ['RecipeCalcTe
 test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
 test('Test mash water volumes'               , testRunner, args : ['RecipeCalcTests', 'testMashWaterVolumes'                 ], suite : 'recipe')
 test('Test brew log volumes'                 , testRunner, args : ['RecipeCalcTests', 'testBrewLogVolumes'                   ], suite : 'recipe')
+test('Test kettle hop absorption'            , testRunner, args : ['RecipeCalcTests', 'testKettleHopAbsorption'              ], suite : 'recipe')
 test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTests', 'testEvaporationRate'                  ], suite : 'recipe')
 test('Test equipment default volumes'        , testRunner, args : ['RecipeCalcTests', 'testEquipmentDefaultVolumes'          ], suite : 'recipe')
 test('Test mash tun heat capacity'           , testRunner, args : ['RecipeCalcTests', 'testMashTunHeatCapacity'              ], suite : 'recipe')

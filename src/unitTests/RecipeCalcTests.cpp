@@ -1864,6 +1864,118 @@ void RecipeCalcTests::testBrewLogVolumes() {
    return;
 }
 
+void RecipeCalcTests::testKettleHopAbsorption() {
+   double const batchSize_l     = 23.0;
+   double const kettleLoss_l    =  1.0;
+   double const evaporation_l   =  3.0; // Per hour, and we use a 60 minute boil
+   double const pelletRate_LKg  =  7.0;
+   double const leafRate_LKg    = Equipment::default_hopAbsorptionLeaf_LKg; // We leave the leaf rate unset
+   double const preBoilNoHops_l = batchSize_l + kettleLoss_l + evaporation_l;
+
+   auto pellets = this->pimpl->m_cascade_4pct;
+   if (pellets->key() <= 0) {
+      ObjectStoreWrapper::insert(pellets);
+   }
+   QVERIFY(pellets->form() == Hop::Form::Pellet);
+   auto makeHop = [&](QString const & name, Hop::Form const form) {
+      auto hop = std::make_shared<Hop>(*pellets);
+      hop->setName(name);
+      hop->setForm(form);
+      ObjectStoreWrapper::insert(hop);
+      return hop;
+   };
+   auto const leaf    = makeHop("Kettle hop absorption leaf"   , Hop::Form::Leaf   );
+   auto const wetLeaf = makeHop("Kettle hop absorption wet"    , Hop::Form::WetLeaf);
+
+   auto equipment = std::make_shared<Equipment>("Kettle hop absorption");
+   equipment->setFvBatchSize_l(batchSize_l);
+   equipment->setTopUpWater_l(0.0);
+   equipment->setTopUpKettle_l(0.0);
+   equipment->setKettleTrubChillerLoss_l(kettleLoss_l);
+   equipment->setKettleEvaporationPerHour_l(evaporation_l);
+   equipment->setHopAbsorptionPellet_LKg(pelletRate_LKg);
+   // Default pre-boil is calculated (so it can be adjusted for boil time) -- see Equipment::defaultPreBoilSize_l
+   equipment->setKettleBoilSize_l(equipment->calculatedPreBoilSize_l());
+   ObjectStoreWrapper::insert(equipment);
+
+   // Rates by form
+   QVERIFY(fuzzyComp(equipment->hopAbsorption_LKg(Hop::Form::Pellet), pelletRate_LKg, 0.0001));
+   QVERIFY(fuzzyComp(equipment->hopAbsorption_LKg(Hop::Form::Powder), pelletRate_LKg, 0.0001));
+   QVERIFY(fuzzyComp(equipment->hopAbsorption_LKg(Hop::Form::Leaf  ), leafRate_LKg  , 0.0001));
+   QVERIFY(fuzzyComp(equipment->hopAbsorption_LKg(Hop::Form::Plug  ), leafRate_LKg  , 0.0001));
+   QVERIFY(fuzzyComp(equipment->hopAbsorption_LKg(Hop::Form::Extract), 0.0          , 0.0001));
+   QVERIFY(fuzzyComp(equipment->hopAbsorption_LKg(Hop::Form::WetLeaf), 0.0          , 0.0001));
+   QVERIFY(fuzzyComp(equipment->hopAbsorption_LKg(std::nullopt     ), pelletRate_LKg, 0.0001));
+
+   auto recipe = std::make_shared<Recipe>("Kettle hop absorption");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(batchSize_l);
+   recipe->setEquipment(equipment);
+   auto boil = recipe->nonOptBoil();
+   boil->setBoilTime_mins(60.0);
+   boil->setPreBoilSize_l(recipe->defaultPreBoilSize_l(*equipment));
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l(), preBoilNoHops_l, 0.0001));
+   recipe->recalcAll();
+
+   auto addHop = [&](QString const & name,
+                     Hop * hop,
+                     RecipeAddition::Stage const stage,
+                     double const quantity_kg) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(hop);
+      addition->setStage(stage);
+      addition->setAddAtTime_mins(stage == RecipeAddition::Stage::Boil ? 60.0 : 0.0);
+      addition->setQuantity(quantity_kg);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      return recipe->addAddition(addition);
+   };
+
+   // Kettle pellets: 100 g at 7 ml/g = 0.7 l, which the (calculated) pre-boil size should follow
+   auto pelletAddition = addHop("Bittering pellets", pellets.get(), RecipeAddition::Stage::Boil, 0.100);
+   double expectedAbsorption_l = 0.100 * pelletRate_LKg;
+   QVERIFY(fuzzyComp(recipe->kettleHopAbsorption_l(), expectedAbsorption_l              , 0.0001));
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l()        , preBoilNoHops_l + expectedAbsorption_l, 0.0001));
+
+   // Kettle leaf: 50 g at the default 5 ml/g = 0.25 l
+   addHop("Flameout leaf", leaf.get(), RecipeAddition::Stage::Boil, 0.050);
+   expectedAbsorption_l += 0.050 * leafRate_LKg;
+   QVERIFY(fuzzyComp(recipe->kettleHopAbsorption_l(), expectedAbsorption_l              , 0.0001));
+   QVERIFY(fuzzyComp(recipe->kettleLoss_l()        , kettleLoss_l + expectedAbsorption_l , 0.0001));
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l()        , preBoilNoHops_l + expectedAbsorption_l, 0.0001));
+
+   // Dry hops and wet hops don't count (for now in the case of the former)
+   addHop("Dry hop pellets", pellets.get(), RecipeAddition::Stage::Fermentation, 0.200);
+   addHop("Wet hops"       , wetLeaf.get(), RecipeAddition::Stage::Boil        , 0.300);
+   QVERIFY(fuzzyComp(recipe->kettleHopAbsorption_l(), expectedAbsorption_l              , 0.0001));
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l()        , preBoilNoHops_l + expectedAbsorption_l, 0.0001));
+
+   // A pre-boil size the user has chosen is left alone
+   boil->setPreBoilSize_l(30.0);
+   pelletAddition->setQuantity(0.200);
+   expectedAbsorption_l = 0.200 * pelletRate_LKg + 0.050 * leafRate_LKg;
+   QVERIFY(fuzzyComp(recipe->kettleHopAbsorption_l(), expectedAbsorption_l, 0.0001));
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l()        , 30.0                , 0.0001));
+
+   // The equipment's default without any allowance for hops also counts as calculated (eg for recipes created before
+   // we allowed for hop absorption)
+   boil->setPreBoilSize_l(preBoilNoHops_l);
+   pelletAddition->setQuantity(0.150);
+   expectedAbsorption_l = 0.150 * pelletRate_LKg + 0.050 * leafRate_LKg;
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l(), preBoilNoHops_l + expectedAbsorption_l, 0.0001));
+
+   // A locked boil is left alone
+   boil->setLocked(true);
+   pelletAddition->setQuantity(0.100);
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l(), preBoilNoHops_l + expectedAbsorption_l, 0.0001));
+   boil->setLocked(false);
+
+   // With the measured volumes equal to the expected ones, the volume into the fermenter is the batch size, ie the
+   // hop absorption is allowed for (rather than coming out of the batch)
+   pelletAddition->setQuantity(0.150);
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l() - evaporation_l - recipe->kettleLoss_l(), batchSize_l, 0.0001));
+   return;
+}
+
 void RecipeCalcTests::testEvaporationRate() {
    auto equipment = std::make_shared<Equipment>("Evaporation Rate Test");
    equipment->setKettleBoilSize_l(30.0);

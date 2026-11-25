@@ -156,6 +156,8 @@ QString Equipment::localisedName_lauterTunVolume_l          () { return tr("Laut
 QString Equipment::localisedName_lauterTunWeight_kg         () { return tr("Lauter Tun Weight"          ); }
 QString Equipment::localisedName_foundationVolume_l         () { return tr("Foundation Volume"          ); }
 QString Equipment::localisedName_grainAbsorption_LKg        () { return tr("Grain Absorption"           ); }
+QString Equipment::localisedName_hopAbsorptionLeaf_LKg      () { return tr("Hop Absorption (Leaf)"      ); }
+QString Equipment::localisedName_hopAbsorptionPellet_LKg    () { return tr("Hop Absorption (Pellets)"   ); }
 QString Equipment::localisedName_mashTunLoss_l              () { return tr("Mash Tun Loss"              ); }
 QString Equipment::localisedName_mashTunNotes               () { return tr("Mash Tun Notes"             ); }
 QString Equipment::localisedName_mashTunSpecificHeat_calGC  () { return tr("Mash Tun Specific Heat"     ); }
@@ -188,6 +190,8 @@ bool Equipment::compareWith(NamedEntity const & other, QList<BtStringConst const
       AUTO_PROPERTY_COMPARE(this, rhs, m_hopUtilization_pct        , PropertyNames::Equipment::hopUtilization_pct        , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleNotes               , PropertyNames::Equipment::kettleNotes               , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_grainAbsorption_LKg       , PropertyNames::Equipment::grainAbsorption_LKg       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_hopAbsorptionPellet_LKg   , PropertyNames::Equipment::hopAbsorptionPellet_LKg   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_hopAbsorptionLeaf_LKg     , PropertyNames::Equipment::hopAbsorptionLeaf_LKg     , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_boilingPoint_c            , PropertyNames::Equipment::boilingPoint_c            , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleInternalDiameter_cm , PropertyNames::Equipment::kettleInternalDiameter_cm , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleOpeningDiameter_cm  , PropertyNames::Equipment::kettleOpeningDiameter_cm  , propertiesThatDiffer) &&
@@ -253,6 +257,8 @@ TypeLookup const Equipment::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hopUtilization_pct         , m_hopUtilization_pct         ,           NonPhysicalQuantity::Percentage          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleNotes                , m_kettleNotes                ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, grainAbsorption_LKg        , m_grainAbsorption_LKg        , Measurement::PhysicalQuantity::VolumePerMass      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hopAbsorptionPellet_LKg    , m_hopAbsorptionPellet_LKg    , Measurement::PhysicalQuantity::VolumePerMass      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hopAbsorptionLeaf_LKg      , m_hopAbsorptionLeaf_LKg      , Measurement::PhysicalQuantity::VolumePerMass      ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, foundationVolume_l         , m_foundationVolume_l         , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, boilingPoint_c             , m_boilingPoint_c             , Measurement::PhysicalQuantity::Temperature         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleInternalDiameter_cm  , m_kettleInternalDiameter_cm  , Measurement::PhysicalQuantity::Length              ),
@@ -314,6 +320,8 @@ Equipment::Equipment(QString name) :
    m_hopUtilization_pct         {std::nullopt}, // Previously 100.0
    m_kettleNotes                {""          },
    m_grainAbsorption_LKg        {std::nullopt}, // Previously 1.086
+   m_hopAbsorptionPellet_LKg    {std::nullopt},
+   m_hopAbsorptionLeaf_LKg      {std::nullopt},
    m_foundationVolume_l         {0.0         },
    m_boilingPoint_c             {100.0       },
    m_kettleInternalDiameter_cm  {std::nullopt},
@@ -379,6 +387,8 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_hopUtilization_pct         , namedParameterBundle, PropertyNames::Equipment::hopUtilization_pct         , std::nullopt),
    SET_REGULAR_FROM_NPB (m_kettleNotes                , namedParameterBundle, PropertyNames::Equipment::kettleNotes                , ""),
    SET_REGULAR_FROM_NPB (m_grainAbsorption_LKg        , namedParameterBundle, PropertyNames::Equipment::grainAbsorption_LKg        , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hopAbsorptionPellet_LKg    , namedParameterBundle, PropertyNames::Equipment::hopAbsorptionPellet_LKg    , std::nullopt),
+   SET_REGULAR_FROM_NPB (m_hopAbsorptionLeaf_LKg      , namedParameterBundle, PropertyNames::Equipment::hopAbsorptionLeaf_LKg      , std::nullopt),
    SET_REGULAR_FROM_NPB (m_foundationVolume_l         , namedParameterBundle, PropertyNames::Equipment::foundationVolume_l         , 0.0         ),
    SET_REGULAR_FROM_NPB (m_boilingPoint_c             , namedParameterBundle, PropertyNames::Equipment::boilingPoint_c             , 100.0),
    SET_REGULAR_FROM_NPB (m_kettleInternalDiameter_cm  , namedParameterBundle, PropertyNames::Equipment::kettleInternalDiameter_cm  , std::nullopt),
@@ -510,6 +520,8 @@ Equipment::Equipment(Equipment const & other) :
    m_hopUtilization_pct         {other.m_hopUtilization_pct         },
    m_kettleNotes                {other.m_kettleNotes                },
    m_grainAbsorption_LKg        {other.m_grainAbsorption_LKg        },
+   m_hopAbsorptionPellet_LKg    {other.m_hopAbsorptionPellet_LKg    },
+   m_hopAbsorptionLeaf_LKg      {other.m_hopAbsorptionLeaf_LKg      },
    m_foundationVolume_l         {other.m_foundationVolume_l         },
    m_boilingPoint_c             {other.m_boilingPoint_c             },
    m_kettleInternalDiameter_cm  {other.m_kettleInternalDiameter_cm  },
@@ -579,6 +591,8 @@ std::optional<double> Equipment::topUpKettle_l              () const { return m_
 std::optional<double> Equipment::hopUtilization_pct         () const { return m_hopUtilization_pct         ; }
 QString               Equipment::kettleNotes                () const { return m_kettleNotes                ; }
 std::optional<double> Equipment::grainAbsorption_LKg        () const { return m_grainAbsorption_LKg        ; }
+std::optional<double> Equipment::hopAbsorptionPellet_LKg    () const { return m_hopAbsorptionPellet_LKg    ; }
+std::optional<double> Equipment::hopAbsorptionLeaf_LKg      () const { return m_hopAbsorptionLeaf_LKg      ; }
 double                Equipment::foundationVolume_l         () const { return m_foundationVolume_l         ; }
 double                Equipment::boilingPoint_c             () const { return m_boilingPoint_c             ; }
 std::optional<double> Equipment::kettleInternalDiameter_cm  () const { return m_kettleInternalDiameter_cm  ; }
@@ -665,6 +679,8 @@ void Equipment::setTopUpKettle_l              (std::optional<double> const   val
 void Equipment::setHopUtilization_pct         (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::hopUtilization_pct        , this->m_hopUtilization_pct        , this->enforceMin(val, "hop utilization")); }
 void Equipment::setKettleNotes                (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleNotes               , this->m_kettleNotes               , val); }
 void Equipment::setGrainAbsorption_LKg        (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::grainAbsorption_LKg       , this->m_grainAbsorption_LKg       , this->enforceMin(val, "absorption")); }
+void Equipment::setHopAbsorptionPellet_LKg    (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::hopAbsorptionPellet_LKg   , this->m_hopAbsorptionPellet_LKg   , this->enforceMin(val, "hop absorption (pellets)")); }
+void Equipment::setHopAbsorptionLeaf_LKg      (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::hopAbsorptionLeaf_LKg     , this->m_hopAbsorptionLeaf_LKg     , this->enforceMin(val, "hop absorption (leaf)")); }
 void Equipment::setFoundationVolume_l         (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::foundationVolume_l        , this->m_foundationVolume_l        , this->enforceMin(val, "foundation volume")); }
 void Equipment::setBoilingPoint_c             (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::boilingPoint_c            , this->m_boilingPoint_c            , this->enforceMin(val, "boiling point of water")); }
 void Equipment::setKettleInternalDiameter_cm  (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleInternalDiameter_cm  , this->m_kettleInternalDiameter_cm  , val); }
@@ -813,6 +829,22 @@ double Equipment::defaultPreBoilSize_l(double const boilTime_mins) const {
       return this->calculatedPreBoilSize_l(boilTime_mins);
    }
    return this->m_kettleBoilSize_l;
+}
+
+double Equipment::hopAbsorption_LKg(std::optional<Hop::Form> const form) const {
+   switch (form.value_or(Hop::Form::Pellet)) {
+      case Hop::Form::Pellet:
+      case Hop::Form::Powder:
+         return this->m_hopAbsorptionPellet_LKg.value_or(Equipment::default_hopAbsorptionPellet_LKg);
+      case Hop::Form::Leaf:
+      case Hop::Form::Plug:
+         return this->m_hopAbsorptionLeaf_LKg.value_or(Equipment::default_hopAbsorptionLeaf_LKg);
+      case Hop::Form::Extract:
+      case Hop::Form::WetLeaf:
+         return 0.0;
+      // As usual, no default case, because we want the compiler to warn if we missed one above
+   }
+   Q_UNREACHABLE();
 }
 
 double Equipment::wortEndOfBoil_l(double const kettleWort_l, double const boilTime_mins) const {

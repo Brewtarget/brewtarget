@@ -38,6 +38,7 @@ Some new features from old issues.  Plus various bug fix release
   * Most recipes will show slightly fewer IBUs with Tinseth, Rager, Noonan, Daniels or mIBU estimation methods.
   * Because evaporation is now counted, any recipe with a pre-boil size set will drop by about 2.5–3% for a typical 25 L → 20 L boil.
   * Recipes without a pre-boil size don’t change.
+* Hop absorption: equipment now has rates for the wort lost with pellet and with leaf hops (Hop absorption (pellets) and Hop absorption (leaf) on the General tab of the Equipment editor).  Kettle hops count as an extra kettle loss, and a recipe's pre-boil volume follows its kettle hops (unless you have set a different pre-boil volume, or the boil is locked).  Existing equipment gets rates of zero, so your existing recipes don't change until you enter your own figures; new equipment uses typical values (7 ml/g for pellets and 5 ml/g for leaf) unless you change them.  Dry hops are not yet allowed for.  Equipment files now use dotBeer 1.2.0. [616](https://github.com/Brewtarget/brewtarget/issues/616)
 * Missing translations filled in for all supported languages, so the user interface is now (almost) fully translated.  These new translations are machine-generated and marked for review, so corrections from native speakers are very welcome.
 
 ### Bug Fixes

@@ -753,6 +753,27 @@ public:
     */
    std::optional<double> mashWaterShortfall_l() const;
    /**
+    * \brief The volume of wort lost with kettle hops, ie, for each boil-stage hop addition measured by weight
+    *        (including first wort, flameout and whirlpool additions), the mass of hops times the rate given by
+    *        \c Equipment::hopAbsorption_LKg for its form.  Mash hops and dry hops are not included.  (Dry hops will be
+    *        once we calculate packaged volume.)
+    *
+    * \param equipment If set, use this equipment.  Otherwise, use the recipe's equipment (and return 0.0 if the recipe
+    *                  does not have equipment.
+    */
+   double kettleHopAbsorption_l(Equipment const * equipment = nullptr) const;
+   /**
+    * \brief Everything lost in the kettle: \c Equipment::kettleTrubChillerLoss_l plus \c kettleHopAbsorption_l.  0 if
+    *        we don't have any equipment.
+    */
+   double kettleLoss_l() const;
+   /**
+    * \brief The pre-boil volume to use for this recipe with \c equipment (which need not yet be ours) -- eg when the
+    *        user sets the recipe's equipment, or scales the recipe.  This is \c Equipment::defaultPreBoilSize_l for
+    *        our boil time, plus what the kettle hops absorb (\c kettleHopAbsorption_l).
+    */
+   double defaultPreBoilSize_l(Equipment const & equipment) const;
+   /**
     * \brief The strike water (ie first infusion) needed for the supplied mash thickness, where the thickness is the
     *        ratio of water to grain in the grain bed.  This is the water for the grain bed plus
     *        \c Equipment::strikeWaterAllowance_l (ie the foundation water and mash tun loss, which have to be in the
@@ -1097,6 +1118,18 @@ public:
     *        grain bill, the equipment or the boil.
     */
    void scheduleMashAutoAdjust();
+
+   /**
+    * \brief Called when the kettle hops change (eg a hop addition is added, removed or changed, or the form of a hop
+    *        changes).  If our pre-boil size is the calculated default -- \c Equipment::defaultPreBoilSize_l, with or
+    *        without the old allowance for kettle hops -- then we update it to allow for the new kettle hops.  So the
+    *        pre-boil size follows the hops, but not if the user has deliberately chosen a different one.
+    *
+    *        We don't change a boil that is locked or shared with other recipes.  And we don't do this when the hop
+    *        absorption rates on the equipment change, because, in that case, \c EquipmentEditor offers to update the
+    *        pre-boil sizes of the recipes using the equipment (see \c EquipmentEditor::offerToUpdateRecipeSizes).
+    */
+   void updatePreBoilSizeForKettleHops();
 
    /**
     * \brief Water equivalent of \c scheduleMashAutoAdjust.  If \c waterKeptInSync is set, arrange for

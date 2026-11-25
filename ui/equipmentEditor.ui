@@ -308,26 +308,79 @@ Tabs</string>
         </widget>
        </item>
        <item row="13" column="0">
-        <widget class="InfoButton" name="infoButton_id"></widget>
+        <widget class="InfoButton" name="infoButton_hopAbsorption"></widget>
        </item>
        <item row="13" column="1">
+        <widget class="SmartLabel" name="label_hopAbsorptionPellet">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Hop absorption (pellets)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hopAbsorptionPellet</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_hopAbsorptionPellet">
+         <property name="toolTip">
+          <string>Wort or beer you typically lose with pellet (and powder) hops, per weight of hops, including dry hops</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="5">
+        <widget class="SmartLabel" name="label_hopAbsorptionLeaf">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Hop absorption (leaf)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_hopAbsorptionLeaf</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="6">
+        <widget class="SmartLineEdit" name="lineEdit_hopAbsorptionLeaf">
+         <property name="toolTip">
+          <string>Wort or beer you typically lose with leaf (whole cone) and plug hops, per weight of hops, including dry hops</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="1" colspan="6">
+        <widget class="InfoText" name="infoText_hopAbsorption">
+         <property name="buddy">
+          <cstring>infoButton_hopAbsorption</cstring>
+         </property>
+         <property name="text">
+          <string>The wort or beer you typically lose with hop material, per weight of hops, when you transfer the liquid off the hops -- in addition to the kettle's (or fermentor's) own loss, which should therefore not include an allowance for hops.  This depends on your process (eg loose hops or a hop spider, whether you squeeze or drain the hops, whirlpooling) as well as the hops, so it is best measured, eg by weighing the wet hops left behind, or from the shortfall on a hoppy brew.  If left blank, typical values of about 7 ml per gram (6.7 fl oz per oz) for pellets and 5 ml per gram (4.8 fl oz per oz) for leaf hops are used.  Wet (fresh) hops and hop extract are not counted.  For now, only hops in the kettle are allowed for: kettle hops increase the pre-boil volume a recipe needs.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="InfoButton" name="infoButton_id"></widget>
+       </item>
+       <item row="15" column="1">
         <widget class="QLabel" name="label_id">
          <property name="text">
           <string>ID in database</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="2">
+       <item row="15" column="2">
         <widget class="QLabel" name="label_id_value">
         </widget>
        </item>
 
-       <item row="13" column="5" colspan="2">
+       <item row="15" column="5" colspan="2">
         <widget class="QLabel" name="label_numRecipesUsing">
         </widget>
        </item>
 
-       <item row="14" column="1" colspan="6">
+       <item row="16" column="1" colspan="6">
         <widget class="InfoText" name="infoText_id">
          <property name="buddy">
           <cstring>infoButton_id</cstring>
@@ -337,7 +390,7 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
+       <item row="17" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1385,6 +1438,8 @@ Tabs</string>
   <tabstop>lineEdit_mashTunVolume</tabstop>
   <tabstop>lineEdit_hopUtilization</tabstop>
   <tabstop>lineEdit_boilingPoint</tabstop>
+  <tabstop>lineEdit_hopAbsorptionPellet</tabstop>
+  <tabstop>lineEdit_hopAbsorptionLeaf</tabstop>
   <tabstop>lineEdit_grainAbsorption</tabstop>
   <tabstop>pushButton_absorption</tabstop>
   <tabstop>lineEdit_mashTunWeight</tabstop>

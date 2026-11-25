@@ -255,7 +255,7 @@ void SerializationTests::testDotBeerVersionHandling() {
             qPrintable(QString{"Failed to read file from newer minor version: %1"}.arg(message)));
    QVERIFY2(!importDotBeerFile(writeMinimalFile("newerMajor.beer", "2.0.0", hops), message),
             "Should not read file from newer major version");
-   QVERIFY2(message.contains("1.1.0") && message.contains("2.0.0"), qPrintable(message));
+   QVERIFY2(message.contains("1.2.0") && message.contains("2.0.0"), qPrintable(message));
    QVERIFY2(!importDotBeerFile(writeMinimalFile("newerMinorUnknownField.beer",
                                          "1.9.0",
                                          hops + ", \"some_future_field\": true"),
@@ -327,6 +327,8 @@ void SerializationTests::testDotBeerExport() {
       vessels->setLauterTunDeadspaceLoss_l(2.0);
       vessels->setLauterTunNotes("Leftover notes");
       vessels->setLauterTunType("Leftover type");
+      // Hop absorption (added in dotBeer 1.2.0): we set the pellet rate but leave the leaf rate unset
+      vessels->setHopAbsorptionPellet_LKg(6.5);
       ObjectStoreWrapper::insert(vessels);
       // Ditto packaging vessel.  (We check below that the export omits both, because their volumes are 0, even
       // though we haven't called Equipment::clearUnusedOptionalVessels.)
@@ -461,6 +463,12 @@ void SerializationTests::testDotBeerExport() {
             QVERIFY2(equipment.as_object().contains("hlt")              , "HLT should be written");
             QVERIFY2(!equipment.as_object().contains("lauter_tun")      , "Zero-volume lauter tun should not be written");
             QVERIFY2(!equipment.as_object().contains("packaging_vessel"), "Zero-volume packaging vessel should not be written");
+            // Hop absorption was added in dotBeer 1.2.0.  Only the rate that is set should be written.
+            QVERIFY2(equipment.as_object().contains("hop_absorption_rate"), "Hop absorption rate not written");
+            auto const & hopAbsorption = equipment.at("hop_absorption_rate").as_object();
+            QVERIFY2(hopAbsorption.contains("pellet"), "Pellet hop absorption rate not written");
+            QVERIFY(fuzzyComp(hopAbsorption.at("pellet").at("value").to_number<double>(), 6.5, 0.0001));
+            QVERIFY2(!hopAbsorption.contains("leaf"), "Unset leaf hop absorption rate should not be written");
          }
       }
       QVERIFY2(foundVessels, "Test Equipment With Unused Lauter Tun not exported");

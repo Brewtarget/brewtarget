@@ -2049,10 +2049,9 @@ template<class NE> void MainWindow::setForRecipe(std::shared_ptr<NE> val) {
       //
       Recipe & recipe = *this->pimpl->m_recipeObs;
       auto const existingBoil = recipe.boil();
-      // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
-      double const boilTime_mins = existingBoil ? existingBoil->boilTime_mins() : Boil::default_boilTime_mins;
       double const newBatchSize_l   = val->fvBatchSize_l();
-      double const newPreBoilSize_l = val->defaultPreBoilSize_l(boilTime_mins);
+      // This allows for the recipe's boil time and kettle hops -- see Recipe::defaultPreBoilSize_l
+      double const newPreBoilSize_l = recipe.defaultPreBoilSize_l(*val);
 
       static constexpr double tolerance_l = 0.001;
       bool const batchSizeMatches   = std::abs(recipe.batchSize_l() - newBatchSize_l) < tolerance_l;

@@ -70,8 +70,8 @@
 namespace {
    // See below for more comments on this.  If and when DotBeer evolves then we will want separate constants for
    // min/max versions we can read plus whatever version we write.
-   BtStringConst  const dotBeerVersionWeSupportAsString{"1.1.0"};
-   QVersionNumber const dotBeerVersionWeSupport        {1, 1, 0};
+   BtStringConst  const dotBeerVersionWeSupportAsString{"1.2.0"};
+   QVersionNumber const dotBeerVersionWeSupport        {1, 2, 0};
 
    auto const outputDocumentName = "DotBeer";
 
@@ -628,6 +628,8 @@ namespace {
       // Type                                                 XPath                                Q_PROPERTY                                             Value Decoder
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "default_batch_size"               , PropertyNames::Equipment::fvBatchSize_l              , &DOT_BEER_VOLUME_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "grain_absorption_rate"            , PropertyNames::Equipment::grainAbsorption_LKg        , &DOT_BEER_VOLUME_PER_MASS_UNIT_MAPPER},
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hop_absorption_rate/pellet"       , PropertyNames::Equipment::hopAbsorptionPellet_LKg    , &DOT_BEER_VOLUME_PER_MASS_UNIT_MAPPER},  // Added in dotBeer 1.2.0
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hop_absorption_rate/leaf"         , PropertyNames::Equipment::hopAbsorptionLeaf_LKg      , &DOT_BEER_VOLUME_PER_MASS_UNIT_MAPPER},  // Added in dotBeer 1.2.0
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "foundation_volume"                , PropertyNames::Equipment::foundationVolume_l         , &DOT_BEER_VOLUME_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::String              , "hlt/vessel_type"                  , PropertyNames::Equipment::hltType                    },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/max_volume"                   , PropertyNames::Equipment::hltVolume_l                , &DOT_BEER_VOLUME_UNIT_MAPPER       },

@@ -260,6 +260,20 @@ void DatabaseTests::testUpgradeBrewtarget231Database() {
    }
    QVERIFY2(foreignKeyErrors.isEmpty(), qPrintable("Foreign key errors: " + foreignKeyErrors.join(", ")));
 
+   //
+   // Existing equipment should get hop absorption rates of zero (rather than NULL, which would mean typical values), so
+   // that upgrading doesn't change the volumes of existing recipes -- see migrate_to_24.
+   //
+   QSqlQuery hopAbsorptionCheck{connection};
+   QVERIFY(hopAbsorptionCheck.exec(
+      "SELECT COUNT(*) FROM equipment "
+      "WHERE hop_absorption_pellet_lkg IS NULL OR hop_absorption_pellet_lkg <> 0 "
+      "OR hop_absorption_leaf_lkg IS NULL OR hop_absorption_leaf_lkg <> 0"
+   ));
+   QVERIFY(hopAbsorptionCheck.next());
+   QVERIFY2(hopAbsorptionCheck.value(0).toInt() == 0, "Upgraded equipment should have zero hop absorption rates");
+   QVERIFY2(countRows(connection, "equipment") > 0, "No equipment to check hop absorption rates on");
+
    return;
 }
 

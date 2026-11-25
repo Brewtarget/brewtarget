@@ -92,7 +92,9 @@ void ScaleRecipeTool::scale(Equipment* equip, double const newEff) {
    this->m_recObs->setBatchSize_l(newBatchSize_l);
    // We assume boil time remains unchanged (see below), so the pre-boil volume needs to be for the recipe's boil time
    auto const boil = this->m_recObs->nonOptBoil();
-   boil->setPreBoilSize_l(equipment->defaultPreBoilSize_l(boil->boilTime_mins()));
+   // This allows for the kettle hops.  (They have not been scaled yet, but, when they are, the pre-boil size will follow
+   // them -- see Recipe::updatePreBoilSizeForKettleHops.)
+   boil->setPreBoilSize_l(this->m_recObs->defaultPreBoilSize_l(*equipment));
    this->m_recObs->setEfficiency_pct(newEff);
 
    // We assume boil time remains unchanged
