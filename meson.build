@@ -2029,6 +2029,7 @@ test('Test mash water volumes'               , testRunner, args : ['RecipeCalcTe
 test('Test brew log volumes'                 , testRunner, args : ['RecipeCalcTests', 'testBrewLogVolumes'                   ], suite : 'recipe')
 test('Test kettle hop absorption'            , testRunner, args : ['RecipeCalcTests', 'testKettleHopAbsorption'              ], suite : 'recipe')
 test('Test packaged volume'                  , testRunner, args : ['RecipeCalcTests', 'testPackagedVolume'                   ], suite : 'recipe')
+test('Test HLT loss in water to heat'        , testRunner, args : ['RecipeCalcTests', 'testHltLossInWaterToHeat'             ], suite : 'recipe')
 test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTests', 'testEvaporationRate'                  ], suite : 'recipe')
 test('Test equipment default volumes'        , testRunner, args : ['RecipeCalcTests', 'testEquipmentDefaultVolumes'          ], suite : 'recipe')
 test('Test mash tun heat capacity'           , testRunner, args : ['RecipeCalcTests', 'testMashTunHeatCapacity'              ], suite : 'recipe')

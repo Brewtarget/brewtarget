@@ -132,6 +132,12 @@ private slots:
    void testPackagedVolume();
 
    /**
+    * \brief Check that the water to heat for the "Heat water" brew day instruction allows for the hot liquor tank loss,
+    *        but only when the HLT is used (ie has a volume) and there are infusions to heat water for.
+    */
+   void testHltLossInWaterToHeat();
+
+   /**
     * \brief Check that the BeerXML-style evaporation rate (percent per hour) is relative to the boil size, and is kept
     *        consistent with the evaporation rate we actually use (liters per hour).
     */

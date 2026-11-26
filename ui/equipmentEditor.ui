@@ -570,6 +570,9 @@ Tabs</string>
        </item>
        <item row="1" column="4">
         <widget class="SmartLineEdit" name="lineEdit_hltLoss">
+         <property name="toolTip">
+          <string>Water left behind in the hot liquor tank, if you use one.  It is added to the water to heat in the brew day instructions.</string>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">

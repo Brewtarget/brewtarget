@@ -505,15 +505,11 @@ public:
    Q_PROPERTY(double                packagingVesselVolume_l           READ packagingVesselVolume_l           WRITE setPackagingVesselVolume_l          ) // Required in BeerJSON (when Packaging Vessel record present)
 
    //
-   // NOTE: As of 2026, hltLoss_l is not used in any of our calculations.  We nonetheless keep it (and show it in the
-   // equipment editor) because it describes the brewer's equipment, it is part of BeerJSON and dotBeer, and we expect to
-   // use it:
+   // NOTE: All the vessel losses are used in our calculations:
    //
-   //   - hltLoss_l: Water left behind in the hot liquor tank.  This does not affect wort volumes, but it does affect
-   //     how much water the brewer needs to heat, which is something s/he needs to know on brew day.  So, it should
-   //     be included in the "heat X liters of water" instructions.
-   //
-   // The other vessel losses are all used:
+   //   - hltLoss_l: Water left behind in the hot liquor tank (counted only if the HLT is used, ie has a volume).  This
+   //     does not affect wort volumes, but it does affect how much water the brewer needs to heat -- see
+   //     Recipe::getInfusionWaterToHeat, which feeds the "Heat water" brew day instruction.
    //
    //   - mashTunLoss_l, lauterTunDeadspaceLoss_l and kettleTrubChillerLoss_l -- see Recipe.cpp and MashAutoAdjuster.cpp.
    //

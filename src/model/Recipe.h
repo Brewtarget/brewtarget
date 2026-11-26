@@ -1047,6 +1047,9 @@ public:
     * \brief For the "Heat water" brew instruction, lists the water that needs to be heated for the mash's infusion
     *        (including sparge) steps, as "<amount> water to <temperature>", one entry per step.  Non-infusion steps
     *        (temperature, decoction, etc) add no water, so are not included.
+    *
+    *        If the equipment has a hot liquor tank (ie \c Equipment::hltVolume_l is non-zero) with a loss
+    *        (\c Equipment::hltLoss_l), there is a final entry for the extra water to heat to allow for that.
     */
    QList<QString> getInfusionWaterToHeat() const;
 

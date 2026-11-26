@@ -2054,6 +2054,56 @@ void RecipeCalcTests::testPackagedVolume() {
    return;
 }
 
+void RecipeCalcTests::testHltLossInWaterToHeat() {
+   auto equipment = std::make_shared<Equipment>("HLT loss");
+   equipment->setHltVolume_l(0.0); // HLT not used to start with
+   equipment->setHltLoss_l(1.5);
+   ObjectStoreWrapper::insert(equipment);
+
+   auto recipe = std::make_shared<Recipe>("HLT loss");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setEquipment(equipment);
+
+   auto mash = std::make_shared<Mash>("HLT loss mash");
+   ObjectStoreWrapper::insert(mash);
+   recipe->setMash(mash);
+
+   // A temperature step adds no water, so, with no infusions, there's nothing to heat -- and so no HLT loss either
+   auto rest = std::make_shared<MashStep>("Rest");
+   rest->setType(MashStep::Type::Temperature);
+   rest->setStartTemp_c(66.0);
+   rest->setStepTime_mins(60.0);
+   mash->add(rest);
+   equipment->setHltVolume_l(30.0);
+   QVERIFY(recipe->getInfusionWaterToHeat().isEmpty());
+   equipment->setHltVolume_l(0.0);
+
+   auto strike = std::make_shared<MashStep>("Strike");
+   strike->setType(MashStep::Type::Infusion);
+   strike->setStartTemp_c(66.0);
+   strike->setInfuseTemp_c(72.0);
+   strike->setStepTime_mins(60.0);
+   strike->setAmount_l(15.0);
+   mash->add(strike);
+
+   // HLT not used, so just the infusion
+   QList<QString> waterToHeat = recipe->getInfusionWaterToHeat();
+   qDebug() << Q_FUNC_INFO << "Without HLT:" << waterToHeat;
+   QCOMPARE(waterToHeat.size(), 1);
+
+   // HLT used, so the loss is an extra entry at the end
+   equipment->setHltVolume_l(30.0);
+   waterToHeat = recipe->getInfusionWaterToHeat();
+   qDebug() << Q_FUNC_INFO << "With HLT:" << waterToHeat;
+   QCOMPARE(waterToHeat.size(), 2);
+   QVERIFY(waterToHeat.last().contains("hot liquor tank"));
+
+   // No loss, no extra entry
+   equipment->setHltLoss_l(0.0);
+   QCOMPARE(recipe->getInfusionWaterToHeat().size(), 1);
+   return;
+}
+
 void RecipeCalcTests::testEvaporationRate() {
    auto equipment = std::make_shared<Equipment>("Evaporation Rate Test");
    equipment->setKettleBoilSize_l(30.0);

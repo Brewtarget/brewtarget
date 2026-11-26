@@ -3931,6 +3931,22 @@ QList<QString> Recipe::getInfusionWaterToHeat() const {
          );
       }
    }
+
+   //
+   // If the brewer heats their water in a hot liquor tank, whatever it can't drain also has to be heated.  This is lost
+   // once, however many infusions are drawn from the tank, so it is a separate entry rather than being added to any
+   // one infusion.  As with the other vessels, we only count the HLT if it is used, ie has a volume.
+   //
+   if (!result.isEmpty()) {
+      auto const equipment = this->equipment();
+      if (equipment && equipment->hltVolume_l() > 0.0 && equipment->hltLoss_l() > 0.0) {
+         result.append(
+            tr("plus %1 extra, which will stay in the hot liquor tank").arg(
+               Measurement::displayAmount(Measurement::Amount{equipment->hltLoss_l(), Measurement::Units::liters}, 1)
+            )
+         );
+      }
+   }
    return result;
 }
 
