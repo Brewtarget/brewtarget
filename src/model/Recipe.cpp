@@ -732,10 +732,14 @@ public:
       );
       if (double const laterLosses_l = this->lossesAfterFermenterFill_l();
           laterLosses_l > 0.0) {
-         str += tr("\nAllowing for what will be left in the fermenter (including with any dry hops) and in any aging "
-                   "or packaging vessel, you should be able to package about %1.").arg(
-            Measurement::displayAmount(Measurement::Amount{std::max(wort_l - laterLosses_l, 0.0),
-                                                           Measurement::Units::liters}, 1)
+         //
+         // NB: We give the losses rather than a volume to package, because wort_l is calculated from the mash water,
+         // whereas Recipe::packagedVolume_l (shown on the recipe tab) starts from the target batch size, and we don't
+         // want to show two different "packaged" figures when the mash water doesn't give the target volumes.
+         //
+         str += tr("\nAllow for losing about %1 between the fermenter and packaging (what is left in the fermenter, "
+                   "including with any dry hops, and in any aging or packaging vessel).").arg(
+            Measurement::displayAmount(Measurement::Amount{laterLosses_l, Measurement::Units::liters}, 1)
          );
       }
 
@@ -956,8 +960,13 @@ public:
             equipment->topUpWater_l().value_or(Equipment::default_topUpWater_l) -
             this->m_self.kettleLoss_l();
       } else {
-         this->m_finalVolume_l = calculatedBoilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
-         //_finalVolumeNoLosses_l = _finalVolume_l;
+         //
+         // Without equipment, we don't know the evaporation or any of the losses, so we just use the post-boil volume
+         // (which, in this case, is the batch size -- see above).  NB: We must set calculatedFinalVolume_l rather than
+         // m_finalVolume_l here, otherwise the latter just gets overwritten with 0 below.  (We used to do this, with
+         // calculatedBoilVolume_l - 4.0, which was "just shooting in the dark".)
+         //
+         calculatedFinalVolume_l = calculatedPostBoilVolume_l;
       }
 
       if (!qFuzzyCompare(calculatedWortFromMash_l, this->m_wortFromMash_l)) {

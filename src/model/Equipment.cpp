@@ -36,6 +36,25 @@
 
 namespace {
    /**
+    * \brief Comparison of hop absorption rates for \c Equipment::compareWith.
+    *
+    *        BeerXML and BeerJSON have no hop absorption fields, so equipment read from them has the rates not set.  So,
+    *        when we are looking for a duplicate (eg on import), a rate that is not set on one side matches any value on
+    *        the other.  Otherwise re-importing equipment the user already has, or a recipe that uses it, would create a
+    *        duplicate, as existing equipment was given rates of 0 when we added them (see migrate_to_24 in
+    *        DatabaseSchemaHelper.cpp).  When we are listing the properties that differ, we still list a set rate versus
+    *        a not-set one.
+    */
+   bool hopAbsorptionMatches(std::optional<double> const & lhs,
+                             std::optional<double> const & rhs,
+                             bool const listingDifferences) {
+      if (!listingDifferences && (!lhs || !rhs)) {
+         return true;
+      }
+      return Utils::AutoCompare(lhs, rhs);
+   }
+
+   /**
     * \brief You can't pass `char const *` as a template parameter.  This struct is the standard workaround.
     * @tparam N
     */
@@ -190,8 +209,25 @@ bool Equipment::compareWith(NamedEntity const & other, QList<BtStringConst const
       AUTO_PROPERTY_COMPARE(this, rhs, m_hopUtilization_pct        , PropertyNames::Equipment::hopUtilization_pct        , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleNotes               , PropertyNames::Equipment::kettleNotes               , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_grainAbsorption_LKg       , PropertyNames::Equipment::grainAbsorption_LKg       , propertiesThatDiffer) &&
-      AUTO_PROPERTY_COMPARE(this, rhs, m_hopAbsorptionPellet_LKg   , PropertyNames::Equipment::hopAbsorptionPellet_LKg   , propertiesThatDiffer) &&
-      AUTO_PROPERTY_COMPARE(this, rhs, m_hopAbsorptionLeaf_LKg     , PropertyNames::Equipment::hopAbsorptionLeaf_LKg     , propertiesThatDiffer) &&
+      // See comment on hopAbsorptionMatches for why we don't use AUTO_PROPERTY_COMPARE for the hop absorption rates
+      Utils::LogIfFalse(
+         *this, rhs, "m_hopAbsorptionPellet_LKg",
+         Utils::AutoPropertyCompare(
+            hopAbsorptionMatches(this->m_hopAbsorptionPellet_LKg, rhs.m_hopAbsorptionPellet_LKg,
+                                 propertiesThatDiffer != nullptr),
+            PropertyNames::Equipment::hopAbsorptionPellet_LKg,
+            propertiesThatDiffer
+         )
+      ) &&
+      Utils::LogIfFalse(
+         *this, rhs, "m_hopAbsorptionLeaf_LKg",
+         Utils::AutoPropertyCompare(
+            hopAbsorptionMatches(this->m_hopAbsorptionLeaf_LKg, rhs.m_hopAbsorptionLeaf_LKg,
+                                 propertiesThatDiffer != nullptr),
+            PropertyNames::Equipment::hopAbsorptionLeaf_LKg,
+            propertiesThatDiffer
+         )
+      ) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_boilingPoint_c            , PropertyNames::Equipment::boilingPoint_c            , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleInternalDiameter_cm , PropertyNames::Equipment::kettleInternalDiameter_cm , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleOpeningDiameter_cm  , PropertyNames::Equipment::kettleOpeningDiameter_cm  , propertiesThatDiffer) &&
