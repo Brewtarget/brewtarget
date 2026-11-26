@@ -1976,6 +1976,84 @@ void RecipeCalcTests::testKettleHopAbsorption() {
    return;
 }
 
+void RecipeCalcTests::testPackagedVolume() {
+   double const batchSize_l      = 20.0;
+   double const fvLoss_l         =  1.0;
+   double const agingLoss_l      =  0.5;
+   double const packagingLoss_l  =  0.3;
+   double const pelletRate_LKg   =  7.0;
+
+   auto pellets = this->pimpl->m_cascade_4pct;
+   if (pellets->key() <= 0) {
+      ObjectStoreWrapper::insert(pellets);
+   }
+
+   // A recipe without equipment packages its whole batch
+   auto noEquipment = std::make_shared<Recipe>("Packaged volume without equipment");
+   ObjectStoreWrapper::insert(noEquipment);
+   noEquipment->setBatchSize_l(batchSize_l);
+   QVERIFY(fuzzyComp(noEquipment->packagedVolume_l(), batchSize_l, 0.0001));
+
+   auto equipment = std::make_shared<Equipment>("Packaged volume");
+   equipment->setFvBatchSize_l(batchSize_l);
+   equipment->setFvLoss_l(fvLoss_l);
+   // Aging vessel not used (no volume), so its loss should not count
+   equipment->setAgingVesselVolume_l(0.0);
+   equipment->setAgingVesselLoss_l(agingLoss_l);
+   equipment->setPackagingVesselVolume_l(25.0);
+   equipment->setPackagingVesselLoss_l(packagingLoss_l);
+   equipment->setHopAbsorptionPellet_LKg(pelletRate_LKg);
+   ObjectStoreWrapper::insert(equipment);
+
+   auto recipe = std::make_shared<Recipe>("Packaged volume");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(batchSize_l);
+   recipe->setEquipment(equipment);
+   recipe->nonOptBoil()->setBoilTime_mins(60.0);
+   recipe->recalcAll();
+
+   double expected_l = batchSize_l - fvLoss_l - packagingLoss_l;
+   QVERIFY(fuzzyComp(recipe->packagedVolume_l(), expected_l, 0.0001));
+
+   auto addHop = [&](QString const & name, RecipeAddition::Stage const stage, double const quantity_kg) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(pellets.get());
+      addition->setStage(stage);
+      addition->setAddAtTime_mins(stage == RecipeAddition::Stage::Boil ? 60.0 : 0.0);
+      addition->setQuantity(quantity_kg);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      return recipe->addAddition(addition);
+   };
+
+   // Dry hops (fermentation stage) come out of the packaged volume: 100 g at 7 ml/g = 0.7 l
+   auto dryHop = addHop("Dry hop", RecipeAddition::Stage::Fermentation, 0.100);
+   QVERIFY(fuzzyComp(recipe->dryHopAbsorption_l(), 0.100 * pelletRate_LKg, 0.0001));
+   expected_l -= 0.100 * pelletRate_LKg;
+   QVERIFY(fuzzyComp(recipe->packagedVolume_l(), expected_l, 0.0001));
+
+   // Kettle hops and keg hops don't (the former are allowed for in the pre-boil volume instead)
+   addHop("Bittering"   , RecipeAddition::Stage::Boil     , 0.050);
+   addHop("Keg hop"     , RecipeAddition::Stage::Packaging, 0.030);
+   QVERIFY(fuzzyComp(recipe->dryHopAbsorption_l(), 0.100 * pelletRate_LKg, 0.0001));
+   QVERIFY(fuzzyComp(recipe->packagedVolume_l()  , expected_l            , 0.0001));
+
+   // Changing the dry hops changes the packaged volume
+   dryHop->setQuantity(0.200);
+   expected_l -= 0.100 * pelletRate_LKg;
+   QVERIFY(fuzzyComp(recipe->packagedVolume_l(), expected_l, 0.0001));
+
+   // Once the aging vessel is used, its loss counts
+   equipment->setAgingVesselVolume_l(20.0);
+   expected_l -= agingLoss_l;
+   QVERIFY(fuzzyComp(recipe->packagedVolume_l(), expected_l, 0.0001));
+
+   // A new brew log's final volume starts from the packaged volume
+   auto brewLog = std::make_shared<BrewLog>(*recipe);
+   brewLog->populateNote(recipe.get());
+   QVERIFY(fuzzyComp(brewLog->measuredFinalVolume_l(), expected_l, 0.0001));
+   return;
+}
+
 void RecipeCalcTests::testEvaporationRate() {
    auto equipment = std::make_shared<Equipment>("Evaporation Rate Test");
    equipment->setKettleBoilSize_l(30.0);

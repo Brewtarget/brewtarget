@@ -1083,6 +1083,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
    SMART_FIELD_INIT(MainWindow, label_name           , lineEdit_name       , Recipe, PropertyNames::NamedEntity::name        );
    SMART_FIELD_INIT(MainWindow, label_targetBatchSize, lineEdit_batchSize  , Recipe, PropertyNames::Recipe::batchSize_l   , 2);
    SMART_FIELD_INIT(MainWindow, label_finalVolume    , value_finalVolume   , Recipe, PropertyNames::Recipe::finalVolume_l , 2);
+   SMART_FIELD_INIT(MainWindow, label_packagedVolume , value_packagedVolume, Recipe, PropertyNames::Recipe::packagedVolume_l, 2);
    SMART_FIELD_INIT(MainWindow, label_targetBoilSize , value_preBoilSize   , Boil  , PropertyNames::Boil::preBoilSize_l   , 2);
    SMART_FIELD_INIT(MainWindow, label_efficiency     , lineEdit_efficiency , Recipe, PropertyNames::Recipe::efficiency_pct, 1);
    SMART_FIELD_INIT(MainWindow, label_boilTime       , value_boilTime      , Boil  , PropertyNames::Boil::boilTime_mins   , 0);
@@ -1504,7 +1505,13 @@ void MainWindow::setupTriggers() {
    connect(actionHydrometer_Temp_Adjustment, &QAction::triggered, this->pimpl->m_hydrometerTool.get()       , &QWidget::show                     ); // > Tools > Hydrometer Temp Adjustment
    connect(actionAlcohol_Percentage_Tool   , &QAction::triggered, this->pimpl->m_alcoholTool.get()          , &QWidget::show                     ); // > Tools > Alcohol
    connect(actionOriginalGravityCorrectionTool, &QAction::triggered, this->pimpl->m_ogCorrectionTool.get()  , &QWidget::show                     ); // > Tools > Original Gravity Correction Tool
-   connect(actionPriming_Calculator        , &QAction::triggered, this->pimpl->m_primingDialog.get()        , &QWidget::show                     ); // > Tools > Priming Calculator
+   // > Tools > Priming Calculator.  We start from the packaged volume of the current recipe, if there is one.
+   connect(actionPriming_Calculator, &QAction::triggered, this, [this]() {
+      if (this->pimpl->m_recipeObs && this->pimpl->m_recipeObs->packagedVolume_l() > 0.0) {
+         this->pimpl->m_primingDialog->setBeerVolume_l(this->pimpl->m_recipeObs->packagedVolume_l());
+      }
+      this->pimpl->m_primingDialog->show();
+   });
    connect(actionStrikeWater_Calculator    , &QAction::triggered, this->pimpl->m_strikeWaterDialog.get()    , &QWidget::show                     ); // > Tools > Strike Water Calculator
    connect(actionRefractometer_Tools       , &QAction::triggered, this->pimpl->m_refractoDialog.get()       , &QWidget::show                     ); // > Tools > Refractometer Tools
    connect(actionPitch_Rate_Calculator     , &QAction::triggered, this                                      , &MainWindow::showPitchDialog       ); // > Tools > Pitch Rate Calculator
@@ -1899,6 +1906,7 @@ void MainWindow::showChanges(QMetaProperty* prop) {
 
 
    this->value_finalVolume->setQuantity(this->pimpl->m_recipeObs->finalVolume_l());
+   this->value_packagedVolume->setQuantity(this->pimpl->m_recipeObs->packagedVolume_l());
 
 
    // Colors need the same basic treatment as gravity

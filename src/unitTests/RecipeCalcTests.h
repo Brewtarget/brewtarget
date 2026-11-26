@@ -125,6 +125,13 @@ private slots:
    void testKettleHopAbsorption();
 
    /**
+    * \brief Check the packaged volume: batch size less fermentor loss, dry hop absorption (but not kettle or keg hops)
+    *        and the losses of aging and packaging vessels that are used.  Also that a new brew log's final volume
+    *        starts from it.  See https://github.com/Brewtarget/brewtarget/issues/616
+    */
+   void testPackagedVolume();
+
+   /**
     * \brief Check that the BeerXML-style evaporation rate (percent per hour) is relative to the boil size, and is kept
     *        consistent with the evaporation rate we actually use (liters per hour).
     */

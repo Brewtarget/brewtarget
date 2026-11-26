@@ -217,7 +217,10 @@ public:
    //! Actual (measured) final (post-fermentation) specific gravity
    Q_PROPERTY(double  measuredFinalGravity_sg         READ measuredFinalGravity_sg         WRITE setMeasuredFinalGravity_sg      )
    // TBD: Do we need expectedFinalVolume_l ?
-   //! Actual (measured) final (post-fermentation) volume
+   /**
+    * Actual (measured) final (post-fermentation) volume, ie what went into the keg or bottles.  Defaults to
+    * \c Recipe::packagedVolume_l.
+    */
    Q_PROPERTY(double  measuredFinalVolume_l           READ measuredFinalVolume_l           WRITE setMeasuredFinalVolume_l        )
    //! Expected alcohol by volume based on the Recipe OG
    Q_PROPERTY(double  expectedAlcoholByVolume_pct     READ expectedAlcoholByVolume_pct     WRITE setExpectedAlcoholByVolume_pct  )

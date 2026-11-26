@@ -356,7 +356,7 @@ Tabs</string>
           <cstring>infoButton_hopAbsorption</cstring>
          </property>
          <property name="text">
-          <string>The wort or beer you typically lose with hop material, per weight of hops, when you transfer the liquid off the hops -- in addition to the kettle's (or fermentor's) own loss, which should therefore not include an allowance for hops.  This depends on your process (eg loose hops or a hop spider, whether you squeeze or drain the hops, whirlpooling) as well as the hops, so it is best measured, eg by weighing the wet hops left behind, or from the shortfall on a hoppy brew.  If left blank, typical values of about 7 ml per gram (6.7 fl oz per oz) for pellets and 5 ml per gram (4.8 fl oz per oz) for leaf hops are used.  Wet (fresh) hops and hop extract are not counted.  For now, only hops in the kettle are allowed for: kettle hops increase the pre-boil volume a recipe needs.</string>
+          <string>The wort or beer you typically lose with hop material, per weight of hops, when you transfer the liquid off the hops -- in addition to the kettle's (or fermentor's) own loss, which should therefore not include an allowance for hops.  This depends on your process (eg loose hops or a hop spider, whether you squeeze or drain the hops, whirlpooling) as well as the hops, so it is best measured, eg by weighing the wet hops left behind, or from the shortfall on a hoppy brew.  If left blank, typical values of about 7 ml per gram (6.7 fl oz per oz) for pellets and 5 ml per gram (4.8 fl oz per oz) for leaf hops are used.  Wet (fresh) hops and hop extract are not counted.  Kettle hops increase the pre-boil volume a recipe needs; dry hops reduce the volume of beer you can package.</string>
          </property>
         </widget>
        </item>
@@ -1144,6 +1144,9 @@ Tabs</string>
        </item>
        <item row="2" column="5">
         <widget class="SmartLineEdit" name="lineEdit_fvLoss">
+         <property name="toolTip">
+          <string>Beer left behind in the fermentor (yeast cake, trub, etc), not counting what dry hops hold (see Hop absorption on the General tab).  Reduces the packaged volume.</string>
+         </property>
         </widget>
        </item>
        <item row="3" column="1" colspan="5">
@@ -1230,6 +1233,9 @@ Tabs</string>
        </item>
        <item row="1" column="4">
         <widget class="SmartLineEdit" name="lineEdit_agingVesselLoss">
+         <property name="toolTip">
+          <string>Beer left behind in the aging vessel, if you use one.  Reduces the packaged volume.</string>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -1306,6 +1312,9 @@ Tabs</string>
        </item>
        <item row="1" column="4">
         <widget class="SmartLineEdit" name="lineEdit_packagingVesselLoss">
+         <property name="toolTip">
+          <string>Beer left behind in the packaging vessel (eg bottling bucket), if you use one.  Reduces the packaged volume.</string>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">

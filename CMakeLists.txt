@@ -1170,6 +1170,7 @@ add_test(NAME RecipeCalcTests.testInventory                         COMMAND ./${
 add_test(NAME RecipeCalcTests.testMashWaterVolumes                  COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testMashWaterVolumes                 )
 add_test(NAME RecipeCalcTests.testBrewLogVolumes                    COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testBrewLogVolumes                   )
 add_test(NAME RecipeCalcTests.testKettleHopAbsorption               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testKettleHopAbsorption              )
+add_test(NAME RecipeCalcTests.testPackagedVolume                    COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testPackagedVolume                   )
 add_test(NAME RecipeCalcTests.testEvaporationRate                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testEvaporationRate                  )
 add_test(NAME RecipeCalcTests.testEquipmentDefaultVolumes           COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testEquipmentDefaultVolumes          )
 add_test(NAME RecipeCalcTests.testMashTunHeatCapacity               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testMashTunHeatCapacity              )

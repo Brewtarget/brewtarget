@@ -269,7 +269,10 @@ void BrewLog::populateNote(Recipe * recipe) {
    this->setMeasuredPostBoilVolume_l(postBoil_l);
    this->setExpectedVolumeIntoFv_l (batchSize_l);
    this->setMeasuredVolumeIntoFv_l (batchSize_l);
-   this->setMeasuredFinalVolume_l  (batchSize_l);
+   // The final volume is what goes into the keg or bottles (as the brew log widget's tooltip says), so we start from
+   // the packaged volume the recipe is designed to give, ie the batch size less losses in the fermenter (including to
+   // dry hops) and in any aging or packaging vessel.
+   this->setMeasuredFinalVolume_l  (recipe->packagedVolume_l());
    // As with other measured values, we start from what the recipe expects
    this->setMeasuredWortClarity(recipe->wortClarity());
 

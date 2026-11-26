@@ -411,8 +411,8 @@ public:
    Q_PROPERTY(std::optional<double> grainAbsorption_LKg          READ grainAbsorption_LKg          WRITE setGrainAbsorption_LKg          )
    /**
     * \brief The typical volume of wort or beer that the brewer loses with pellet (and powder) hops, per mass of hops,
-    *        over and above the loss of the vessel the hops are left in.  Applies to hops left in the kettle and to dry
-    *        hops (though, for now, we only use it for the former).  If not set, we use
+    *        over and above the loss of the vessel the hops are left in.  Applies to hops left in the kettle (see
+    *        \c Recipe::kettleHopAbsorption_l) and to dry hops (see \c Recipe::dryHopAbsorption_l).  If not set, we use
     *        \c default_hopAbsorptionPellet_LKg.
     *
     *        In dotBeer, this is \c hop_absorption_rate/pellet (added in dotBeer 1.2.0).  There is no equivalent in
@@ -505,23 +505,22 @@ public:
    Q_PROPERTY(double                packagingVesselVolume_l           READ packagingVesselVolume_l           WRITE setPackagingVesselVolume_l          ) // Required in BeerJSON (when Packaging Vessel record present)
 
    //
-   // NOTE: As of 2026, several of the vessel losses below are not used in any of our calculations.  We nonetheless keep
-   // them (and show them in the equipment editor) because they describe the brewer's equipment, they are part of
-   // BeerJSON and dotBeer, and we expect to use them:
+   // NOTE: As of 2026, hltLoss_l is not used in any of our calculations.  We nonetheless keep it (and show it in the
+   // equipment editor) because it describes the brewer's equipment, it is part of BeerJSON and dotBeer, and we expect to
+   // use it:
    //
    //   - hltLoss_l: Water left behind in the hot liquor tank.  This does not affect wort volumes, but it does affect
    //     how much water the brewer needs to heat, which is something s/he needs to know on brew day.  So, it should
    //     be included in the "heat X liters of water" instructions.
    //
-   //   - fvLoss_l: What is left behind in the fermentation vessel (yeast cake, trub, etc).  This determines how much
-   //     beer there is to package (BeerSmith calls this "bottling volume"), which is what should drive priming sugar
-   //     calculations, and is what the brewer actually ends up with.
+   // The other vessel losses are all used:
    //
-   //   - agingVesselLoss_l, packagingVesselLoss_l: Further losses on the way to the packaged volume, as for fvLoss_l.
+   //   - mashTunLoss_l, lauterTunDeadspaceLoss_l and kettleTrubChillerLoss_l -- see Recipe.cpp and MashAutoAdjuster.cpp.
    //
-   // In other words, these are the later links in the chain of volumes from water heated, to mash, to boil, to
-   // fermentation vessel, to packaging, of which we currently only calculate the earlier links.  (mashTunLoss_l,
-   // lauterTunDeadspaceLoss_l and kettleTrubChillerLoss_l are all used -- see Recipe.cpp and MashAutoAdjuster.cpp.)
+   //   - fvLoss_l: What is left behind in the fermentation vessel (yeast cake, trub, etc), not counting what dry hops
+   //     hold (see hopAbsorptionPellet_LKg and hopAbsorptionLeaf_LKg).  Together with agingVesselLoss_l and
+   //     packagingVesselLoss_l (further losses on the way to packaging, counted only if the vessel is used, ie has a
+   //     volume), this determines how much beer there is to package -- see Recipe::packagedVolume_l.
    //
    Q_PROPERTY(double                hltLoss_l                         READ hltLoss_l                         WRITE setHltLoss_l                        ) // Required in BeerJSON (when HLT record present)
    Q_PROPERTY(double                mashTunLoss_l                     READ mashTunLoss_l                     WRITE setMashTunLoss_l                    ) // Required in BeerJSON (when Mash Tun record present)

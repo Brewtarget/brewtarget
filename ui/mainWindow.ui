@@ -572,6 +572,26 @@
                         </widget>
                        </item>
                        <item>
+                        <widget class="SmartLabel" name="label_packagedVolume">
+                         <property name="contextMenuPolicy">
+                          <enum>Qt::CustomContextMenu</enum>
+                         </property>
+                         <property name="text">
+                          <string>Packaged</string>
+                         </property>
+                         <property name="buddy">
+                          <cstring>value_packagedVolume</cstring>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SmartValueDisplay" name="value_packagedVolume">
+                         <property name="toolTip">
+                          <string>Beer you can expect to package (bottle or keg): the target batch size, less what is left in the fermenter (including with dry hops) and in any aging or packaging vessel</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
                         <spacer name="spacer_batchSize">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
