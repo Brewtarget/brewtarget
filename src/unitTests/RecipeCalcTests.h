@@ -125,6 +125,13 @@ private slots:
    void testKettleHopAbsorption();
 
    /**
+    * \brief Check that changing the recipe's (target) batch size moves the pre-boil size with it, keeping any allowance
+    *        the user has added, but not for a locked or shared boil; and that, after the batch size has changed, the
+    *        pre-boil size still follows the kettle hops.  See https://github.com/Brewtarget/brewtarget/issues/938
+    */
+   void testPreBoilFollowsBatchSize();
+
+   /**
     * \brief Check the packaged volume: batch size less fermentor loss, dry hop absorption (but not kettle or keg hops)
     *        and the losses of aging and packaging vessels that are used.  Also that a new brew log's final volume
     *        starts from it.  See https://github.com/Brewtarget/brewtarget/issues/616

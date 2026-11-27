@@ -369,11 +369,15 @@ void EquipmentEditor::rememberRecipeSizesBeforeSave() {
       return;
    }
    for (Recipe * recipe : RecipeUtils::recipesUsing(*this->m_editItem)) {
-      // This allows for the recipe's boil time and kettle hops -- see Recipe::defaultPreBoilSize_l
+      //
+      // This allows for the recipe's boil time and kettle hops -- see Recipe::defaultPreBoilSize_l.  The pre-boil size
+      // is for the recipe's own batch size, since, if the user changed that, the pre-boil size will have moved with it
+      // -- see Recipe::preBoilSizeForNewBatchSize_l.
+      //
       this->m_recipeSizesBeforeSave.push_back({
          .recipe        = recipe,
          .batchSize_l   = this->m_editItem->fvBatchSize_l(),
-         .preBoilSize_l = recipe->defaultPreBoilSize_l(*this->m_editItem)
+         .preBoilSize_l = recipe->defaultPreBoilSize_l(*this->m_editItem, recipe->batchSize_l())
       });
    }
    return;
@@ -402,7 +406,9 @@ void EquipmentEditor::offerToUpdateRecipeSizes() {
          update.newBatchSize_l = newBatchSize_l;
       }
       if (auto const boil = recipe.boil(); boil && boil->preBoilSize_l()) {
-         double const newPreBoilSize_l = recipe.defaultPreBoilSize_l(*this->m_editItem);
+         // If we're also changing the batch size, the pre-boil size needs to be for the new one
+         double const newPreBoilSize_l =
+            recipe.defaultPreBoilSize_l(*this->m_editItem, update.newBatchSize_l.value_or(recipe.batchSize_l()));
          if (same(*boil->preBoilSize_l(), before.preBoilSize_l) && !same(newPreBoilSize_l, before.preBoilSize_l)) {
             update.newPreBoilSize_l = newPreBoilSize_l;
          }

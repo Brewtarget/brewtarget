@@ -2302,10 +2302,40 @@ void MainWindow::updateRecipeBatchSize() {
       return;
    }
 
-   Undoable::doOrRedoUpdate(*this->pimpl->m_recipeObs,
-                        TYPE_INFO(Recipe, batchSize_l),
-                        lineEdit_batchSize->getNonOptCanonicalQty(),
-                        tr("Change Batch Size"));
+   Recipe & recipe = *this->pimpl->m_recipeObs;
+   double const newBatchSize_l = lineEdit_batchSize->getNonOptCanonicalQty();
+   auto update = new SimpleUndoableUpdate(recipe, TYPE_INFO(Recipe, batchSize_l), newBatchSize_l,
+                                          tr("Change Batch Size"));
+
+   //
+   // The pre-boil size (and hence the mash water) needs to move with the batch size -- see
+   // Recipe::preBoilSizeForNewBatchSize_l.  As in setForRecipe<Equipment>, we make this a child of the batch size
+   // update, so that the two are undone/redone together.
+   //
+   auto const preBoil = recipe.preBoilSizeForNewBatchSize_l(newBatchSize_l);
+   if (preBoil.newPreBoilSize_l) {
+      new SimpleUndoableUpdate(*recipe.boil(), TYPE_INFO(Boil, preBoilSize_l), *preBoil.newPreBoilSize_l,
+                               tr("Change Pre-Boil Size"), update);
+   }
+
+   Undoable::doOrRedoUpdate(update);
+
+   //
+   // If the pre-boil size should have moved with the batch size but couldn't, the user needs to know, otherwise the
+   // volumes (and the mash water) won't match the new batch size.  We show the message for longer than updateStatus
+   // does, as there's a bit more to read.
+   //
+   using Blocker = Recipe::PreBoilSizeForNewBatchSize::Blocker;
+   if (preBoil.blocker != Blocker::None && this->statusBar()) {
+      this->statusBar()->showMessage(
+         preBoil.blocker == Blocker::Locked ?
+            tr("Pre-boil size not changed to match the new batch size, because the boil is locked.  You can change "
+               "it on the Boil tab.") :
+            tr("Pre-boil size not changed to match the new batch size, because the boil is shared with other "
+               "recipes.  You can change it on the Boil tab."),
+         10000
+      );
+   }
    return;
 }
 
