@@ -3563,6 +3563,16 @@ namespace {
          {QString("ALTER TABLE equipment ADD COLUMN hop_absorption_leaf_lkg   %1").arg(doubleType)},
          {QString("UPDATE equipment SET hop_absorption_pellet_lkg = ?, hop_absorption_leaf_lkg = ?"),
           {QVariant{0.0}, QVariant{0.0}}},
+         //
+         // The notes on the example mash profiles in DefaultContent006-MashAndWaterProfiles.beer (first loaded in v5.3.0)
+         // told users to click "Adjust Mash…" on the recipe's Mash tab, but there is no such button.  Correct the notes on
+         // the profiles already in the database (and any copies of them).  REPLACE() works the same in SQLite and
+         // PostgreSQL, and does nothing to notes that don't contain the old text.
+         //
+         {QString("UPDATE mash SET notes = REPLACE(notes, ?, ?)"),
+          {QVariant{QString::fromUtf8("select it on a recipe's Mash tab and click \"Adjust Mash\u2026\".")},
+           QVariant{QString::fromUtf8("select it on a recipe's Mash tab, click the edit button next to it, then click "
+                                      "\"Auto-Adjust\" in the mash editor.")}}},
       };
       return executeSqlQueries(q, migrationQueries);
    }

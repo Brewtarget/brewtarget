@@ -2,14 +2,11 @@
 
 {app-name} has a long history of helping homebrewers create the beers they want to brew. This manual introduces the application and explains how to make the most of its features. It is not intended to be comprehensive; instead, it focuses on practical examples to help you get started. If you have any questions or find something unclear, please let us know via link:{app-github-url}/issues[our issue tracker].
 
-### Chapter 1: A Walkthrough
-
+Chapter 1: A Walkthrough::
 The best way to get started is to brew a beer. This chapter takes you through the process of creating your first beer recipe using {app-name}, with a straightforward, step-by-step guide.
 
-### Chapter 2: General Concepts
-
+Chapter 2: General Concepts::
 This chapter covers the main features of {app-name}, including recipe management, cost reporting, and importing and exporting recipes. It provides an overview of what the application can do and explains how to use its various features.
 
-### Chapter 3: Tools
-
+Chapter 3: Tools::
 This chapter describes the individual tools available in {app-name}, explaining what each one does and how to use it.

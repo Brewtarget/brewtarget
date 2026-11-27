@@ -150,7 +150,7 @@
                   <item>
                    <widget class="QCheckBox" name="checkBox_inventoryMicellaneous">
                     <property name="text">
-                     <string>Micelleneous</string>
+                     <string>Miscellaneous</string>
                     </property>
                    </widget>
                   </item>
