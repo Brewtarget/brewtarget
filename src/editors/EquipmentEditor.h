@@ -32,7 +32,7 @@
 #include "editors/EditorBase.h"
 #include "model/Equipment.h"
 
-#define EquipmentEditorOptions EditorBaseOptions{ .idDisplay = true, .numRecipesUsing = true }
+#define EquipmentEditorOptions EditorBaseOptions{ .idDisplay = true, .numRecipesUsing = true, .sharingBar = true }
 /*!
  * \class EquipmentEditor
  *
@@ -85,7 +85,7 @@ private:
       Recipe * recipe;
       //! What the equipment specified for the recipe's batch size before the save
       double batchSize_l;
-      //! What the equipment specified for the recipe's pre-boil size (for its boil time) before the save
+      //! What the equipment specified for the recipe's pre-boil size (for its boil time and batch size) before the save
       double preBoilSize_l;
    };
    std::vector<RecipeSizesBeforeSave> m_recipeSizesBeforeSave;

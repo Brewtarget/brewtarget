@@ -4183,11 +4183,45 @@ double Recipe::kettleLoss_l() const {
    return equipment ? equipment->kettleTrubChillerLoss_l() + this->kettleHopAbsorption_l(equipment.get()) : 0.0;
 }
 
-double Recipe::defaultPreBoilSize_l(Equipment const & equipment) const {
+double Recipe::defaultPreBoilSize_l(Equipment const & equipment, std::optional<double> const batchSize_l) const {
    // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
    auto const boil = this->boil();
    double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
-   return equipment.defaultPreBoilSize_l(boilTime_mins) + this->kettleHopAbsorption_l(&equipment);
+   double preBoilSize_l = equipment.defaultPreBoilSize_l(boilTime_mins) + this->kettleHopAbsorption_l(&equipment);
+   if (batchSize_l) {
+      preBoilSize_l += *batchSize_l - equipment.fvBatchSize_l();
+   }
+   return std::max(preBoilSize_l, 0.0);
+}
+
+Recipe::PreBoilSizeForNewBatchSize Recipe::preBoilSizeForNewBatchSize_l(double const newBatchSize_l) const {
+   using Blocker = PreBoilSizeForNewBatchSize::Blocker;
+   auto const boil = this->boil();
+   if (!boil || !boil->preBoilSize_l()) {
+      return {};
+   }
+
+   // Same tolerance as updatePreBoilSizeForKettleHops
+   static constexpr double tolerance_l = 0.001;
+   double const change_l = newBatchSize_l - this->batchSize_l();
+   if (std::abs(change_l) < tolerance_l) {
+      return {};
+   }
+
+   Blocker blocker = Blocker::None;
+   if (this->locked() || RecipeUtils::lockReason(*boil) != RecipeUtils::LockReason::NotLocked) {
+      blocker = Blocker::Locked;
+   } else if (RecipeUtils::recipesUsing(*boil).size() != 1) {
+      blocker = Blocker::Shared;
+   }
+   if (blocker != Blocker::None) {
+      qInfo() <<
+         Q_FUNC_INFO << "Not updating pre-boil size of" << (blocker == Blocker::Locked ? "locked" : "shared") <<
+         *boil << "for change of batch size on Recipe #" << this->key();
+      return {.newPreBoilSize_l = std::nullopt, .blocker = blocker};
+   }
+
+   return {.newPreBoilSize_l = std::max(*boil->preBoilSize_l() + change_l, 0.0), .blocker = Blocker::None};
 }
 
 void Recipe::updatePreBoilSizeForKettleHops() {
@@ -4217,13 +4251,26 @@ void Recipe::updatePreBoilSizeForKettleHops() {
    // calculated (eg because the recipe was created, or its equipment set, before the hops were added, or before we
    // allowed for hop absorption).
    //
+   // The equipment's default is for its default batch size.  If the user has changed the recipe's batch size, the
+   // pre-boil size will have moved with it (see preBoilSizeForNewBatchSize_l), so we also check against the default
+   // adjusted for our batch size.  (We check the unadjusted default too, for recipes whose batch size was changed
+   // before we moved the pre-boil size with it.)
+   //
    double const equipmentDefault_l = equipment->defaultPreBoilSize_l(boil->boilTime_mins());
+   double const batchSizeAdjustment_l = this->batchSize_l() - equipment->fvBatchSize_l();
    double const currentPreBoil_l   = *boil->preBoilSize_l();
-   if (!same(currentPreBoil_l, equipmentDefault_l + oldAbsorption_l) && !same(currentPreBoil_l, equipmentDefault_l)) {
+   std::optional<double> calculatedBase_l;
+   for (double const base_l : {equipmentDefault_l + batchSizeAdjustment_l, equipmentDefault_l}) {
+      if (same(currentPreBoil_l, base_l + oldAbsorption_l) || same(currentPreBoil_l, base_l)) {
+         calculatedBase_l = base_l;
+         break;
+      }
+   }
+   if (!calculatedBase_l) {
       return;
    }
 
-   double const newPreBoil_l = equipmentDefault_l + newAbsorption_l;
+   double const newPreBoil_l = *calculatedBase_l + newAbsorption_l;
    if (!same(currentPreBoil_l, newPreBoil_l)) {
       qInfo() <<
          Q_FUNC_INFO << "Recipe #" << this->key() << ": kettle hop absorption now" << newAbsorption_l << "l (was" <<

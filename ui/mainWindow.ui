@@ -664,7 +664,7 @@
                     <item row="6" column="2">
                      <widget class="SmartValueDisplay" name="value_preBoilSize">
                       <property name="toolTip">
-                       <string>Calculated preboil volume - See Boil tab below</string>
+                       <string>Target pre-boil volume (which follows the target batch size) - See Boil tab below</string>
                       </property>
                      </widget>
                     </item>

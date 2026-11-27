@@ -1976,6 +1976,103 @@ void RecipeCalcTests::testKettleHopAbsorption() {
    return;
 }
 
+void RecipeCalcTests::testPreBoilFollowsBatchSize() {
+   double const batchSize_l     = 20.0;
+   double const kettleLoss_l    =  2.0;
+   double const evaporation_l   =  4.0; // Per hour, and we use a 60 minute boil
+   double const pelletRate_LKg  =  7.0;
+   double const preBoilDefault_l = batchSize_l + kettleLoss_l + evaporation_l;
+
+   auto equipment = std::make_shared<Equipment>("Pre-boil follows batch size");
+   equipment->setFvBatchSize_l(batchSize_l);
+   equipment->setTopUpWater_l(0.0);
+   equipment->setTopUpKettle_l(0.0);
+   equipment->setKettleTrubChillerLoss_l(kettleLoss_l);
+   equipment->setKettleEvaporationPerHour_l(evaporation_l);
+   equipment->setHopAbsorptionPellet_LKg(pelletRate_LKg);
+   // Default pre-boil is calculated (so it can be adjusted for boil time) -- see Equipment::defaultPreBoilSize_l
+   equipment->setKettleBoilSize_l(equipment->calculatedPreBoilSize_l());
+   ObjectStoreWrapper::insert(equipment);
+
+   auto recipe = std::make_shared<Recipe>("Pre-boil follows batch size");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(batchSize_l);
+   recipe->setEquipment(equipment);
+   auto boil = recipe->nonOptBoil();
+   boil->setBoilTime_mins(60.0);
+   boil->setPreBoilSize_l(recipe->defaultPreBoilSize_l(*equipment));
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l(), preBoilDefault_l, 0.0001));
+   recipe->recalcAll();
+
+   // The default pre-boil size for a different batch size just adds on the difference
+   QVERIFY(fuzzyComp(recipe->defaultPreBoilSize_l(*equipment, 25.0), preBoilDefault_l + 5.0, 0.0001));
+
+   // No change of batch size means no change of pre-boil size
+   {
+      auto const result = recipe->preBoilSizeForNewBatchSize_l(batchSize_l);
+      QVERIFY(!result.newPreBoilSize_l && result.blocker == Recipe::PreBoilSizeForNewBatchSize::Blocker::None);
+   }
+
+   // Bigger and smaller batches move the pre-boil size litre for litre
+   auto newPreBoil_l = recipe->preBoilSizeForNewBatchSize_l(25.0).newPreBoilSize_l;
+   QVERIFY(newPreBoil_l && fuzzyComp(*newPreBoil_l, preBoilDefault_l + 5.0, 0.0001));
+   newPreBoil_l = recipe->preBoilSizeForNewBatchSize_l(15.0).newPreBoilSize_l;
+   QVERIFY(newPreBoil_l && fuzzyComp(*newPreBoil_l, preBoilDefault_l - 5.0, 0.0001));
+
+   // An allowance the user has added on to the pre-boil size is kept
+   boil->setPreBoilSize_l(preBoilDefault_l + 1.5);
+   newPreBoil_l = recipe->preBoilSizeForNewBatchSize_l(25.0).newPreBoilSize_l;
+   QVERIFY(newPreBoil_l && fuzzyComp(*newPreBoil_l, preBoilDefault_l + 6.5, 0.0001));
+
+   // A locked boil is left alone
+   boil->setLocked(true);
+   {
+      auto const result = recipe->preBoilSizeForNewBatchSize_l(25.0);
+      QVERIFY(!result.newPreBoilSize_l && result.blocker == Recipe::PreBoilSizeForNewBatchSize::Blocker::Locked);
+   }
+   boil->setLocked(false);
+
+   //
+   // Change the batch size as MainWindow::updateRecipeBatchSize does (pre-boil size first, as that's the order the
+   // undo commands get done in).  The calculated pre-boil size should then still follow the kettle hops -- see
+   // Recipe::updatePreBoilSizeForKettleHops.
+   //
+   boil->setPreBoilSize_l(preBoilDefault_l);
+   newPreBoil_l = recipe->preBoilSizeForNewBatchSize_l(25.0).newPreBoilSize_l;
+   QVERIFY(newPreBoil_l);
+   boil->setPreBoilSize_l(*newPreBoil_l);
+   recipe->setBatchSize_l(25.0);
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l(), preBoilDefault_l + 5.0, 0.0001));
+
+   auto pellets = this->pimpl->m_cascade_4pct;
+   if (pellets->key() <= 0) {
+      ObjectStoreWrapper::insert(pellets);
+   }
+   QVERIFY(pellets->form() == Hop::Form::Pellet);
+   auto addition = std::make_shared<RecipeAdditionHop>("Pre-boil follows batch size pellets");
+   addition->setHop(pellets.get());
+   addition->setStage(RecipeAddition::Stage::Boil);
+   addition->setAddAtTime_mins(60.0);
+   addition->setQuantity(0.100);
+   addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(addition);
+   double const absorption_l = 0.100 * pelletRate_LKg;
+   QVERIFY(fuzzyComp(recipe->kettleHopAbsorption_l(), absorption_l, 0.0001));
+   QVERIFY(fuzzyComp(*boil->preBoilSize_l(), preBoilDefault_l + 5.0 + absorption_l, 0.0001));
+   QVERIFY(fuzzyComp(recipe->defaultPreBoilSize_l(*equipment, 25.0), *boil->preBoilSize_l(), 0.0001));
+
+   // A boil shared with another recipe is left alone
+   QVERIFY(recipe->preBoilSizeForNewBatchSize_l(30.0).newPreBoilSize_l);
+   auto otherRecipe = std::make_shared<Recipe>("Pre-boil follows batch size (sharing boil)");
+   ObjectStoreWrapper::insert(otherRecipe);
+   otherRecipe->setBoil(boil);
+   {
+      auto const result = recipe->preBoilSizeForNewBatchSize_l(30.0);
+      QVERIFY(!result.newPreBoilSize_l && result.blocker == Recipe::PreBoilSizeForNewBatchSize::Blocker::Shared);
+   }
+   return;
+}
+
 void RecipeCalcTests::testPackagedVolume() {
    double const batchSize_l      = 20.0;
    double const fvLoss_l         =  1.0;

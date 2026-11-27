@@ -790,8 +790,42 @@ public:
     * \brief The pre-boil volume to use for this recipe with \c equipment (which need not yet be ours) -- eg when the
     *        user sets the recipe's equipment, or scales the recipe.  This is \c Equipment::defaultPreBoilSize_l for
     *        our boil time, plus what the kettle hops absorb (\c kettleHopAbsorption_l).
+    *
+    * \param batchSize_l If supplied, the pre-boil size is for this batch size rather than the equipment's default batch
+    *                    size (\c Equipment::fvBatchSize_l).  Since none of the losses or the boil-off depend on the
+    *                    batch size, this just means adding on the difference between the two batch sizes.
     */
-   double defaultPreBoilSize_l(Equipment const & equipment) const;
+   double defaultPreBoilSize_l(Equipment const & equipment,
+                               std::optional<double> const batchSize_l = std::nullopt) const;
+   /**
+    * \brief Result of \c preBoilSizeForNewBatchSize_l
+    */
+   struct PreBoilSizeForNewBatchSize {
+      //! Why, if at all, we can't change the pre-boil size when we otherwise would
+      enum class Blocker {
+         None,
+         //! The boil is locked, or used by a locked recipe (or this recipe is locked)
+         Locked,
+         //! The boil is shared with other recipes
+         Shared
+      };
+      //! The new pre-boil size, or \c std::nullopt if it should not (or cannot) be changed
+      std::optional<double> newPreBoilSize_l = std::nullopt;
+      Blocker blocker = Blocker::None;
+   };
+
+   /**
+    * \brief When the user changes the recipe's (target) batch size to \c newBatchSize_l, this gives the new pre-boil
+    *        size for our boil, if it should be changed, or, if it should be changed but can't, why not.
+    *
+    *        Losses and boil-off don't depend on the batch size, so the pre-boil size moves litre-for-litre with the
+    *        batch size.  We do this whether or not the current pre-boil size is one we calculated, so that any
+    *        allowance the user has added on is kept.  (See https://github.com/Brewtarget/brewtarget/issues/938.)
+    *
+    *        As with \c updatePreBoilSizeForKettleHops, we don't change a boil that is locked or shared with other
+    *        recipes.
+    */
+   PreBoilSizeForNewBatchSize preBoilSizeForNewBatchSize_l(double const newBatchSize_l) const;
    /**
     * \brief The strike water (ie first infusion) needed for the supplied mash thickness, where the thickness is the
     *        ratio of water to grain in the grain bed.  This is the water for the grain bed plus
@@ -1144,8 +1178,9 @@ public:
 
    /**
     * \brief Called when the kettle hops change (eg a hop addition is added, removed or changed, or the form of a hop
-    *        changes).  If our pre-boil size is the calculated default -- \c Equipment::defaultPreBoilSize_l, with or
-    *        without the old allowance for kettle hops -- then we update it to allow for the new kettle hops.  So the
+    *        changes).  If our pre-boil size is the calculated default -- \c Equipment::defaultPreBoilSize_l (either as
+    *        is, or adjusted for our batch size -- see \c defaultPreBoilSize_l), with or without the old allowance for
+    *        kettle hops -- then we update it to allow for the new kettle hops.  So the
     *        pre-boil size follows the hops, but not if the user has deliberately chosen a different one.
     *
     *        We don't change a boil that is locked or shared with other recipes.  And we don't do this when the hop
