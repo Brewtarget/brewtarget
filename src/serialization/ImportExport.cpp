@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QObject>
 
+#include "Application.h"
 #include "MainWindow.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -76,7 +77,7 @@ namespace {
       // Our workaround is to use a new QFileDialog each time, and manually keep track of the current directory.  This
       // also has the advantage that we remember the same directory for both reading and writing.
       //
-      static QString fileChooserDirectory{QDir::homePath()};
+      static QString fileChooserDirectory{Application::userHomeDir()};
       bool const importing{importOrExport == ImportOrExport::IMPORT};
       // Note that we can't have the "both" formats filter for exporting, because QFileDialog will just slap a .json
       // extension on, even if you specified myfile.xml.  .:TBD:. There is probably a better way of handling this that

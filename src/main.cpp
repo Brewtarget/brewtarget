@@ -260,8 +260,9 @@ int main(int argc, char **argv) {
 
    try {
       qInfo() <<
-         "Starting" << CONFIG_APPLICATION_NAME_UC << "v" << CONFIG_VERSION_STRING << " (app name" <<
-         app.applicationName() << ") on " << QSysInfo::prettyProductName();
+         "Starting" << CONFIG_APPLICATION_NAME_UC << "v" << CONFIG_VERSION_STRING <<
+         (Application::isStoreInstalledSnap() ? " from Snap Store" : "") << " (app name" << app.applicationName() <<
+         ") on " << QSysInfo::prettyProductName();
       qInfo() <<
          "Built at" << CONFIG_BUILD_TIMESTAMP << "on" << CONFIG_BUILD_SYSTEM << "for" << CONFIG_RUN_SYSTEM << "with" <<
          CONFIG_CXX_COMPILER_ID << "compiler";

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Application.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * Application.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -55,6 +55,24 @@ namespace Application {
     *         the file directly.  Such files are stored in this directory.
     */
    QDir getResourceDir();
+
+   /**
+    * \return The user's real home directory, for use as a starting point in file dialogs etc.
+    *
+    *         Normally this is the same as \c QDir::homePath().  But, in a strictly-confined Snap, \c HOME is set to a
+    *         private, per-revision directory (~/snap/[name]/[revision]), which is not where users expect to find, or
+    *         save, their files.  Snapd gives us the real home directory in the \c SNAP_REAL_HOME environment variable.
+    */
+   QString userHomeDir();
+
+   /**
+    * \return \c true if we are running as a Snap that was installed from the Snap Store.  In this case, snapd takes care
+    *         of updating to new versions, so we should not tell the user to go and download them.
+    *
+    *         (A Snap installed locally with `snap install --dangerous` has a revision number starting with 'x', and
+    *         does not get updated automatically, so we return \c false for that.)
+    */
+   bool isStoreInstalledSnap();
 
    /*!
     * \brief Blocking call that executes the application.

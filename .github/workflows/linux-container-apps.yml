@@ -46,7 +46,30 @@ on:
       - main
   schedule:
     - cron: "0 2 * * *"
+  #
+  # The Snap Store channels allow you to publish several versions of the app.  A channel has three components:
+  # Track, Risk and Branch.  By default, every app gets a "latest" Track and four Risk levels, "stable", "candidate",
+  # "beta", "edge".  You can add more, but these defaults are more than enough for us.  Typical use is:
+  #    • stable     = Ordinary users           = Official releases
+  #    • candidate  = Release testers          = Almost-ready releases
+  #    • beta       = Enthusiasts and testers  = Upcoming features, pre-releases
+  #    • edge       = Developers               = Latest development builds
+  #
+  # To override the default here (eg to do a release), run the workflow manually (via the "Run workflow" button on the
+  # Actions tab).
+  #
   workflow_dispatch:
+    inputs:
+      snap_channel:
+        description: 'Publish the Snap to this Snap Store channel ("none" = build only, do not publish)'
+        type: choice
+        default: edge
+        options:
+          - none
+          - edge
+          - beta
+          - candidate
+          - stable
 
 permissions: read-all
 
@@ -137,6 +160,33 @@ jobs:
             contAppPkgs/${{ matrix.app }}/brewtarget*.${{ matrix.ext }}
             contAppPkgs/${{ matrix.app }}/brewtarget*.${{ matrix.ext }}.sha256sum
           retention-days: 7
+
+      #
+      # Publish the Snap to the Snap Store, but only when this workflow was run with a channel other than "none" (see
+      # workflow_dispatch above).  This needs a repository secret called SNAPCRAFT_STORE_CREDENTIALS, created by running
+      # the following on a machine where you are logged in to the store:
+      #
+      #    snapcraft export-login --snaps=brewken --acls=package_access,package_push,package_update,package_release -
+      #
+      # NB: Revisions can also be promoted between channels later (eg edge -> stable) via the web dashboard or with
+      # `snapcraft release`, without rebuilding.
+      #
+      - name: Publish Snap to Snap Store
+        if: ${{ success() && matrix.app == 'snap' && github.event_name == 'workflow_dispatch' && inputs.snap_channel != 'none' }}
+        working-directory: ${{github.workspace}}
+        shell: bash
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+          SNAP_CHANNEL: ${{ inputs.snap_channel }}
+        run: |
+          if [[ -z "${SNAPCRAFT_STORE_CREDENTIALS}" ]]; then
+             echo "SNAPCRAFT_STORE_CREDENTIALS not set, so not publishing to Snap Store"
+             exit 0
+          fi
+          echo "Publishing from ${GITHUB_REF_NAME} to ${SNAP_CHANNEL} channel"
+          for snapFile in contAppPkgs/snap/brewken*.snap; do
+             snapcraft upload --release="${SNAP_CHANNEL}" "${snapFile}"
+          done
 
       #
       # When the Snap build fails, the details are in snapcraft's own log files rather than the step output
