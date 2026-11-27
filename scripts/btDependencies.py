@@ -1346,7 +1346,7 @@ def installDependencies():
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Try to install Asciidoctor PDF, which we use to generate the PDF user manual from doc/manual.  This is optional: if
+# Try to install Asciidoctor PDF, which we use to generate the PDF user manual from docs/manual.  This is optional: if
 # it's not installed, Meson builds without the PDF manual (and About > Manual opens the online version instead).  So we
 # only log a warning, rather than stopping, if something goes wrong here.
 #-----------------------------------------------------------------------------------------------------------------------

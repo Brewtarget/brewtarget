@@ -3,13 +3,14 @@
 This directory holds the source of the user manual, written in [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest/).
 It was previously maintained in the separate [Brewtarget/manual](https://github.com/Brewtarget/manual) repository.
 
-The manual is licensed under the GNU Free Documentation License, version 1.3 or later -- see `COPYING.FDL_1.3` and
-`COPYRIGHT` -- rather than the GPL that covers the rest of the code.
+The manual is licensed under the GNU Free Documentation License, version 1.3 or later -- see `COPYING.FDL_1.3`, and
+the `Files: docs/manual/*` section of the top-level `COPYRIGHT` file -- rather than the GPL that covers the rest of the
+code.  If you contribute to the manual, add yourself to that section.
 
 ## Layout
 
 ```
-doc/manual/
+docs/manual/
   en/                 English manual -- this is the "gold standard" that other languages follow
     book.adoc         Top-level file: document attributes, title, and the list of included chapters
     README.adoc       Contributors, foreword and preface
@@ -40,15 +41,17 @@ To rebuild just the manual: `meson compile -C mbuild manual`
 
 ### HTML (online)
 
-`.github/workflows/manual.yml` builds the HTML and PDF and publishes them to GitHub Pages: `dev/` for every push to
-`main` that changes the manual, and `<version>/` plus `latest/` for each release.  See the comments at the top of that
-file for the one-off repository setup.
+`.github/workflows/manual.yml` builds the HTML and PDF and publishes them to GitHub Pages when a release is published.
+There is only one online manual, for the latest release -- older releases have their own manual in the PDF they ship
+with.  You can also run the workflow by hand to republish (eg after fixing a mistake), but choose the release tag when
+you do, otherwise the online manual may describe features that haven't been released yet.  See the comments at the top
+of that file for the one-off repository setup.
 
 To preview the HTML locally:
 
 ```bash
-asciidoctor --attribute app-name=Brewken --destination-dir /tmp/manual --out-file index.html doc/manual/en/book.adoc
-cp -r doc/manual/en/assets /tmp/manual/
+asciidoctor --attribute app-name=Brewken --destination-dir /tmp/manual --out-file index.html docs/manual/en/book.adoc
+cp -r docs/manual/en/assets /tmp/manual/
 xdg-open /tmp/manual/index.html
 ```
 

@@ -1647,10 +1647,10 @@ exportedVariables = {
    # Similarly, installers often want a URL link.  We also use this in the program, to tell users where to get support.
    'CONFIG_GITHUB_URL' : 'https://github.com/' + capitalisedProjectName + '/' + projectName,
    'CONFIG_WEBSITE_URL' : 'https://www.' + domain + '/',
-   # Online user manual, published to GitHub Pages by .github/workflows/manual.yml.  If the repository's Pages site has
-   # a custom domain (eg manual.brewtarget.beer), GitHub redirects this URL to it, so we don't need to know about that
-   # here.
-   'CONFIG_MANUAL_URL' : 'https://' + projectName + '.github.io/' + projectName + '/latest/',
+   # Online user manual (for the latest release), published to GitHub Pages by .github/workflows/manual.yml.  If the
+   # repository's Pages site has a custom domain (eg manual.brewtarget.beer), GitHub redirects this URL to it, so we
+   # don't need to know about that here.
+   'CONFIG_MANUAL_URL' : 'https://' + projectName + '.github.io/' + projectName + '/',
    'CONFIG_ORGANIZATION_DOMAIN' : domain,
    # We need reverse domain name notation for building flatpaks
    'CONFIG_ORGANIZATION_REVERSE_DOMAIN' : reverseDomain,

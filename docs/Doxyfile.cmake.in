@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------------------------------------------------
-# Doxyfile.in is part of Brewtarget, and is copyright the following authors 2012-2021:
+# docs/Doxyfile.cmake.in is part of Brewtarget, and is copyright the following authors 2012-2026:
 #   • Matt Young <mfsy@yahoo.com>
 #   • Maxime Lavigne (malavv) <duguigne@gmail.com>
 #   • Mik Firestone <mikfire@gmail.com>
@@ -79,7 +79,7 @@ PROJECT_LOGO           =
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ${CMAKE_CURRENT_BINARY_DIR}/doc
+OUTPUT_DIRECTORY       = ${CMAKE_CURRENT_BINARY_DIR}/docs
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
