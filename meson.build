@@ -1623,6 +1623,8 @@ exportedVariables = {
    # Also note, per https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-maintainer, that it's simplest
    # to avoid having full stops in the maintainer's name.
    'CONFIG_PACKAGE_MAINTAINER'      : 'Matt Young <mfsy@yahoo.com>',
+   # The Snap Store needs a simpler version of the maintainer email
+   'CONFIG_PACKAGE_MAINTAINER_RAW'  : 'mfsy@yahoo.com',
 
    # Info for InstallerWindowIcon which is "Filename for a custom window icon in PNG format for the Installer
    # application.

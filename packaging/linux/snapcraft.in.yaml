@@ -30,7 +30,7 @@ name: @CONFIG_APPLICATION_NAME_LC@
 # NB: Max length of title is 40 characters, ie ⇩
 title: Beer recipe and ingredient manager
 version: @CONFIG_VERSION_STRING@
-license: GPL-3.0+
+license: GPL-3.0-or-later
 # NB: Max length of summary is 78 characters, is end of next line must be before here ⇩
 summary: Desktop application for managing beer recipes, ingredients and calculations
 # Advice is that description should be under 100 words
@@ -49,18 +49,19 @@ base: core24
 #
 # See https://snapcraft.io/docs/snap-confinement for different Snap confinement levels.  Essentially you have to use
 # 'strict' unless you've got a very good reason to need 'classic' (which, per
-# https://snapcraft.io/docs/reviewing-classic-confinement-snaps, we don't).  Using 'devmode' here prevents us from
-# publishing the snap to the stable or candidate channels, but allows us to debug what interfaces etc we would need to
-# add to use 'strict'.  (Run the installed snap and look for AppArmor denials with `sudo snappy-debug` or
-# `journalctl -f | grep -i apparmor`.)  Once the snap works in devmode with no denials, switch confinement to 'strict'
-# and grade to 'stable'.
+# https://snapcraft.io/docs/reviewing-classic-confinement-snaps, we don't).  ('devmode' is useful for debugging what
+# interfaces we need, but devmode snaps cannot be released to the stable or candidate channels, and users have to
+# install them with --devmode.)
 #
-# Grade is 'devel' whilst confinement is 'devmode', as devmode snaps can't be released to stable/candidate anyway.
+# If something doesn't work, look for AppArmor denials with `sudo snappy-debug` (from `sudo snap install
+# snappy-debug`) or `journalctl -f | grep -i apparmor` whilst running the installed snap.  If the fix is not obvious,
+# temporarily switch confinement to 'devmode' (and grade to 'devel') to confirm that confinement is the problem.
 #
-grade: devel
-confinement: devmode
+grade: stable
+confinement: strict
 source-code: @CONFIG_GITHUB_URL@
-contact: @CONFIG_PACKAGE_MAINTAINER@
+# NB: The Snap Store wants an email address or URL here, rather than the "Name <email>".
+contact: mailto:@CONFIG_PACKAGE_MAINTAINER_RAW@
 website: @CONFIG_WEBSITE_URL@
 issues: @CONFIG_GITHUB_URL@/issues
 
@@ -100,8 +101,16 @@ platforms:
 #   home    - So users can open/save recipe files (BeerXML, BeerJSON, .beer) in their home directory.  (NB: The
 #             application's own config and database live under ~/snap/@CONFIG_APPLICATION_NAME_LC@/ inside the snap.
 #             Accessing an existing ~/.config/@CONFIG_APPLICATION_NAME_LC@ from a non-snap install would need the
-#             personal-files interface, which requires Snap Store approval.)
-#   network - Already supplied by the extension, but listed explicitly here because we need it for PostgreSQL.
+#             personal-files interface, which requires Snap Store approval.  Note too that the home interface does not
+#             give access to hidden files or directories at the top level of the user's home directory.)
+#   network - Already supplied by the extension, but listed explicitly here because we need it for PostgreSQL.  (NB:
+#             Connecting to PostgreSQL via a local Unix domain socket -- ie leaving the host name blank -- will be
+#             blocked by confinement.  Users need to specify a host name, eg localhost, so we connect via TCP/IP.)
+#   cups    - For printing (via the Qt print dialog) to real printers.  Not supplied by the kde-neon-6 extension.
+#             Auto-connected.
+#
+# Optionally, users can also do `snap connect @CONFIG_APPLICATION_NAME_LC@:removable-media` to give access to USB
+# drives etc under /media and /mnt.  (This plug is not auto-connected.)
 #
 apps:
   @CONFIG_APPLICATION_NAME_LC@:
@@ -113,6 +122,8 @@ apps:
     plugs:
       - home
       - network
+      - cups
+      - removable-media
 
 #
 # These are "the self-contained software pieces needed to create the final artifact."
@@ -168,8 +179,13 @@ parts:
     # Run-time libraries that are neither in the core24 base snap nor in the kf6-core24 content snap.  (OpenSSL 3 is
     # in core24.  Boost and libbacktrace are linked statically.  Blaze is a static library.)
     #
+    # libpq5 is the PostgreSQL client library, which Qt's QPSQL driver plugin needs at run-time.  .:TBD:. If the
+    # content snap turns out to supply it (check with `ldd` on the libqsqlpsql.so plugin under
+    # /snap/kde-qt6-core24/current), we can remove it from here.
+    #
     stage-packages:
       - libxml2
+      - libpq5
     override-build: |
       set -eux
 

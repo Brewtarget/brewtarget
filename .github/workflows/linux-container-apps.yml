@@ -139,6 +139,30 @@ jobs:
           retention-days: 7
 
       #
+      # Publish the Snap to the edge channel of the Snap Store on pushes to main.  This needs a repository secret called
+      # SNAPCRAFT_STORE_CREDENTIALS, created by running the following on a machine where you are logged in to the store:
+      #
+      #    snapcraft export-login --snaps=brewken --acls=package_access,package_push,package_update,package_release -
+      #
+      # If the secret is not set (eg in a fork), we just skip this step.  Promoting a revision from edge to beta,
+      # candidate or stable is done manually, either via the web dashboard or with `snapcraft release`.
+      #
+      - name: Publish Snap to edge channel
+        if: ${{ success() && matrix.app == 'snap' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        working-directory: ${{github.workspace}}
+        shell: bash
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+        run: |
+          if [[ -z "${SNAPCRAFT_STORE_CREDENTIALS}" ]]; then
+             echo "SNAPCRAFT_STORE_CREDENTIALS not set, so not publishing to Snap Store"
+             exit 0
+          fi
+          for snapFile in contAppPkgs/snap/brewken*.snap; do
+             snapcraft upload --release=edge "${snapFile}"
+          done
+
+      #
       # When the Snap build fails, the details are in snapcraft's own log files rather than the step output
       #
       - name: Recover Debris Artifacts (Snapcraft logs)

@@ -15,7 +15,7 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 Some new features from old issues.  Plus various bug fix release
 
 ### New Features
-* Snap builds working in dev mode
+* Snap builds working with strict confinement, ready for the Snap Store
 * Various UI improvements inspired by suggestions in the old Brewtarget issue [193](https://github.com/Brewtarget/brewtarget/issues/193):
   - Tables
     - **Show and hide columns:** right-click any column header to get new **Columns** submenu. You can also rearrange columns by dragging their headers. Column choices are remembered between sessions.

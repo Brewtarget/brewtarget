@@ -1171,7 +1171,7 @@ def doSnap():
       btUtils.writeSha256sum(btFileSystem.dir_snap, snapFile.name)
 
    btLogger.log.info(
-      'To install locally for testing: sudo snap install --devmode --dangerous ' +
+      'To install locally for testing: sudo snap install --dangerous ' +
       btFileSystem.dir_snap.as_posix() + '/[snap file]'
    )
 

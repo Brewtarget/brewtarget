@@ -280,6 +280,30 @@ QDir Application::getResourceDir() {
    return resourceDir;
 }
 
+QString Application::userHomeDir() {
+   if (QString const snapRealHome{qEnvironmentVariable("SNAP_REAL_HOME")};
+       !snapRealHome.isEmpty() && QDir{snapRealHome}.exists()) {
+      return snapRealHome;
+   }
+   return QDir::homePath();
+}
+
+bool Application::isStoreInstalledSnap() {
+   //
+   // When an application is running inside a Snap, the Snap runtime sets several environment variables (which are not
+   // normally set for applications running outside a Snap).  They include:
+   //    - SNAP – path to the mounted snap.
+   //    - SNAP_NAME – name of the running snap.
+   //    - SNAP_REVISION – installed revision number.
+   //    - SNAP_VERSION – version declared in snapcraft.yaml.
+   //
+   if (!qEnvironmentVariableIsSet("SNAP")) {
+      return false;
+   }
+   QString const snapRevision{qEnvironmentVariable("SNAP_REVISION")};
+   return !snapRevision.isEmpty() && !snapRevision.startsWith('x');
+}
+
 bool Application::initialize() {
    // Need these for changed(QMetaProperty, QVariant) to be emitted across threads.
    qRegisterMetaType<QMetaProperty>();
@@ -399,7 +423,15 @@ int Application::run() {
    //     caller's thread -- ie the thread created above for LatestReleaseFinder -- then various things inside Qt will
    //     break eg when we use QMessageBox or QDesktopServices::openUrl.)
    //
-   mainWindow.connect(&mainWindow        , &MainWindow::initialisedAndVisible      , latestReleaseFinder, &LatestReleaseFinder::checkMainRespository, Qt::QueuedConnection);
+   //
+   // If we were installed from the Snap Store, snapd keeps us up-to-date, so there is no point checking for new
+   // releases (and it would be misleading to offer to take the user to the GitHub download page).
+   //
+   if (Application::isStoreInstalledSnap()) {
+      qInfo() << Q_FUNC_INFO << "Running as Snap Store install, so not checking for new releases";
+   } else {
+      mainWindow.connect(&mainWindow, &MainWindow::initialisedAndVisible, latestReleaseFinder, &LatestReleaseFinder::checkMainRespository, Qt::QueuedConnection);
+   }
    mainWindow.connect(latestReleaseFinder, &LatestReleaseFinder::foundLatestRelease, &mainWindow        , &MainWindow::checkAgainstLatestRelease    , Qt::QueuedConnection);
    latestReleaseFinderThread.start();
 
