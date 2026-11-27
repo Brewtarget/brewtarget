@@ -63,7 +63,7 @@ on:
       snap_channel:
         description: 'Publish the Snap to this Snap Store channel ("none" = build only, do not publish)'
         type: choice
-        default: none
+        default: edge
         options:
           - none
           - edge
