@@ -1,6 +1,6 @@
 ## Introduction
 
-{app-name} has a long history of helping homebrewers create the beers they want to brew. This manual introduces the application and explains how to make the most of its features. It is not intended to be comprehensive; instead, it focuses on practical examples to help you get started. If you have any questions or find something unclear, please let us know via [our issue tracker](link:{app-github-url}/issues[our issue tracker]).
+{app-name} has a long history of helping homebrewers create the beers they want to brew. This manual introduces the application and explains how to make the most of its features. It is not intended to be comprehensive; instead, it focuses on practical examples to help you get started. If you have any questions or find something unclear, please let us know via link:{app-github-url}/issues[our issue tracker].
 
 ### Chapter 1: A Walkthrough
 

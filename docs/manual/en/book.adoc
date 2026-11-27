@@ -15,6 +15,8 @@
 :toc: left
 :toclevels: 3
 :sectanchors:
+// Needed for the menu:, btn: and kbd: macros
+:experimental:
 :imagesdir: ./assets
 :title-logo-image: image:{app-logo}[pdfwidth=40%,align=center]
 :revnumber: {app-version}
