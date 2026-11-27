@@ -103,6 +103,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_grainAbsorption         , lineEdit_grainAbsorption         , Equipment::grainAbsorption_LKg         ),
       EDITOR_FIELD_NORM(Equipment, label_foundationVolume        , lineEdit_foundationVolume        , Equipment::foundationVolume_l          ),
       EDITOR_FIELD_NORM(Equipment, label_hopUtilization          , lineEdit_hopUtilization          , Equipment::hopUtilization_pct       , 0),
+      EDITOR_FIELD_NORM(Equipment, label_hopAbsorptionPellet     , lineEdit_hopAbsorptionPellet     , Equipment::hopAbsorptionPellet_LKg     ),
+      EDITOR_FIELD_NORM(Equipment, label_hopAbsorptionLeaf       , lineEdit_hopAbsorptionLeaf       , Equipment::hopAbsorptionLeaf_LKg       ),
       EDITOR_FIELD_NORM(Equipment, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment::mashTunWeight_kg            ),
       EDITOR_FIELD_NORM(Equipment, label_boilingPoint            , lineEdit_boilingPoint            , Equipment::boilingPoint_c           , 1),
       EDITOR_FIELD_NORM(Equipment, label_fvBatchSize      , lineEdit_fvBatchSize      , Equipment::fvBatchSize_l        ),
@@ -367,13 +369,11 @@ void EquipmentEditor::rememberRecipeSizesBeforeSave() {
       return;
    }
    for (Recipe * recipe : RecipeUtils::recipesUsing(*this->m_editItem)) {
-      auto const boil = recipe->boil();
-      // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
-      double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+      // This allows for the recipe's boil time and kettle hops -- see Recipe::defaultPreBoilSize_l
       this->m_recipeSizesBeforeSave.push_back({
          .recipe        = recipe,
          .batchSize_l   = this->m_editItem->fvBatchSize_l(),
-         .preBoilSize_l = this->m_editItem->defaultPreBoilSize_l(boilTime_mins)
+         .preBoilSize_l = recipe->defaultPreBoilSize_l(*this->m_editItem)
       });
    }
    return;
@@ -402,7 +402,7 @@ void EquipmentEditor::offerToUpdateRecipeSizes() {
          update.newBatchSize_l = newBatchSize_l;
       }
       if (auto const boil = recipe.boil(); boil && boil->preBoilSize_l()) {
-         double const newPreBoilSize_l = this->m_editItem->defaultPreBoilSize_l(boil->boilTime_mins());
+         double const newPreBoilSize_l = recipe.defaultPreBoilSize_l(*this->m_editItem);
          if (same(*boil->preBoilSize_l(), before.preBoilSize_l) && !same(newPreBoilSize_l, before.preBoilSize_l)) {
             update.newPreBoilSize_l = newPreBoilSize_l;
          }

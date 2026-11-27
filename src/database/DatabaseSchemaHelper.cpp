@@ -38,7 +38,7 @@
 #include "database/DbTransaction.h"
 #include "database/ObjectStoreTyped.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 23;
+int constexpr DatabaseSchemaHelper::latestVersion = 24;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -3549,6 +3549,24 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Add hop absorption rates for pellet and leaf hops to equipment (see Equipment::hopAbsorptionPellet_LKg and
+    *        Equipment::hopAbsorptionLeaf_LKg).
+    *
+    *        For new equipment, not set means we use typical values.  However, for existing records, we set both rates
+    *        to zero, so that upgrading does not change the volumes (and pre-boil sizes) of anyone's existing recipes.
+    */
+   bool migrate_to_24(Database & db, BtSqlQuery & q) {
+      QString const doubleType = db.getDbNativeTypeName<double>();
+      QVector<QueryAndParameters> const migrationQueries{
+         {QString("ALTER TABLE equipment ADD COLUMN hop_absorption_pellet_lkg %1").arg(doubleType)},
+         {QString("ALTER TABLE equipment ADD COLUMN hop_absorption_leaf_lkg   %1").arg(doubleType)},
+         {QString("UPDATE equipment SET hop_absorption_pellet_lkg = ?, hop_absorption_leaf_lkg = ?"),
+          {QVariant{0.0}, QVariant{0.0}}},
+      };
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    //
    // At some future point:
    //   - maybe fix remaining issues listed in ObjectStore legacyBadTypes
@@ -3587,6 +3605,7 @@ namespace {
          case 20: ret &= migrate_to_21 (database, sqlQuery); break;
          case 21: ret &= migrate_to_22 (database, sqlQuery); break;
          case 22: ret &= migrate_to_23 (database, sqlQuery); break;
+         case 23: ret &= migrate_to_24 (database, sqlQuery); break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;

@@ -38,6 +38,9 @@ Some new features from old issues.  Plus various bug fix release
   * Most recipes will show slightly fewer IBUs with Tinseth, Rager, Noonan, Daniels or mIBU estimation methods.
   * Because evaporation is now counted, any recipe with a pre-boil size set will drop by about 2.5–3% for a typical 25 L → 20 L boil.
   * Recipes without a pre-boil size don’t change.
+* Hop absorption: equipment now has rates for the wort lost with pellet and with leaf hops (Hop absorption (pellets) and Hop absorption (leaf) on the General tab of the Equipment editor).  Kettle hops count as an extra kettle loss, and a recipe's pre-boil volume follows its kettle hops (unless you have set a different pre-boil volume, or the boil is locked).  Existing equipment gets rates of zero, so your existing recipes don't change until you enter your own figures; new equipment, including equipment imported from BeerXML or BeerJSON files (which have no hop absorption fields), uses typical values (7 ml/g for pellets and 5 ml/g for leaf) unless you change them.  Dry hops reduce the packaged volume (see below).  Equipment files now use dotBeer 1.2.0. [616](https://github.com/Brewtarget/brewtarget/issues/616)
+* Packaged volume: the recipe tab now shows the volume of beer you can expect to package (Packaged, under Batch Size), ie the batch size less the fermentor loss, what the dry hops hold, and the losses in any aging or packaging vessel (all set in the Equipment editor).  The priming calculator starts from this volume, and so does the final volume in a new brew log. [616](https://github.com/Brewtarget/brewtarget/issues/616)
+* Hot liquor tank loss: if your equipment has a hot liquor tank (ie its volume is set in the Equipment editor), the "Heat water" brew day instruction now includes the extra water to allow for its loss.
 * Missing translations filled in for all supported languages, so the user interface is now (almost) fully translated.  These new translations are machine-generated and marked for review, so corrections from native speakers are very welcome.
 
 ### Bug Fixes
@@ -48,9 +51,10 @@ Some new features from old issues.  Plus various bug fix release
 * Logging level names on the Options dialog were always shown in English, regardless of the language setting.
 * On Windows, Brewtarget fails to start with an error about libz-1.dll not being found [1198](https://github.com/Brewtarget/brewtarget/issues/1198)
 * 5.3 Mac Version Crash [1201](https://github.com/Brewtarget/brewtarget/issues/1201)
+* Final volume was always shown as 0 for recipes without equipment.
 
 ### Release Timestamp
-Fri, 20 Nov 2026 05:03:02 +0100
+Thu, 26 Nov 2026 05:03:02 +0100
 
 ## v5.3.1
 Bug fix release

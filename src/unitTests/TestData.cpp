@@ -63,6 +63,9 @@ std::shared_ptr<Equipment> UnitTests::makeEquipment_FiveGalNoLoss() {
    equipment->setTopUpKettle_l(0);
    equipment->setHopUtilization_pct(100);
    equipment->setGrainAbsorption_LKg(1.0);
+   // As the name says, no losses, so no hop absorption either (otherwise we'd get the typical values)
+   equipment->setHopAbsorptionPellet_LKg(0.0);
+   equipment->setHopAbsorptionLeaf_LKg(0.0);
    equipment->setBoilingPoint_c(100);
    return equipment;
 }

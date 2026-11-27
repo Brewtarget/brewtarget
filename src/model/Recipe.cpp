@@ -236,7 +236,9 @@ public:
       m_boilVolume_l         {other.pimpl->m_boilVolume_l         },
       m_postBoilVolume_l     {other.pimpl->m_postBoilVolume_l     },
       m_finalVolume_l        {other.pimpl->m_finalVolume_l        },
+      m_packagedVolume_l     {other.pimpl->m_packagedVolume_l     },
       m_finalVolumeNoLosses_l{other.pimpl->m_finalVolumeNoLosses_l},
+      m_kettleHopAbsorption_l{other.pimpl->m_kettleHopAbsorption_l},
       m_caloriesPerLiter     {other.pimpl->m_caloriesPerLiter     },
       m_grainsInMash_kg      {other.pimpl->m_grainsInMash_kg      },
       m_grains_kg            {other.pimpl->m_grains_kg            },
@@ -710,7 +712,12 @@ public:
          Measurement::displayAmount(Measurement::Amount{equipment->kettleTrubChillerLoss_l(),
                                                         Measurement::Units::liters}, 1)
       );
-      wort_l -= equipment->kettleTrubChillerLoss_l();
+      if (double const hopAbsorption_l = this->m_self.kettleHopAbsorption_l(equipment.get()); hopAbsorption_l > 0.0) {
+         str += tr("\nYou anticipate losing %1 with the hops.").arg(
+            Measurement::displayAmount(Measurement::Amount{hopAbsorption_l, Measurement::Units::liters}, 1)
+         );
+      }
+      wort_l -= this->m_self.kettleLoss_l();
       if (equipment->topUpWater_l() > 0.0) {
          str += tr("\nAdd %1 top up water into primary.").arg(
             Measurement::displayAmount(
@@ -723,6 +730,18 @@ public:
       str += tr("\nThe final volume in the primary is %1.").arg(
          Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}, 1)
       );
+      if (double const laterLosses_l = this->lossesAfterFermenterFill_l();
+          laterLosses_l > 0.0) {
+         //
+         // NB: We give the losses rather than a volume to package, because wort_l is calculated from the mash water,
+         // whereas Recipe::packagedVolume_l (shown on the recipe tab) starts from the target batch size, and we don't
+         // want to show two different "packaged" figures when the mash water doesn't give the target volumes.
+         //
+         str += tr("\nAllow for losing about %1 between the fermenter and packaging (what is left in the fermenter, "
+                   "including with any dry hops, and in any aging or packaging vessel).").arg(
+            Measurement::displayAmount(Measurement::Amount{laterLosses_l, Measurement::Units::liters}, 1)
+         );
+      }
 
       preInstructions.push_back(
          PreInstruction(RecipeAddition::Stage::Fermentation,
@@ -817,11 +836,8 @@ public:
 
    // Batch size without losses.
    double batchSizeNoLosses_l() const {
-      double ret = this->m_self.batchSize_l();
-      auto const equipment = this->m_self.equipment();
-      if (equipment) {
-         ret += equipment->kettleTrubChillerLoss_l();
-      }
+      // Note that kettleLoss_l is 0 if we have no equipment
+      double ret = this->m_self.batchSize_l() + this->m_self.kettleLoss_l();
 
       return ret;
    }
@@ -935,16 +951,22 @@ public:
       // NOTE: the following figure is not based on the other volume estimates
       // since we want to show og,fg,ibus,etc. as if the collected wort is correct.
       this->m_finalVolumeNoLosses_l = this->batchSizeNoLosses_l();
+      this->m_kettleHopAbsorption_l = this->m_self.kettleHopAbsorption_l();
       double calculatedFinalVolume_l = 0.0;
       if (equipment) {
          //_finalVolumeNoLosses_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l) + equipment->topUpWater_l();
          calculatedFinalVolume_l =
             calculatedPostBoilVolume_l +
             equipment->topUpWater_l().value_or(Equipment::default_topUpWater_l) -
-            equipment->kettleTrubChillerLoss_l();
+            this->m_self.kettleLoss_l();
       } else {
-         this->m_finalVolume_l = calculatedBoilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
-         //_finalVolumeNoLosses_l = _finalVolume_l;
+         //
+         // Without equipment, we don't know the evaporation or any of the losses, so we just use the post-boil volume
+         // (which, in this case, is the batch size -- see above).  NB: We must set calculatedFinalVolume_l rather than
+         // m_finalVolume_l here, otherwise the latter just gets overwritten with 0 below.  (We used to do this, with
+         // calculatedBoilVolume_l - 4.0, which was "just shooting in the dark".)
+         //
+         calculatedFinalVolume_l = calculatedPostBoilVolume_l;
       }
 
       if (!qFuzzyCompare(calculatedWortFromMash_l, this->m_wortFromMash_l)) {
@@ -970,7 +992,7 @@ public:
          }
       }
 
-      if (! qFuzzyCompare(calculatedFinalVolume_l, this->m_finalVolume_l)) {
+      if (!qFuzzyCompare(calculatedFinalVolume_l, this->m_finalVolume_l)) {
 //         qDebug() <<
 //            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
 //            "Calculated final volume: " << calculatedFinalVolume_l << ", stored: " << this->m_finalVolume_l;
@@ -981,7 +1003,7 @@ public:
          }
       }
 
-      if (! qFuzzyCompare(calculatedPostBoilVolume_l, this->m_postBoilVolume_l)) {
+      if (!qFuzzyCompare(calculatedPostBoilVolume_l, this->m_postBoilVolume_l)) {
          qDebug() <<
             Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
             "Calculated post boil volume: " << calculatedPostBoilVolume_l << ", stored: " << this->m_postBoilVolume_l;
@@ -991,7 +1013,44 @@ public:
                                       this->m_postBoilVolume_l);
          }
       }
+
+      // packagedVolume_l ===========================
+      if (double const calculatedPackagedVolume_l = this->calculatePackagedVolume_l();
+          !qFuzzyCompare(calculatedPackagedVolume_l, this->m_packagedVolume_l)) {
+         this->m_packagedVolume_l = calculatedPackagedVolume_l;
+         if (!this->m_self.m_uninitializedCalcs) {
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::packagedVolume_l),
+                                      this->m_packagedVolume_l);
+         }
+      }
       return;
+   }
+
+   /**
+    * \brief Everything lost between the fermenter being filled and the beer being packaged: what is left behind in the
+    *        fermenter, what the dry hops absorb, and the losses in the aging and packaging vessels, if they are used (ie
+    *        have a volume).  0 if there is no equipment.
+    */
+   double lossesAfterFermenterFill_l() const {
+      auto const equipment = this->m_self.equipment();
+      if (!equipment) {
+         return 0.0;
+      }
+      double losses_l = equipment->fvLoss_l() + this->m_self.dryHopAbsorption_l(equipment.get());
+      if (equipment->agingVesselVolume_l() > 0.0) {
+         losses_l += equipment->agingVesselLoss_l();
+      }
+      if (equipment->packagingVesselVolume_l() > 0.0) {
+         losses_l += equipment->packagingVesselLoss_l();
+      }
+      return losses_l;
+   }
+
+   /**
+    * \brief See comment on \c Recipe::packagedVolume_l
+    */
+   double calculatePackagedVolume_l() const {
+      return std::max(this->m_self.batchSize_l() - this->lossesAfterFermenterFill_l(), 0.0);
    }
 
    /**
@@ -1206,7 +1265,7 @@ public:
          double const kettleWort_l = (this->m_wortFromMash_l - equipment->getLauteringDeadspaceLoss_l()) +
                                      equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
          double const postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l, boil->boilTime_mins());
-         double ratio = (postBoilWort_l - equipment->kettleTrubChillerLoss_l()) / postBoilWort_l;
+         double ratio = (postBoilWort_l - this->m_self.kettleLoss_l()) / postBoilWort_l;
          if (ratio > 1.0) { // Usually happens when we don't have a mash yet.
             ratio = 1.0;
          } else if (ratio < 0.0) {
@@ -1862,7 +1921,7 @@ public:
       }
       qDebug() << Q_FUNC_INFO << "Calculated IBU from hops and fermentables" << calculatedIbu;
 
-      if (! qFuzzyCompare(calculatedIbu, this->m_IBU)) {
+      if (!qFuzzyCompare(calculatedIbu, this->m_IBU)) {
          qDebug() <<
             Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
             "Calculated IBU: " << calculatedIbu << ", stored: " << this->m_IBU;
@@ -2037,6 +2096,31 @@ public:
       return numCorrected;
    }
 
+   /**
+    * \brief Volume absorbed by hop additions (measured by weight) at the given stage -- see
+    *        \c Recipe::kettleHopAbsorption_l and \c Recipe::dryHopAbsorption_l
+    *
+    * \param equipment If null, use the recipe's equipment and, if that is not set, return 0.0.
+    * \param stage
+    */
+   double hopAbsorptionAtStage_l(Equipment const * equipment,
+                                 RecipeAddition::Stage const stage) {
+      if (!equipment) {
+         equipment = this->m_self.equipment().get();
+         if (!equipment) {
+            return 0.0;
+         }
+      }
+      double absorption_l = 0.0;
+      for (auto const & hopAddition : this->m_self.hopAdditions()) {
+         if (hopAddition->stage() == stage && hopAddition->amountIsWeight()) {
+            if (Hop const * hop = hopAddition->hop()) {
+               absorption_l += hopAddition->quantity() * equipment->hopAbsorption_LKg(hop->form());
+            }
+         }
+      }
+      return absorption_l;
+   }
 
    //================================================ Member variables =================================================
    Recipe & m_self;
@@ -2052,8 +2136,11 @@ public:
    double        m_boilVolume_l         {0.0};
    double        m_postBoilVolume_l     {0.0};
    double        m_finalVolume_l        {0.0};
+   double        m_packagedVolume_l     {0.0};
    // Final volume before any losses out of the kettle, used in calculations for sg/ibu/etc.
    double        m_finalVolumeNoLosses_l{0.0};
+   // What the kettle hops absorbed when we last calculated volumes -- see Recipe::updatePreBoilSizeForKettleHops
+   double        m_kettleHopAbsorption_l{0.0};
    double        m_caloriesPerLiter     {0.0};
    double        m_grainsInMash_kg      {0.0};
    double        m_grains_kg            {0.0};
@@ -2146,6 +2233,7 @@ QString Recipe::localisedName_fermentation           () { return tr("Fermentatio
 QString Recipe::localisedName_fermentationId         () { return tr("Fermentation ID"        ); }
 QString Recipe::localisedName_fg                     () { return tr("FG"                     ); }
 QString Recipe::localisedName_finalVolume_l          () { return tr("Final Volume"           ); }
+QString Recipe::localisedName_packagedVolume_l       () { return tr("Packaged Volume"        ); }
 QString Recipe::localisedName_forcedCarbonation      () { return tr("Forced Carbonation"     ); }
 QString Recipe::localisedName_grainsInMash_kg        () { return tr("Grains In Mash"         ); }
 QString Recipe::localisedName_grains_kg              () { return tr("Grains"                 ); }
@@ -2301,6 +2389,7 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerUsPint  , caloriesPerUsPint,         NonPhysicalQuantity::Dimensionless), // TODO: Remove this
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, color_srm          , color_srm         , Measurement::PhysicalQuantity::Color     ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, finalVolume_l      , finalVolume_l     , Measurement::PhysicalQuantity::Volume    ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, packagedVolume_l   , packagedVolume_l  , Measurement::PhysicalQuantity::Volume    ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grainsInMash_kg    , grainsInMash_kg   , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grains_kg          , grains_kg         , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, ibuFormula         , ibuFormula        ,           NonPhysicalQuantity::Enum      ), // Cached, not in DB
@@ -3343,6 +3432,7 @@ double        Recipe::wortFromMash_l  () const { return this->pimpl->getCalculat
 double        Recipe::boilVolume_l    () const { return this->pimpl->getCalculated(this->pimpl->m_boilVolume_l    );}
 double        Recipe::postBoilVolume_l() const { return this->pimpl->getCalculated(this->pimpl->m_postBoilVolume_l);}
 double        Recipe::finalVolume_l   () const { return this->pimpl->getCalculated(this->pimpl->m_finalVolume_l   );}
+double        Recipe::packagedVolume_l() const { return this->pimpl->getCalculated(this->pimpl->m_packagedVolume_l);}
 double        Recipe::grainsInMash_kg () const { return this->pimpl->getCalculated(this->pimpl->m_grainsInMash_kg );}
 double        Recipe::grains_kg       () const { return this->pimpl->getCalculated(this->pimpl->m_grains_kg       );}
 
@@ -3476,9 +3566,14 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
    // We could just compare with "Hop", "Equipment", etc but there's then no compile-time checking of typos.  Using
    // ::staticMetaObject.className() is a bit more clunky but it's safer.
 
+   //
+   // Hops used to affect only IBUs.  But kettle hops absorb wort (see kettleHopAbsorption_l), so they also affect the
+   // volumes, and therefore the gravities.  And our pre-boil size may need to follow them.
+   //
    if (classNameOfWhatWasAddedOrChanged ==               Hop::staticMetaObject.className() ||
        classNameOfWhatWasAddedOrChanged == RecipeAdditionHop::staticMetaObject.className()) {
-      this->pimpl->recalcIBU();
+      this->updatePreBoilSizeForKettleHops();
+      this->recalcAll();
       return;
    }
 
@@ -3845,6 +3940,22 @@ QList<QString> Recipe::getInfusionWaterToHeat() const {
          );
       }
    }
+
+   //
+   // If the brewer heats their water in a hot liquor tank, whatever it can't drain also has to be heated.  This is lost
+   // once, however many infusions are drawn from the tank, so it is a separate entry rather than being added to any
+   // one infusion.  As with the other vessels, we only count the HLT if it is used, ie has a volume.
+   //
+   if (!result.isEmpty()) {
+      auto const equipment = this->equipment();
+      if (equipment && equipment->hltVolume_l() > 0.0 && equipment->hltLoss_l() > 0.0) {
+         result.append(
+            tr("plus %1 extra, which will stay in the hot liquor tank").arg(
+               Measurement::displayAmount(Measurement::Amount{equipment->hltLoss_l(), Measurement::Units::liters}, 1)
+            )
+         );
+      }
+   }
    return result;
 }
 
@@ -4057,6 +4168,69 @@ std::optional<double> Recipe::mashWaterShortfall_l() const {
       return std::nullopt;
    }
    return this->targetTotalMashVol_l() - mash->totalMashWater_l();
+}
+
+double Recipe::kettleHopAbsorption_l(Equipment const * equipment) const {
+   return this->pimpl->hopAbsorptionAtStage_l(equipment, RecipeAddition::Stage::Boil);
+}
+
+double Recipe::dryHopAbsorption_l(Equipment const * equipment) const {
+   return this->pimpl->hopAbsorptionAtStage_l(equipment, RecipeAddition::Stage::Fermentation);
+}
+
+double Recipe::kettleLoss_l() const {
+   auto const equipment = this->equipment();
+   return equipment ? equipment->kettleTrubChillerLoss_l() + this->kettleHopAbsorption_l(equipment.get()) : 0.0;
+}
+
+double Recipe::defaultPreBoilSize_l(Equipment const & equipment) const {
+   // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
+   auto const boil = this->boil();
+   double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+   return equipment.defaultPreBoilSize_l(boilTime_mins) + this->kettleHopAbsorption_l(&equipment);
+}
+
+void Recipe::updatePreBoilSizeForKettleHops() {
+   double const oldAbsorption_l = this->pimpl->m_kettleHopAbsorption_l;
+   double const newAbsorption_l = this->kettleHopAbsorption_l();
+   this->pimpl->m_kettleHopAbsorption_l = newAbsorption_l;
+
+   // Same tolerance as EquipmentEditor::offerToUpdateRecipeSizes
+   static constexpr double tolerance_l = 0.001;
+   auto same = [](double const lhs, double const rhs) { return std::abs(lhs - rhs) < tolerance_l; };
+
+   auto const equipment = this->equipment();
+   auto const boil      = this->boil();
+   if (this->m_uninitializedCalcs || !equipment || !boil || !boil->preBoilSize_l() ||
+       same(oldAbsorption_l, newAbsorption_l)) {
+      return;
+   }
+   if (this->locked() ||
+       RecipeUtils::lockReason(*boil) != RecipeUtils::LockReason::NotLocked ||
+       RecipeUtils::recipesUsing(*boil).size() != 1) {
+      qDebug() << Q_FUNC_INFO << "Not updating pre-boil size of locked or shared" << *boil;
+      return;
+   }
+
+   //
+   // If the pre-boil size is the equipment's default without any allowance for kettle hops, that's also one we
+   // calculated (eg because the recipe was created, or its equipment set, before the hops were added, or before we
+   // allowed for hop absorption).
+   //
+   double const equipmentDefault_l = equipment->defaultPreBoilSize_l(boil->boilTime_mins());
+   double const currentPreBoil_l   = *boil->preBoilSize_l();
+   if (!same(currentPreBoil_l, equipmentDefault_l + oldAbsorption_l) && !same(currentPreBoil_l, equipmentDefault_l)) {
+      return;
+   }
+
+   double const newPreBoil_l = equipmentDefault_l + newAbsorption_l;
+   if (!same(currentPreBoil_l, newPreBoil_l)) {
+      qInfo() <<
+         Q_FUNC_INFO << "Recipe #" << this->key() << ": kettle hop absorption now" << newAbsorption_l << "l (was" <<
+         oldAbsorption_l << "l), so updating pre-boil size from" << currentPreBoil_l << "to" << newPreBoil_l;
+      boil->setPreBoilSize_l(newPreBoil_l);
+   }
+   return;
 }
 
 double Recipe::targetStrikeWater_l(double const mashThickness_LKg) const {

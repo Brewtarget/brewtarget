@@ -59,6 +59,12 @@ PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent) {
 
 PrimingDialog::~PrimingDialog() = default;
 
+void PrimingDialog::setBeerVolume_l(double const beer_l) {
+   this->lineEdit_beerVol->setQuantity(beer_l);
+   this->calculate();
+   return;
+}
+
 void PrimingDialog::calculate() {
    // Wait until the user has filled in all the inputs
    if (this->lineEdit_beerVol->isBlank() || this->lineEdit_temp->isBlank() || this->lineEdit_vols->isBlank()) {

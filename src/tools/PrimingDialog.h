@@ -35,6 +35,11 @@ public:
    explicit PrimingDialog(QWidget * parent = nullptr);
    ~PrimingDialog() override;
 
+   /**
+    * \brief Set the volume of beer to prime (eg to the current recipe's packaged volume) and recalculate
+    */
+   void setBeerVolume_l(double const beer_l);
+
 public slots:
    void calculate();
 

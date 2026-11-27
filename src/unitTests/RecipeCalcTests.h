@@ -117,6 +117,27 @@ private slots:
    void testBrewLogVolumes();
 
    /**
+    * \brief Check that wort lost with kettle hops (Equipment hop absorption rates) is counted as a kettle loss, that
+    *        only boil-stage hops of the relevant forms count, and that a calculated pre-boil size follows the kettle
+    *        hops, but a pre-boil size the user has chosen, or a locked boil, does not.  See
+    *        https://github.com/Brewtarget/brewtarget/issues/616
+    */
+   void testKettleHopAbsorption();
+
+   /**
+    * \brief Check the packaged volume: batch size less fermentor loss, dry hop absorption (but not kettle or keg hops)
+    *        and the losses of aging and packaging vessels that are used.  Also that a new brew log's final volume
+    *        starts from it.  See https://github.com/Brewtarget/brewtarget/issues/616
+    */
+   void testPackagedVolume();
+
+   /**
+    * \brief Check that the water to heat for the "Heat water" brew day instruction allows for the hot liquor tank loss,
+    *        but only when the HLT is used (ie has a volume) and there are infusions to heat water for.
+    */
+   void testHltLossInWaterToHeat();
+
+   /**
     * \brief Check that the BeerXML-style evaporation rate (percent per hour) is relative to the boil size, and is kept
     *        consistent with the evaporation rate we actually use (liters per hour).
     */

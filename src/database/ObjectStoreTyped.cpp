@@ -146,6 +146,8 @@ namespace {
          {ObjectStore::FieldType::Double, {"kettle_evaporation_per_hour_l" }, PropertyNames::Equipment::kettleEvaporationPerHour_l  },
          {ObjectStore::FieldType::Double, {"evap_rate"                     }, PropertyNames::Equipment::evapRate_pctHr              },
          {ObjectStore::FieldType::Double, {"grain_absorption_lkg"          }, PropertyNames::Equipment::grainAbsorption_LKg         },
+         {ObjectStore::FieldType::Double, {"hop_absorption_pellet_lkg"     }, PropertyNames::Equipment::hopAbsorptionPellet_LKg     },
+         {ObjectStore::FieldType::Double, {"hop_absorption_leaf_lkg"       }, PropertyNames::Equipment::hopAbsorptionLeaf_LKg       },
          {ObjectStore::FieldType::Double, {"hop_utilization"               }, PropertyNames::Equipment::hopUtilization_pct          },
          {ObjectStore::FieldType::Double, {"lauter_tun_deadspace_loss_l"   }, PropertyNames::Equipment::lauterTunDeadspaceLoss_l    },
          {ObjectStore::FieldType::String, {"kettle_notes"                  }, PropertyNames::Equipment::kettleNotes                 },

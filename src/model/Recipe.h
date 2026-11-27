@@ -83,6 +83,7 @@ AddPropertyName(fermentationId         )
 AddPropertyName(fg                     )
 AddPropertyName(fgCalcUsesMash         )
 AddPropertyName(finalVolume_l          )
+AddPropertyName(packagedVolume_l       )
 AddPropertyName(forcedCarbonation      )
 AddPropertyName(grainsInMash_kg        )
 AddPropertyName(grains_kg              )
@@ -208,6 +209,7 @@ public:
    static QString localisedName_fg                     ();
    static QString localisedName_fgCalcUsesMash         ();
    static QString localisedName_finalVolume_l          ();
+   static QString localisedName_packagedVolume_l       ();
    static QString localisedName_forcedCarbonation      ();
    static QString localisedName_grainsInMash_kg        ();
    static QString localisedName_grains_kg              ();
@@ -469,6 +471,17 @@ public:
    Q_PROPERTY(double  postBoilVolume_l    READ postBoilVolume_l    STORED false)
    //! \brief The calculated final volume into the primary in liters.
    Q_PROPERTY(double  finalVolume_l       READ finalVolume_l       STORED false)
+   /**
+    * \brief The volume of beer we expect to package, in liters: the (target) batch size, less what is left behind in the
+    *        fermenter (\c Equipment::fvLoss_l), what the dry hops absorb (\c dryHopAbsorption_l), and the losses in the
+    *        aging and packaging vessels, if they are used (ie have a non-zero volume).  BeerSmith calls this "bottling
+    *        volume".  It is what priming sugar calculations should be based on.
+    *
+    *        Like the brew log, this starts from the target batch size rather than \c finalVolume_l (which is calculated
+    *        from the water in the mash), so it is what the recipe is designed to give.  If there is no equipment, it is
+    *        just the batch size.
+    */
+   Q_PROPERTY(double  packagedVolume_l    READ packagedVolume_l    STORED false)
    //! \brief The calculated energy content, in kiloalories per liter. (kcal/L).
    Q_PROPERTY(double  energyContent_kcalL READ energyContent_kcalL STORED false)
    //! \brief The calculated Calories per 33cl. (kcal). TODO: Remove this and use Measurement::Units::kilocaloriesPer33cl to convert from energyContent_kcalL
@@ -753,6 +766,33 @@ public:
     */
    std::optional<double> mashWaterShortfall_l() const;
    /**
+    * \brief The volume of wort lost with kettle hops, ie, for each boil-stage hop addition measured by weight
+    *        (including first wort, flameout and whirlpool additions), the mass of hops times the rate given by
+    *        \c Equipment::hopAbsorption_LKg for its form.  Mash hops and dry hops are not included.  (For the latter,
+    *        see \c dryHopAbsorption_l.)
+    *
+    * \param equipment If set, use this equipment.  Otherwise, use the recipe's equipment (and return 0.0 if the recipe
+    *                  does not have equipment.
+    */
+   double kettleHopAbsorption_l(Equipment const * equipment = nullptr) const;
+   /**
+    * \brief As \c kettleHopAbsorption_l, but for dry hops, ie fermentation-stage hop additions measured by weight.  This
+    *        comes out of the packaged volume (see \c packagedVolume_l).  Hops added at packaging (eg keg hops) are not
+    *        included, as the beer they hold stays in the package.
+    */
+   double dryHopAbsorption_l(Equipment const * equipment = nullptr) const;
+   /**
+    * \brief Everything lost in the kettle: \c Equipment::kettleTrubChillerLoss_l plus \c kettleHopAbsorption_l.  0 if
+    *        we don't have any equipment.
+    */
+   double kettleLoss_l() const;
+   /**
+    * \brief The pre-boil volume to use for this recipe with \c equipment (which need not yet be ours) -- eg when the
+    *        user sets the recipe's equipment, or scales the recipe.  This is \c Equipment::defaultPreBoilSize_l for
+    *        our boil time, plus what the kettle hops absorb (\c kettleHopAbsorption_l).
+    */
+   double defaultPreBoilSize_l(Equipment const & equipment) const;
+   /**
     * \brief The strike water (ie first infusion) needed for the supplied mash thickness, where the thickness is the
     *        ratio of water to grain in the grain bed.  This is the water for the grain bed plus
     *        \c Equipment::strikeWaterAllowance_l (ie the foundation water and mash tun loss, which have to be in the
@@ -791,6 +831,7 @@ public:
    double        boilVolume_l            () const;
    double        postBoilVolume_l        () const;
    double        finalVolume_l           () const;
+   double        packagedVolume_l        () const;
    double        caloriesPer33cl         () const;
    double        energyContent_kcalL     () const;
    double        caloriesPerUs12oz       () const;
@@ -1006,6 +1047,9 @@ public:
     * \brief For the "Heat water" brew instruction, lists the water that needs to be heated for the mash's infusion
     *        (including sparge) steps, as "<amount> water to <temperature>", one entry per step.  Non-infusion steps
     *        (temperature, decoction, etc) add no water, so are not included.
+    *
+    *        If the equipment has a hot liquor tank (ie \c Equipment::hltVolume_l is non-zero) with a loss
+    *        (\c Equipment::hltLoss_l), there is a final entry for the extra water to heat to allow for that.
     */
    QList<QString> getInfusionWaterToHeat() const;
 
@@ -1097,6 +1141,18 @@ public:
     *        grain bill, the equipment or the boil.
     */
    void scheduleMashAutoAdjust();
+
+   /**
+    * \brief Called when the kettle hops change (eg a hop addition is added, removed or changed, or the form of a hop
+    *        changes).  If our pre-boil size is the calculated default -- \c Equipment::defaultPreBoilSize_l, with or
+    *        without the old allowance for kettle hops -- then we update it to allow for the new kettle hops.  So the
+    *        pre-boil size follows the hops, but not if the user has deliberately chosen a different one.
+    *
+    *        We don't change a boil that is locked or shared with other recipes.  And we don't do this when the hop
+    *        absorption rates on the equipment change, because, in that case, \c EquipmentEditor offers to update the
+    *        pre-boil sizes of the recipes using the equipment (see \c EquipmentEditor::offerToUpdateRecipeSizes).
+    */
+   void updatePreBoilSizeForKettleHops();
 
    /**
     * \brief Water equivalent of \c scheduleMashAutoAdjust.  If \c waterKeptInSync is set, arrange for
