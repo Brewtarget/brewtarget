@@ -1,0 +1,28 @@
+=== Prêt-à-Brasser
+
+Maintenant que votre recette est plannifié, vous pouvez demander à Brewtarget de vous écrire la marche à suivre pour la réaliser. Pour ce faire, sélectionnez l'onglet ``Journée de brassage`` de la fenêtre principale. Ensuite, appuyez sur ``Générez Instructions``.
+
+Une série d'instructions seront générés et placé dans la barre de gauche. Les étapes se trouveront dans le bon ordre directement. Si vous vous sentez plus à l'aise en utilisant un ordre différent, vous pouvez les déplacer.
+
+==== Alarmes
+// Alarmes pourraient être dans une autre section comme outils
+Il y a trois alarmes pour vous supporter dans votre brassage. Ils peuvent être configurés en cliquant sur l'icone : image:clockIcon.png[Horloge,30,30].
+
+L'heure est configuré en mode ``HH:MM:SS`` et vous devez entrer la valeure voulut et cliqué sur ``Régler``. Vous pouvez changer le son par défault avec le bouton ``son``.
+
+=== Impression
+
+L'impression et la visualization sont disponible dans le menu ``Fichier``. Deux formats sont disponnible dépendement de vos besoin.
+
+**Recette** est un mode optimizer pour la communication de la recette lors de l'achat d'ingrédient, ou pour l'échange d'information.
+
+**Journée de Brassage** est conçu pour vous faciliter la vie le jour du brassage.
+
+=== Sauvegarde de votre travail
+
+Similairement à d'autre logiciel semblable, une icon représetant une diskette vous permet de sauvegarder votre travail. Cet icon sera visible en deux mode : image:filesave.png[] et image:filesavedirty.png[].
+
+Ces icons représentent respectivement un mode sauvegarder et non sauvegarder de votre espace de travail.
+
+[IMPORTANT]
+Brewtarget ne sauve pas vos modification en temps réel. Quitter l'application alors qu'elle a des modifications non-sauvegardé signifie que vous les perderez.

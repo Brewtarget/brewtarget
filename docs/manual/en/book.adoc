@@ -1,0 +1,37 @@
+//
+// Top-level file for the English user manual.
+//
+// The attributes below are defaults so that the manual can be built standalone (eg `asciidoctor en/book.adoc`).  The
+// build system (meson.build and .github/workflows/manual.yml) overrides them with -a on the command line, so the same
+// source gives a Brewken or a Brewtarget manual for the right version.  (app-logo is
+// relative to imagesdir unless given as an absolute path.)
+//
+:app-name: Brewken
+:app-version: 0.0.0
+:app-github-url: https://github.com/Brewken/brewken
+:app-logo: cover.jpg
+// manual-pdf-name is set only by the GitHub Pages build, to add a link to the PDF in the HTML version
+:doctype: book
+:toc: left
+:toclevels: 3
+:sectanchors:
+:imagesdir: ./assets
+:title-logo-image: image:{app-logo}[pdfwidth=40%,align=center]
+:revnumber: {app-version}
+
+= {app-name} User Manual
+The {app-name} Team
+
+ifdef::backend-html5+manual-pdf-name[]
+TIP: This manual for {app-name} {app-version} is also available as a link:{manual-pdf-name}[PDF].
+endif::[]
+
+include::README.adoc[]
+
+include::chapters/01.adoc[]
+
+include::chapters/02.adoc[]
+
+include::chapters/03.adoc[]
+
+include::license.adoc[]

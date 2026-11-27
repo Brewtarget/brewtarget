@@ -1,0 +1,163 @@
+#-----------------------------------------------------------------------------------------------------------------------
+# .github/workflows/manual.yml is part of Brewtarget, and is copyright the following authors 2026:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Builds the user manual (doc/manual) as HTML and PDF and publishes it to GitHub Pages, via the gh-pages branch.  The
+# site is laid out as:
+#
+#    /                 -> redirects to latest/
+#    /latest/          The manual for the most recent release  (This is the URL the program opens from About > Manual
+#                      if it doesn't have a local PDF -- see CONFIG_MANUAL_URL in meson.build.)
+#    /5.4.0/ etc       The manual for each release
+#    /dev/             The manual as it stands on the main branch
+#
+# Each folder has index.html, the images it needs, and the PDF.
+#
+# One-off setup in the repository settings:
+#    - Settings > Pages > Build and deployment: Source = "Deploy from a branch", Branch = gh-pages, folder = / (root).
+#      (The gh-pages branch is created by the first run of this workflow, so run it once first, eg via "Run workflow"
+#      on the Actions tab.)
+#    - Optionally, for a custom domain (eg manual.brewtarget.beer): first add a CNAME DNS record pointing the domain at
+#      <owner>.github.io, then set the repository variable MANUAL_CNAME (Settings > Secrets and variables > Actions >
+#      Variables) to the domain.  Don't set the variable before the DNS record exists, as GitHub will then redirect
+#      the github.io URL to a domain that doesn't resolve.
+#
+name: Manual
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/manual/**'
+      - '.github/workflows/manual.yml'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      publishAsRelease:
+        description: 'Publish as the current release (ie to the version folder and latest/) rather than to dev/'
+        type: boolean
+        default: false
+
+permissions: read-all
+
+# Don't let two runs push to gh-pages at the same time
+concurrency:
+  group: manual-gh-pages
+  cancel-in-progress: false
+
+jobs:
+  manual:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write   # To push to the gh-pages branch
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Asciidoctor
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y asciidoctor ruby-asciidoctor-pdf
+
+      - name: Work out names and versions
+        id: names
+        shell: bash
+        run: |
+          # Eg brewken for Brewken/brewken, brewtarget for Brewtarget/brewtarget
+          projectName="${GITHUB_REPOSITORY#*/}"
+          appName="${projectName^}"
+          appVersion="$(sed -n "s/^ *version: '\([0-9.]*\)',$/\1/p" meson.build | head -1)"
+          if [[ -z "${appVersion}" ]]; then
+            echo "Could not find version in meson.build" >&2
+            exit 1
+          fi
+          if [[ "${{ github.event_name }}" == "release" || "${{ inputs.publishAsRelease }}" == "true" ]]; then
+            isRelease=true
+            destination="${appVersion}"
+          else
+            isRelease=false
+            destination=dev
+          fi
+          {
+            echo "projectName=${projectName}"
+            echo "appName=${appName}"
+            echo "appVersion=${appVersion}"
+            echo "isRelease=${isRelease}"
+            echo "destination=${destination}"
+            echo "pdfName=${appName}-${appVersion}-manual.pdf"
+          } >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+      - name: Build HTML and PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          attributes=(
+            --attribute "app-name=${{ steps.names.outputs.appName }}"
+            --attribute "app-version=${{ steps.names.outputs.appVersion }}"
+            --attribute "app-github-url=${{ github.server_url }}/${{ github.repository }}"
+            --attribute "app-logo=${GITHUB_WORKSPACE}/images/${{ steps.names.outputs.projectName }}.svg"
+            --attribute "manual-pdf-name=${{ steps.names.outputs.pdfName }}"
+          )
+          mkdir -p out/site
+          asciidoctor     "${attributes[@]}" --failure-level WARN --destination-dir out/site --out-file index.html docs/manual/en/book.adoc
+          cp -r doc/manual/en/assets out/site/
+          asciidoctor-pdf "${attributes[@]}" --failure-level WARN --out-file "out/site/${{ steps.names.outputs.pdfName }}" docs/manual/en/book.adoc
+          # Root page just redirects to the latest release
+          mkdir -p out/root
+          cat > out/root/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8">
+              <title>User Manual</title>
+              <meta http-equiv="refresh" content="0; url=latest/">
+              <link rel="canonical" href="latest/">
+            </head>
+            <body><p><a href="latest/">User Manual</a></p></body>
+          </html>
+          EOF
+          ls -lR out
+
+      - name: Publish to version folder (or dev)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out/site
+          destination_dir: ${{ steps.names.outputs.destination }}
+          keep_files: false   # Only affects destination_dir; other folders on gh-pages are left alone
+          cname: ${{ vars.MANUAL_CNAME }}
+          commit_message: 'Manual ${{ steps.names.outputs.destination }}'
+
+      - name: Publish to latest
+        if: steps.names.outputs.isRelease == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out/site
+          destination_dir: latest
+          keep_files: false
+          cname: ${{ vars.MANUAL_CNAME }}
+          commit_message: 'Manual latest (${{ steps.names.outputs.appVersion }})'
+
+      - name: Publish root redirect
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out/root
+          keep_files: true    # Publishing to the root, so we must keep the version folders
+          cname: ${{ vars.MANUAL_CNAME }}
+          commit_message: 'Manual root page'

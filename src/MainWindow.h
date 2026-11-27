@@ -185,6 +185,12 @@ public slots:
    void showPitchDialog();
 
    /**
+    * \brief Open the user manual.  We use the PDF installed with the program if there is one (because it matches the
+    *        version being run), otherwise the online version.
+    */
+   void openManual();
+
+   /**
     * \brief Remove selected Hop addition(s) from the Recipe.
     *
     *        The name is a bit cumbersome, but is more accurate than, say, `removeSelectedHop`.  You might have the same

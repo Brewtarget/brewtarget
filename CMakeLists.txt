@@ -135,6 +135,8 @@ string(TOUPPER "${CMAKE_PROJECT_NAME}" CONFIG_APPLICATION_NAME_AC)
 # We use this in the program, to tell users where to get support.
 set(CONFIG_GITHUB_URL "https://github.com/${CONFIG_APPLICATION_NAME_UC}/${projectName}")
 set(CONFIG_WEBSITE_URL "https://www.brewtarget.beer/")
+# NB: The CMake build does not generate the PDF user manual, so About > Manual always opens this online version
+set(CONFIG_MANUAL_URL "https://${projectName}.github.io/${projectName}/latest/")
 set(CONFIG_ORGANIZATION_DOMAIN "brewtarget.beer")
 
 #=======================================================================================================================

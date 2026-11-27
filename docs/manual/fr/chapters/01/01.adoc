@@ -1,0 +1,3 @@
+== Chapitre 1 : Visite Guidée
+
+Il est probablement plus facile de débuter par une démonstration des fonctionnalités du logiciel que par l'explication de l'ensemble des concepts sous-jacents à la conception d'une bière. Nous vous proposons donc un apprentissage par la pratique. Vous serez guidé à travers l'utilisation de Brewtarget et de ses composants dans le context de la création d'une ale ambrée États-Unienne.

@@ -45,9 +45,11 @@
 
 #include <QAction>
 #include <QBrush>
+#include <QDesktopServices>
 #include <QEvent>
 #include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QIcon>
 #include <QInputDialog>
 #include <QIODevice>
@@ -1498,7 +1500,7 @@ void MainWindow::setupTriggers() {
    connect(actionYeasts                    , &QAction::triggered, this->pimpl->m_yeastCatalog.get()         , &QWidget::show                     ); // > View > Yeasts
    connect(actionWaters                    , &QAction::triggered, this->pimpl->m_waterCatalog.get()         , &QWidget::show                     ); // > View > Waters
    connect(actionInventory                 , &QAction::triggered, this->pimpl->m_stockWindow.get()          , &QWidget::show                     ); // > View > Inventory
-//   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
+   connect(actionManual                    , &QAction::triggered, this                                      , &MainWindow::openManual            ); // > About > Manual
    connect(actionScale_Recipe              , &QAction::triggered, this->pimpl->m_recipeScaler.get()         , &QWidget::show                     ); // > Tools > Scale Recipe
    connect(action_recipeToTextClipboard    , &QAction::triggered, this->pimpl->m_recipeFormatter.get()      , &RecipeFormatter::toTextClipboard  ); // > Tools > Recipe to Clipboard as Text
    connect(actionUnitConversionTool        , &QAction::triggered, this->pimpl->m_unitConversionTool.get()   , &QWidget::show                     ); // > Tools > Unit Conversion Tool
@@ -2921,6 +2923,31 @@ void MainWindow::showPitchDialog() {
    }
 
    this->pimpl->m_pitchDialog->show();
+   return;
+}
+
+void MainWindow::openManual() {
+   //
+   // The PDF manual is generated and installed by the Meson build if Asciidoctor PDF is available -- see meson.build.
+   //
+   QString const localManual{Application::getResourceDir().canonicalPath() + "/manual/manual-en.pdf"};
+   if (QFileInfo::exists(localManual)) {
+      qDebug() << Q_FUNC_INFO << "Opening" << localManual;
+      if (QDesktopServices::openUrl(QUrl::fromLocalFile(localManual))) {
+         return;
+      }
+      qWarning() << Q_FUNC_INFO << "Unable to open" << localManual << "- trying online manual instead";
+   }
+
+   QUrl const onlineManual{QString{CONFIG_MANUAL_URL}};
+   qDebug() << Q_FUNC_INFO << "Opening" << onlineManual;
+   if (!QDesktopServices::openUrl(onlineManual)) {
+      QMessageBox::warning(
+         this,
+         tr("Unable to open manual"),
+         tr("Could not open the user manual.  You can read it online at %1").arg(onlineManual.toString())
+      );
+   }
    return;
 }
 
