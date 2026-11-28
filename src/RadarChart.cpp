@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QDebug>
-#include <QHash>
+#include <QMap>
 
 // Internal constants
 namespace {
@@ -126,7 +126,12 @@ public:
    QString m_unitsName = "";
    double  m_axisMarkInterval = 0.0;
    QVector<RadarChart::VariableName> m_variableNames;
-   QHash<QString, LineStyleAndObject > m_allSeries;
+   //
+   // NB: This is a QMap rather than a QHash so that the series are always drawn in the same order (ie by name).  (Qt 6
+   //     randomises the iteration order of a QHash each time the program runs, which meant that which line ended up on
+   //     top changed from one run to the next.)
+   //
+   QMap<QString, LineStyleAndObject > m_allSeries;
 
    // Angle in radians between the radii (aka spokes aka axes)
    // Calculated in RadarChart::init()
@@ -186,7 +191,7 @@ void RadarChart::addSeries(QString const & name,
 }
 
 void RadarChart::removeSeries(QString const & name) {
-   // It doesn't matter if the series is not present - QHash remove will just return false, but nothing bad happens
+   // It doesn't matter if the series is not present - QMap remove will just return false, but nothing bad happens
    this->pimpl->m_allSeries.remove(name);
    qDebug() << Q_FUNC_INFO << "Removed" << name;
    // We deliberately don't replot here because the caller might need to make further calls before it is OK to redraw

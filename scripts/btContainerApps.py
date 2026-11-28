@@ -728,7 +728,7 @@ def doFlatpak():
    os.makedirs(dir_copyOfSource)
    for directoryToCopy in ['css',
                            'data',
-                           'doc',
+                           'docs',
                            'fonts',
                            'images',
                            'linux',  # For desktop.in
@@ -1130,7 +1130,7 @@ def doSnap():
    btLogger.log.info('Copy source tree etc')
    for directoryToCopy in ['css',
                            'data',
-                           'doc',
+                           'docs',
                            'fonts',
                            'images',
                            'linux',  # For desktop.in

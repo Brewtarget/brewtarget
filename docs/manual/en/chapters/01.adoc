@@ -1,0 +1,244 @@
+== Chapter 1: A Walkthrough
+
+This chapter takes you through designing a recipe from start to finish, then brewing it.  The example is an English
+Best Bitter brewed on a Grainfather G30, but the steps are the same whatever you brew and whatever you brew it on.
+Nothing here depends on getting the details right first time: every change can be undone, and you can come back to any
+step later.
+
+image::screenshots/mainWindow.png["The main window with the example recipe open",pdfwidth=100%]
+
+=== The Main Window
+
+The main window has three parts.
+
+* On the left is a set of *trees*, one for each kind of thing {app-name} stores: recipes, styles, equipment, mash,
+  boil and fermentation profiles, fermentables, hops, miscellaneous ingredients, yeasts and water profiles.  The icons
+  down the side switch between them (hover over an icon to see which is which).  Double-click a recipe to open it, or
+  any other item to edit it.  You can also drag items onto the recipe to use them there.
+* At the top right are tabs about the recipe as a whole: *Recipe* (the main figures), *Extras*, *Notes*, *Water* and
+  *Brewday*.  Once you have brewed a recipe, there is also a tab for each brew log.
+* At the bottom right are tabs for the parts of the recipe: *Fermentables*, *Hops*, *Miscellaneous*, *Yeast*, *Mash*,
+  *Boil* and *Fermentation*.
+
+There is no Save button on the main window.  Changes to a recipe are stored as you make them, and
+menu:Edit[Undo] and menu:Edit[Redo] take you backwards and forwards through them.  The editors that open in their own
+window (for equipment, hops, mash profiles and so on) are different: they have btn:[Save] and btn:[Cancel] buttons, and
+nothing you change in them is kept until you click btn:[Save].
+
+=== Units
+
+{app-name} works internally in metric units, but you can show most things in whichever units you prefer.  Go to
+menu:Edit[Options], and choose your units on the *Units & Precision* tab -- eg litres or US gallons for volume, Celsius
+or Fahrenheit for temperature, specific gravity or Plato for density.
+
+To change the units for just one field, right-click its label.  You can also type a unit after a number, and it will be
+converted -- eg typing `5 gal` into a volume field that shows litres converts it to litres for you.
+
+=== Equipment
+
+Much of what {app-name} calculates -- how much water you need, how much wort ends up in the fermenter, how much beer you
+can package -- depends on your equipment, so it is worth setting this up before anything else.
+
+Open menu:View[Equipments].  This lists the equipment profiles in your database, including ready-made profiles for a
+number of all-in-one systems (Grainfather, BrewZilla, Braumeister and others) and a basic cooler mash tun set-up.  If
+yours is there, select it and click the edit button; otherwise create a new one with the button next to it.
+
+image::screenshots/equipmentEditor.png["The General tab of the Equipment editor",pdfwidth=75%]
+
+The editor has a tab for each vessel, plus a *General* tab and a *Mash* tab.  Most fields have an explanation beneath
+them, so this section only covers the ones that matter most.
+
+General tab::
+*Default Batch Size* is the volume that goes into the fermenter, and *Default Pre-boil Volume* is what you expect to
+have in the kettle before the boil.  A new recipe starts with these, and you can change them per recipe.  (They are not
+the capacities of the fermenter and kettle, which are set on those vessels' own tabs.)  The checkboxes at the top
+control which of the optional vessel tabs are shown.  If you have no separate mash tun, untick *Mash Tun*: {app-name}
+then assumes the mash happens in the kettle, as it does on an all-in-one system or for brew in a bag.
+
+Mash tab::
+*Grain absorption* is the water the spent grain keeps hold of.  *Foundation Water* is the water that has to be below the
+false bottom (or malt pipe) before the grain is covered, but which drains out with the wort -- about 3.5 litres on a
+Grainfather G30.
+
+Boil Kettle tab::
+*Evaporation rate per hour* and *Kettle to Fermentor Loss* (the trub, and whatever stays in the chiller and pipework)
+have the biggest effect on your volumes.
+
+Fermentor tab::
+*Deadspace Losses* is what stays behind with the yeast when you transfer or package the beer.
+
+The figures in the ready-made profiles are the manufacturers' own, which are a reasonable starting point.  After a few
+brews, the brew logs will tell you how far your own figures differ.
+
+Tick *Set as Default* if this is the equipment you normally use, so that new recipes pick it up automatically, then
+click btn:[Save].
+
+=== Creating the Recipe
+
+Choose menu:File[New Recipe] (or press kbd:[Ctrl+N]), and give the recipe a name.  It appears in the recipe tree and
+opens on the Recipe tab.
+
+image::screenshots/recipeTab.png["The Recipe tab of the new recipe, before adding ingredients",pdfwidth=100%]
+
+If you did not set default equipment, choose it from the *Equipment* drop-down.  {app-name} asks whether to set the
+recipe's batch size and pre-boil volume from the equipment; say yes unless you are brewing an unusual batch size.
+
+Next, choose a *Style* -- here, Best Bitter.  The style is optional, but it means that the bars for colour, bitterness,
+OG, FG and ABV show the style's range, so you can see at a glance whether the recipe fits it.  The styles supplied
+include the 2021 BJCP guidelines, and you can add your own with menu:View[Styles].
+
+*Efficiency* is the brewhouse efficiency: how much of the potential extract of the grain ends up in the fermenter.  If
+you don't know yours, 70% is a reasonable guess for most systems; the brew log will tell you the real figure after your
+first brew day.
+
+=== Fermentables
+
+Click the plus button on the *Fermentables* tab to open the fermentable catalogue.  Type in the filter box to narrow the
+list down, select what you want and click btn:[Add to recipe].  You can add several things before closing the
+catalogue.  (Alternatively, drag fermentables from the tree on the left onto the recipe.)
+
+For the Best Bitter, add Maris Otter and a medium crystal malt, eg *Caramel/Crystal Malt – 60L*.  New additions start
+with no amount, so double-click in the *Amount* column to set one.  As you do, the OG, colour and ABV on the Recipe tab
+update.  Aim for something like 92% pale malt and 8% crystal by weight, and adjust the total to put the OG in the middle
+of the style's range.
+
+image::screenshots/fermentablesTab.png["The Fermentables tab",pdfwidth=100%]
+
+If something is not in the catalogue, create it with the new-item button at the bottom of the catalogue.  The most
+important fields are the yield and the colour, which you can usually get from the maltster's specification sheet.
+
+=== Hops
+
+Hops work the same way: click the plus button on the *Hops* tab, choose the hops and add them to the recipe.  For each
+addition, set:
+
+* the *Amount*;
+* the *Stage* -- Mash, Boil, Fermentation (for dry hops) or Packaging;
+* the *Time*.  For the boil, this counts down to the end of the boil, as in most recipes, so a 60-minute addition goes
+  in 60 minutes before the end.  For the other stages, it counts from the start, so a dry hop at 3 days goes in three
+  days after fermentation starts.
+
+For the Best Bitter, add Challenger at 60 minutes for bitterness and East Kent Goldings at 15 minutes for flavour and
+aroma, and adjust the amounts to get about 35 IBU.  The *IBU/GU* scale on the Recipe tab shows how bitter the beer
+will taste relative to its strength.
+
+Check the *Alpha %* column against the packet, as it varies from crop to crop.  Alpha acid belongs to the hop rather
+than to the recipe, so changing it -- here or in the hop's editor -- changes it for every recipe that uses that hop.  If
+you want to keep the old figure for older recipes, copy the hop first (select it in the tree, then
+menu:Edit[Copy Selected Item(s)]) and use the copy.
+
+The IBU figures depend on which formula is used.  The default is Tinseth, and you can choose another on the *Formulas*
+tab of menu:Edit[Options].
+
+=== Yeast and Other Ingredients
+
+Add a yeast from the *Yeast* tab -- for a Best Bitter, an English ale yeast such as SafAle S-04.  The yeast's
+attenuation is what {app-name} uses to estimate the FG.
+
+The *Miscellaneous* tab is for everything else: finings, spices, fruit and so on.  Water treatment (salts and acids)
+also ends up here, but it is easier to let the Water tab work that out for you, as described below.
+
+=== The Mash
+
+The mash profile says how the mash is done: the rests and their temperatures, how much water goes in at each step, and
+how the grain is sparged.
+
+On the *Mash* tab, choose a profile from the drop-down.  The ones supplied cover the common cases -- single infusion
+mashes for light, medium and full body, step mashes and a decoction mash -- and their names say what they are.  For the
+Grainfather, choose *Single Infusion, Medium Body, Fly Sparge*.
+
+The supplied profiles don't have any water amounts or temperatures, because those depend on the recipe.  To fill them
+in, click the edit button next to the drop-down to open the mash editor, then:
+
+. Check the *Sparge* method.
+. Set the *Target mash thickness* (the volume of strike water per weight of grain).  Grainfather suggest 2.7 L/kg;
+  around 2.5--3 L/kg is typical for most systems.
+. Click btn:[Auto-Adjust].
+
+image::screenshots/mashEditor.png["The mash editor after Auto-Adjust",pdfwidth=75%]
+
+The supplied profiles are locked, so that they stay available for other recipes.  {app-name} asks whether to make a
+copy for this recipe; say yes, and it adjusts the copy instead.  It works out the strike water, sparge water and
+temperatures from your grain bill and equipment, so that you end up with the recipe's pre-boil volume.  If anything
+doesn't add up -- eg the mash won't fit in the vessel -- it says so.
+
+If you tick *Keep mash in sync with recipe changes*, the mash is adjusted again whenever something it depends on
+changes, eg if you add more grain or change the batch size.  This is only possible for a mash that just one recipe
+uses.
+
+Click btn:[Save] to close the mash editor.  Back on the Mash tab, the line next to the drop-down tells you whether the
+mash is shared with other recipes, and whether it is locked.
+
+*Use mash profile in FG calculation*, on the Mash tab, makes the FG estimate allow for the mash temperatures and
+thickness, so that, eg, a hotter mash gives a higher FG.  Without it, the FG depends only on the yeast's attenuation.
+
+=== Water
+
+You can skip this section if you don't adjust your brewing water.
+
+The *Water* tab works out which brewing salts to add, and how much acid, to turn the water you have into the water you
+want.  It needs the water amounts from the mash, which is why it comes after the mash in this walkthrough.
+
+. Choose the *Base Profile*: your tap water, or whatever water you brew with.  There are profiles for a few cities, but
+  you will probably need to create your own from your water supplier's report, with menu:View[Waters].  If you dilute
+  with reverse-osmosis water, set the *% RO* for the mash and the sparge.
+. Choose the *Target Profile*.  There is one for each broad family of beer styles; for the Best Bitter, choose
+  *Amber, Hoppy (Bitter, ESB, Amber Ale)*.
+. If you want acid added to hit a particular mash pH, tick *Adjust acid for mash pH of* and set the pH -- 5.4 is a good
+  default.
+. Click btn:[Auto-Adjust].
+
+image::screenshots/waterTab.png["The Water tab after Auto-Adjust",pdfwidth=100%]
+
+The salts and acid it chooses appear in the *Water Agents* table and on the Miscellaneous tab.  The figures under
+*Actual* show what you will end up with, and the chart compares this with the base and target profiles.  It is rarely
+possible to match a target exactly, so the *Auto-Adjust Notes* tab explains any compromises.
+
+As with the mash, you can tick the box to keep the water agents in sync with the rest of the recipe.
+
+=== Boil and Fermentation
+
+A new recipe starts with a standard boil profile: heating up to the boil, the boil itself, and cooling.  Set the length
+of the boil in the boil step on the *Boil* tab.  If you do a hop stand or whirlpool, add a step for it after the boil.
+Only some IBU formulas (currently mIBU and SMPH) estimate the bitterness from hops added after the boil; the others
+treat them as adding none.
+
+Likewise, a new recipe starts with a single primary fermentation step.  On the *Fermentation* tab, set its temperature
+and length -- eg 19°C for ten days -- and add more steps if you do, eg, a diacetyl rest or a cold crash.
+
+=== Checking the Recipe
+
+Go back to the *Recipe* tab and check the figures against the style.  The bars show the style's range, with a marker
+for the recipe's own value; if a value is outside the range, adjust the ingredients.
+
+image::screenshots/recipeTabDone.png["The Recipe tab of the finished recipe",pdfwidth=100%]
+
+Under *Batch Size*, *Target* is the volume into the fermenter, *Calculated* is what the equipment and recipe actually
+give you, and *Packaged* is what you can expect to bottle or keg once the fermenter losses and any dry hops have taken
+their share.
+
+=== Brew Day
+
+On the *Brewday* tab, click btn:[Generate Instructions] for a step-by-step list of what to do on the day, worked out
+from the recipe.  You can edit, add, remove and reorder the steps.
+
+To print the recipe or the brew day instructions, or save them as PDF or HTML, use menu:File[Print and preview].
+
+When you brew, click *Brew It!* at the right-hand end of the toolbar, or right-click the recipe in the tree and
+choose *Brew It!*.  This:
+
+* creates a brew log for today, which opens as a new tab next to the Recipe tab and also appears under the recipe in
+  the tree;
+* takes the ingredients out of your inventory, if you keep track of it;
+* warns you if the mash water doesn't match the recipe -- eg because you changed the grain bill after adjusting the
+  mash, and didn't keep it in sync.
+
+image::screenshots/brewLog.png["A brew log",pdfwidth=100%]
+
+As you brew, fill in the brew log: the volumes and gravities you measure, the mash temperatures, the date fermentation
+finished and so on.  It calculates the efficiency into the kettle, the brewhouse efficiency and the attenuation, and
+shows them next to the figures the recipe predicted.  Use the brewhouse efficiency to correct the efficiency on the
+recipe for next time, and any shortfall in volumes to correct the losses in the equipment profile.
+
+Once you have brewed a recipe, you may want to tick *Recipe Locked* on the Recipe tab, so that it can't be changed by
+accident.  To brew a variation, copy it and change the copy.

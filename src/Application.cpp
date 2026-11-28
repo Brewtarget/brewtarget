@@ -43,6 +43,7 @@
 #include <QObject>
 #include <QString>
 #include <QThread>
+#include <QTimer>
 #include <QUrl>
 
 #include "BtSplashScreen.h"
@@ -50,6 +51,7 @@
 #include "Localization.h"
 #include "MainWindow.h"
 #include "PersistentSettings.h"
+#include "ScreenshotTaker.h"
 #include "calculations/Algorithms.h"
 #include "calculations/ColorMethods.h"
 #include "calculations/IbuMethods.h"
@@ -76,6 +78,9 @@
 namespace {
 
    bool interactive = true;
+
+   //! \brief See \c Application::setScreenshotDir
+   QString screenshotDirectory;
 
    //! \brief If this option is false, do not bother the user about new versions.
    bool tellUserAboutNewRelease = true;
@@ -388,6 +393,19 @@ void Application::setInteractive(bool val) {
    return;
 }
 
+void Application::setScreenshotDir(QString const & dir) {
+   screenshotDirectory = dir;
+   return;
+}
+
+QString const & Application::screenshotDir() {
+   return screenshotDirectory;
+}
+
+bool Application::isScreenshotMode() {
+   return !screenshotDirectory.isEmpty();
+}
+
 int Application::run() {
    int ret = 0;
 
@@ -429,6 +447,8 @@ int Application::run() {
    //
    if (Application::isStoreInstalledSnap()) {
       qInfo() << Q_FUNC_INFO << "Running as Snap Store install, so not checking for new releases";
+   } else if (Application::isScreenshotMode()) {
+      qInfo() << Q_FUNC_INFO << "Generating screenshots, so not checking for new releases";
    } else {
       mainWindow.connect(&mainWindow, &MainWindow::initialisedAndVisible, latestReleaseFinder, &LatestReleaseFinder::checkMainRespository, Qt::QueuedConnection);
    }
@@ -437,6 +457,17 @@ int Application::run() {
 
    mainWindow.initialiseAndMakeVisible();
    splashScreen.finish(&mainWindow);
+
+   if (Application::isScreenshotMode()) {
+      //
+      // Take the screenshots once the event loop is running (so that the main window has been laid out), then quit.
+      //
+      QTimer::singleShot(0, &mainWindow, [&mainWindow]() {
+         bool const succeeded = ScreenshotTaker::takeAll(mainWindow, Application::screenshotDir());
+         qApp->exit(succeeded ? 0 : 1);
+         return;
+      });
+   }
 
    // TODO: According to https://doc.qt.io/qt-6/qapplication.html#exec, there are circumstances where exec() does not
    //       return, so best practice is to connect clean-up code to the aboutToQuit() signal, instead of putting it in

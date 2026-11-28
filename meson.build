@@ -106,10 +106,10 @@
 #
 # STEP 5 (OPTIONAL): Build code documentation
 # -------------------------------------------
-# To build Doxygen-generated HTML code documentation (from the comments in the source files) to the mbuild/doc
+# To build Doxygen-generated HTML code documentation (from the comments in the source files) to the mbuild/docs
 # directory, use:
-#    meson compile doc
-# Then open the file mbuild/doc/html/index.html in a web browser.
+#    meson compile docs
+# Then open the file mbuild/docs/html/index.html in a web browser.
 #
 # NOTE that as, at 2023-08-05, there are quite a lot of things that Doxygen is unable to parse in the code, which means
 #      the generated documentation, whilst extensive, is missing quite a few classes (even though they have Doxygen
@@ -839,6 +839,7 @@ commonSourceFiles = files([
    'src/RadarChart.cpp',
    'src/RangedSlider.cpp',
    'src/RecipeFormatter.cpp',
+   'src/ScreenshotTaker.cpp',
    'src/StockFormatter.cpp',
    'src/StockWindow.cpp',
    'src/StyleRangeWidget.cpp',
@@ -1647,6 +1648,10 @@ exportedVariables = {
    # Similarly, installers often want a URL link.  We also use this in the program, to tell users where to get support.
    'CONFIG_GITHUB_URL' : 'https://github.com/' + capitalisedProjectName + '/' + projectName,
    'CONFIG_WEBSITE_URL' : 'https://www.' + domain + '/',
+   # Online user manual (for the latest release), published to GitHub Pages by .github/workflows/manual.yml.  If the
+   # repository's Pages site has a custom domain (eg manual.brewtarget.beer), GitHub redirects this URL to it, so we
+   # don't need to know about that here.
+   'CONFIG_MANUAL_URL' : 'https://' + projectName + '.github.io/' + projectName + '/',
    'CONFIG_ORGANIZATION_DOMAIN' : domain,
    # We need reverse domain name notation for building flatpaks
    'CONFIG_ORGANIZATION_REVERSE_DOMAIN' : reverseDomain,
@@ -1804,7 +1809,7 @@ if host_machine.system() == 'linux' or host_machine.system() == 'darwin'
    # On Linux (and TBD Mac) we inject build system variables into the markdown text that will be used to generate the
    # man page for the application.
    #
-   manPageMarkdown = configure_file(input  : 'doc/manpage.1.md.in',
+   manPageMarkdown = configure_file(input  : 'docs/manpage.1.md.in',
                                     output : 'manpage.1.md',
                                     configuration : exportedVariables,
                                     install : false)
@@ -1837,6 +1842,52 @@ if host_machine.system() == 'linux' or host_machine.system() == 'darwin'
       command: ['pandoc', '@INPUT@', '--verbose', '-t', 'man', '-s'],
    )
    install_man(generatedManPage)
+endif
+
+#=======================================================================================================================
+#================================================= Generate user manual ================================================
+#=======================================================================================================================
+#
+# The user manual is written in AsciiDoc (in docs/manual) and we use Asciidoctor PDF to turn it into a PDF that we ship
+# with the software.  (The HTML version for the web is built separately, by .github/workflows/manual.yml.)
+#
+# Asciidoctor PDF is a Ruby program, so not every build environment will have it.  If it is not found, we just build
+# without the PDF manual, and About > Manual in the program falls back to opening the online version.
+#
+# The attributes we pass in on the command line override the defaults at the top of docs/manual/en/book.adoc.
+#
+# Meson can't glob, so, if you add a new chapter, add it to manualSources so that edits to it trigger a rebuild.
+# (Changing just an image will not trigger a rebuild; touch book.adoc or do a clean build.)
+#
+asciidoctorPdf = find_program('asciidoctor-pdf', required : false)
+if asciidoctorPdf.found()
+   message('Generating PDF user manual with', asciidoctorPdf.full_path())
+   manualSources = files([
+      'docs/manual/en/README.adoc',
+      'docs/manual/en/chapters/01.adoc',
+      'docs/manual/en/chapters/02.adoc',
+      'docs/manual/en/chapters/03.adoc',
+      'docs/manual/en/license.adoc',
+   ])
+   custom_target('manual',
+                 input        : files('docs/manual/en/book.adoc'),
+                 output       : 'manual-en.pdf',
+                 depend_files : manualSources,
+                 command      : [asciidoctorPdf,
+                                 '--attribute', 'app-name=' + capitalisedProjectName,
+                                 '--attribute', 'app-version=' + meson.project_version(),
+                                 '--attribute', 'app-github-url=' + exportedVariables['CONFIG_GITHUB_URL'],
+                                 '--attribute', 'app-logo=' + (meson.current_source_dir() / 'images' / projectName + '.svg'),
+                                 '--out-file', '@OUTPUT@',
+                                 '@INPUT@'],
+                 build_by_default : true,
+                 install          : true,
+                 # NB: We put the manual with the data files rather than in installSubDir_doc because (a) the program
+                 # can find it via Application::getResourceDir() and (b) some Linux distros and container images strip
+                 # /usr/share/doc.
+                 install_dir      : installSubDir_data + '/manual')
+else
+   warning('asciidoctor-pdf not found - continuing without PDF user manual')
 endif
 
 #=======================================================================================================================
@@ -2067,11 +2118,11 @@ else
 ##      # source files
 ##      join_paths(meson.source_root(), 'src'),
 ##   )
-   doxyfile = configure_file(input : 'doc/Doxyfile.meson.in',
+   doxyfile = configure_file(input : 'docs/Doxyfile.meson.in',
                              output : 'Doxyfile',
                              configuration : exportedVariables,
                              install : false)
-   custom_target('doc',
+   custom_target('docs',
                  command: [doxygen, doxyfile],
                  input: doxyfile,
                  output: 'html',

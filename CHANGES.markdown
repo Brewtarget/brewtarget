@@ -42,6 +42,7 @@ Some new features from old issues.  Plus various bug fix release
 * Packaged volume: the recipe tab now shows the volume of beer you can expect to package (Packaged, under Batch Size), ie the batch size less the fermentor loss, what the dry hops hold, and the losses in any aging or packaging vessel (all set in the Equipment editor).  The priming calculator starts from this volume, and so does the final volume in a new brew log. [616](https://github.com/Brewtarget/brewtarget/issues/616)
 * Hot liquor tank loss: if your equipment has a hot liquor tank (ie its volume is set in the Equipment editor), the "Heat water" brew day instruction now includes the extra water to allow for its loss.
 * Missing translations filled in for all supported languages, so the user interface is now (almost) fully translated.  These new translations are machine-generated and marked for review, so corrections from native speakers are very welcome.
+* Manual is now merged into the main code branch instead of hosted in a separate repository
 
 ### Bug Fixes
 * Compile error with latest versions of Qt

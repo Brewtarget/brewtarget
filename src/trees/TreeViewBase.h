@@ -322,7 +322,12 @@ public:
       // If the entire row is not selected, then (a) the selection will look a bit odd and (b) the row won't be
       // included in this->derived().selectionModel()->selectedRows(), which will break other things.
       //
-      this->derived().selectionModel()->select(viewIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+      // We clear any existing selection, so that this item is the only one selected.  Otherwise, eg, creating a new
+      // recipe while another recipe was selected in the tree would leave both selected, and actions that work on the
+      // selected recipe (eg Brew It!) would act on whichever of them came first, which might not be the one being shown.
+      //
+      this->derived().selectionModel()->select(viewIndex,
+                                               QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
       TreeNode const * treeNode = this->doTreeNode(viewIndex);
       if (QModelIndex parentIndex = this->parentIndex(viewIndex);
           treeNode->classifier() == TreeNodeClassifier::Folder && !this->derived().isExpanded(parentIndex)) {

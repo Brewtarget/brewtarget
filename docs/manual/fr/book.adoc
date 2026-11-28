@@ -1,0 +1,18 @@
+:doctype: book
+:imagesdir: ./assets
+:title-logo-image: ./assets/cover.jpg
+
+= Brewtarget
+Par Philip G. Lee
+v3.0.3
+
+include::README.adoc[]
+
+include::chapters/01/01.adoc[]
+include::chapters/01/option.adoc[]
+include::chapters/01/equip.adoc[]
+include::chapters/01/recipe.adoc[]
+include::chapters/01/mash.adoc[]
+include::chapters/01/brewday.adoc[]
+
+include::license.adoc[]

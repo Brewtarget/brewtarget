@@ -1340,5 +1340,50 @@ def installDependencies():
    btExecute.abortOnRunFail(subprocess.run(sudoIfNeeded + ['cmake', '--install', './build', '--config', 'Release', '--verbose', '--component', 'sourcemeta_blaze'    ]))
    btExecute.abortOnRunFail(subprocess.run(sudoIfNeeded + ['cmake', '--install', './build', '--config', 'Release', '--verbose', '--component', 'sourcemeta_blaze_dev']))
 
+   installAsciidoctorPdf()
+
    btLogger.log.info('*** Finished checking / installing dependencies ***')
+   return
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Try to install Asciidoctor PDF, which we use to generate the PDF user manual from docs/manual.  This is optional: if
+# it's not installed, Meson builds without the PDF manual (and About > Manual opens the online version instead).  So we
+# only log a warning, rather than stopping, if something goes wrong here.
+#-----------------------------------------------------------------------------------------------------------------------
+def installAsciidoctorPdf():
+   if shutil.which('asciidoctor-pdf') is not None:
+      btLogger.log.debug('asciidoctor-pdf already installed')
+      return
+
+   match platform.system():
+      case 'Linux':
+         commands = [['sudo', 'apt', 'install', '-y', 'ruby-asciidoctor-pdf']]
+      case 'Windows':
+         commands = [
+            ['pacman', '-S', '--needed', '--noconfirm', '--disable-download-timeout', 'mingw-w64-ucrt-x86_64-ruby'],
+            ['gem', 'install', '--no-document', 'asciidoctor-pdf'],
+         ]
+      case 'Darwin':
+         #
+         # On the GitHub runners, the Ruby on the PATH is a user-writable one, so gem install works without sudo.  On a
+         # Mac where the only Ruby is the system one, this will fail (and you would need to install Ruby from Homebrew
+         # first) but, as noted above, the PDF manual is optional.
+         #
+         commands = [['gem', 'install', '--no-document', 'asciidoctor-pdf']]
+      case _:
+         commands = []
+
+   btLogger.log.info('Installing asciidoctor-pdf (optional -- for PDF user manual)')
+   for command in commands:
+      try:
+         result = subprocess.run(command)
+      except OSError as exception:
+         btLogger.log.warning('Could not run ' + ' '.join(command) + ': ' + str(exception))
+         break
+      if result.returncode != 0:
+         btLogger.log.warning(' '.join(command) + ' failed with return code ' + str(result.returncode))
+         break
+
+   if shutil.which('asciidoctor-pdf') is None:
+      btLogger.log.warning('asciidoctor-pdf not available, so builds will not include the PDF user manual')
    return

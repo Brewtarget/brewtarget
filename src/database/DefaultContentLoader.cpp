@@ -103,12 +103,16 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
       Q_FUNC_INFO << "availableContentVersion:" << DefaultContentLoader::availableContentVersion <<
       ", defaultContentAlreadyLoaded:" << defaultContentAlreadyLoaded;
 
-   if (!Application::isInteractive() ||
+   //
+   // When generating screenshots for the manual, we always want the default content, and there is no-one to ask
+   //
+   if ((!Application::isInteractive() && !Application::isScreenshotMode()) ||
        defaultContentAlreadyLoaded >= DefaultContentLoader::availableContentVersion) {
       return DefaultContentLoader::UpdateResult::NothingToDo;
    }
 
-   if (QMessageBox::question(nullptr,
+   if (Application::isScreenshotMode() ||
+       QMessageBox::question(nullptr,
                              QObject::tr("Merge Database"),
                              QObject::tr("New ingredients etc are available. Would you like to add them to your database?"),
                              QMessageBox::Yes | QMessageBox::No,

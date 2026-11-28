@@ -1,0 +1,347 @@
+
+== Chapter 2: General Concepts
+
+{app-name} maintains a database of recipes, ingredients, etc. If
+{app-name} should crash unexpectedly, you will be prompted to either restore
+the changes made last session or rollback the database to discard the changes
+in the last session.
+
+=== Inventory
+
+{app-name} can keep track of how much of each brewing ingredient you have
+available. The mechanism is straight-forward. Open up the item you want to record
+your inventory, say "Briess 2 Row Brewers Malt". Towards the bottom
+of the left hand side, enter the amount you have in inventory. On any recipe
+you have used this malt, you can now see what you have in inventory.
+
+
+Every time you use the "Brew It!" functionality, the amount in inventory is
+reduced by the amount the recipe uses. Be somewhat careful; {app-name} does
+not warn you if a recipe calls for 2 kg of crystal 80, but only 1 kg is
+available in the inventory.
+
+=== Trees
+
+A tree is a hierarchical view of ingredients, recipes, and other items.
+
+The application window is split into three major panes: the trees, the recipe
+and the ingredients. The tree pane is a set of tabs that displays your
+recipes, equipment profiles, fermentables, hops, miscellaneous items and hops.
+You can sort any of the trees on the displayed fields.
+
+Double clicking on any item in the tree will open up the appropriate editor for
+that item. Double clicking a recipe will open the recipe in the main window.
+
+There are 6 tabs:
+
+* Recipes - this tree shows all your recipes. You can drag and drop the
+recipe onto the main window and that recipe will be loaded. Each recipe
+will also show any associated brewnotes.
+* Equipment - this shows all your defined kit. You can drag and drop a
+piece of equipment onto your recipe which will have the same effect as
+changing the equipment via the dropdown box.
+* Fermentables, Hops, Misc and Yeast - these show all of your ingredients.
+Dragging an item onto the main window will add that item to the recipe.
+
+You can drop recipes, styles and equipment profiles onto the recipe pane; you
+can drop fermentables, hops, miscellaneous and yeast onto the ingredients pane.
+
+You can right-click almost anywhere on a tree and get a menu of options. The
+menu allows you to create a new item or a folder. The item you can create
+depends on the tree you clicked in. If you right-clicked in the miscellaneous
+tree, for example, you can create a miscellaneous item. Otherwise, the menus
+are identical for each tree.
+
+You can select multiple items, right-click and then perform an action on the
+entire selected list. The only exception is the "Export" function. Limitations
+in the BeerXML format do not allow recipes and ingredients to be exported at
+the same time.
+
+==== Folders
+
+Items in trees can be organized into folders.
+
+* The folder separator is "/". You can create many subfolders, like
+"/IPA/BYO/2012/Sept", as long as you use forward slashes (/) to separate them.
+* Empty folders, or folders that contain only more empty folders, will be
+removed after restart. If you want a folder to be preserved, make sure to put
+at least one item in the folder.
+* Deleting a folder deletes its contents too. You will only be prompted to
+delete the folder, not each item in the folder.
+* Be careful when dropping a folder. There is a space between items that is not
+a valid drop target. Nothing will happen if you drop it there, which will
+can be frustrating.
+
+=== Brew Notes
+
+If you right-click a recipe, you can select an action called
+"Brew It". If you select this action, a new entry will be created below
+the recipe and a new tab will be opened in the main window. This new tab
+allows you to record important information about your beer during brewing
+(sg, volumes, temperatures, etc.). This allows you to track performance over
+time and adjust equipment and efficiencies to better predict what you brew.
+
+The values are preloaded based on the recipe as written. As you move through
+your brewday, you can record the actual numbers. The calculated values in the
+middle of the screen will change based on those inputs. For example, if you
+expected an SG of 1.036 but only got 1.032 the projected OG, ABV and ABV will
+all change to reflect the lower SG.
+
+There are four main sections on the brewnote tab.
+
+.Brewnote Fields
+[cols="<25,<75a", options="header"]
+|==============================================================================
+
+|Field
+|Description
+
+2+^h|Preboil
+
+|SG
+|Specific gravity of the collected wort
+
+|Volume
+|The volume of wort that made it into your boil kettle
+
+|Final temp
+|The temperature of your mash after dough in
+
+2+^h|Postboil
+
+|OG
+|Specific gravity of the wort after the boil
+
+|Postboil Volume
+|The volume of wort in your boil kettle
+
+|Volume into Fermenter
+|The volume of wort in your primary fermenter
+
+|Pitch temp
+|The temperature of your wort when you pitched the yeast
+
+2+^h|Postferment
+
+|FG
+|Specific gravity of the wort after fermentation
+
+|Volume
+|The volume of beer bottled or kegged
+
+|Date
+|The date the beer finished fermenting
+
+2+^h|Notes
+
+|Notes
+|Any notes specific to the brew day
+
+|==============================================================================
+
+=== Adding Ingredients to a Recipe
+
+==== Method 1: Editors
+
+If you are looking for a fermentable with a specific SRM or a yeast from a
+specific lab, this approach allows you to sort on any column you want.
+
+. Choose the appropriate tab in the main window (Fermentable, Hops,...).
+. Click the "add" button in the tab.
+. Select any column of the row of the ingredient you wish to add.
+. Click "Add to Recipe".
+
+==== Method 2: Drag and Drop
+
+This is a simpler method, as long as you don't mind the default sorting
+
+. Open the appropriate tree in the left pane.
+. Click on the item you wish to add.
+. Drag it to the ingredients pane on the main window, and drop it
+. The tabs will change if required. E.g., if you drop a hop onto the
+"Fermentables" tab, the focus will change to the "Hops" tab.
+
+=== Importing Recipes
+
+You can import other BeerXML recipes (such as from Beersmith) by using
+File-{gt}Import Recipes. However, be aware that Beersmith and other software
+do not strictly adhere to BeerXML or XML standards in general, so you may have
+some trouble importing recipes from time to time. {app-name} tries to maintain
+strict compatability with the standards.
+
+=== Exporting Recipes
+
+This option will export selected recipes to BeerXML.
+
+=== Database Backup and Restore
+
+For many reasons, you may want to back up all your recipes, ingredients, and
+everything else. To do this, go to File-{gt}"Backup Database" and select an
+empty directory. Restoring the database is just as simple.
+
+IMPORTANT: when you restore a database, everything in your current database
+will be replaced.
+
+IMPORTANT: Restoring a database will cause {app-name} to automatically restart.
+
+=== Sharing Recipes
+
+{app-name} offers two different methods for posting your recipes in simple
+readable formats.
+
+==== Method 1: Recipe to Clipboard
+
+This tool makes a text version of the recipe so that you may post it online or
+pretty much anywhere else. To export a text version,
+Tools-{gt}"Recipe to Clipboard as Text", then click paste where you want the
+recipe text to be pasted.
+
+==== Method 2: Recipe to HTML
+
+Another way you can share you recipes is to export them to HTML, which is
+viewable in any web browser. Use File-{gt}"Recipe"-{gt}"Save to HTML". You can
+export either the recipe or the brewday instructions.
+
+=== Supported Units
+
+{app-name} supports SI, Imperial, and US customary units. To switch between
+these modes, go to Tools-{gt}Options-{gt}Units, and check/uncheck the
+appropriate box. It also supports auto-conversion. For example, if you are in
+US mode, and you enter "0.50 gal" into a text field, it will appear as
+"2.000 qt". You may also enter units from the other unit system if you like. If
+you enter an unsupported unit, {app-name} applies a default unit (which is
+usually SI). For example, if you enter "20 asdf" into a volume field while in
+US mode, you will see "5.283 gal" because {app-name} assumed you meant "20 L"
+and then converted to US units. Always use a valid unit suffix to avoid unit
+confusion.
+
+==== Controlling Default Unit and Scale
+
+You can control what units are used in the display and how they scale. In any
+field where it makes sense (volumes, weights, temperatures and gravities), you
+can right-click the associated label and be presented with the unit and scale
+menu. Selecting one of those options will cause that field to be displayed in
+the selected unit. So you can, for example, display Boil SG and OG in Plato,
+but FG in specific gravity.
+
+You can also select the scale for any volume or weight field. You can use this
+to, for example, cause your target batch size to be displayed in quarts instead
+of gallons.  You can do the same thing in any of the ingredient tabs by right
+clicking on the column header. This will allow you to display your hops in
+grams, but keep your fermentables displayed in pounds.
+
+Volumes will present you with the options "default", "SI", "US Customary" and
+"British Imperial"; weights will present you with the options "default", "SI"
+and "US Customary"; temperatures will present the options "default", "Celsius"
+and "Fahrenheit"; gravities will show "default", "Plato" and "Specific Gravity".
+
+==== Caveats
+
+With US and Imperial units, people have a tendency to sometimes put a trailing
+"s" or a period at the end (hrs, hrs., etc.). {app-name} only supports singular
+no-period units to be consistent with the metric system. The units supported,
+and the exact unit abbreviation you should use are given in
+<<Supported Units>>.
+
+==== Supported Units
+
+.US Customary and Imperial Units
+[cols="<25,<75a", options="header"]
+|==============================================================================
+
+|Unit
+|Abbreviation
+
+2+^h|Mass/Weight
+
+|Pounds
+|lb
+
+|Ounces
+|oz
+
+2+^h|Volume
+
+|Barrels
+|bbl
+
+|Gallons
+|gal
+
+|Quarts
+|qt
+
+|Cups
+|cp
+
+|Tablespoons
+|tbsp
+
+|Teaspoons
+|tsp
+
+2+^h|Temperature
+
+|Fahrenheit
+|F
+
+|==============================================================================
+
+.SI Units
+[cols="<25,<75a", options="header"]
+|==============================================================================
+
+|Unit
+|Abbreviation
+
+2+^h|Mass/Weight
+
+|Kilograms
+|kg
+
+|Grams
+|g
+
+|Milligrams
+|mg
+
+2+^h|Volume
+
+|Liters
+|L
+
+|Milliliters
+|mL
+
+2+^h|Temperature
+
+|Celsius
+|C
+
+|Kelvin
+|K
+
+|==============================================================================
+
+.Shared Units
+[cols="<25,<75a", options="header"]
+|==============================================================================
+
+|Unit
+|Abbreviation
+
+2+^h|Time
+
+|Days
+|day
+
+|Hours
+|hr
+
+|Minutes
+|min
+
+|Seconds
+|s
+
+|==============================================================================

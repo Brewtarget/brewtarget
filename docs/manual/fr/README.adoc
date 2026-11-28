@@ -1,0 +1,15 @@
+## Introduction
+
+{app-name} aide les brasseurs amateurs à créer les bières qu'ils souhaitent brasser depuis de nombreuses années. Ce manuel vous présente l'application et vous explique comment tirer le meilleur parti de ses fonctionnalités. Il n'a pas vocation à être exhaustif ; il privilégie les exemples pratiques pour vous aider à prendre en main l'application. Si vous avez des questions ou si certains points ne sont pas clairs, n'hésitez pas à nous en faire part sur [notre gestionnaire de tickets](link:{app-github-url}/issues[notre gestionnaire de tickets]).
+
+### Chapitre 1 : Prise en main
+
+Pour commencer, rien de mieux que de brasser une bière. Ce chapitre vous guide pas à pas dans la création de votre première recette avec {app-name}.
+
+### Chapitre 2 : Concepts généraux
+
+Ce chapitre présente les principales fonctionnalités de {app-name}, notamment la gestion des recettes, le calcul des coûts, ainsi que l'importation et l'exportation des recettes. Il donne un aperçu des possibilités offertes par l'application et explique comment utiliser ses différentes fonctionnalités.
+
+### Chapitre 3 : Outils
+
+Ce chapitre décrit les différents outils disponibles dans {app-name}, en expliquant leur rôle et leur utilisation.

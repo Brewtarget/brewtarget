@@ -829,10 +829,13 @@ void Database::checkForNewDefaultData() {
             qCritical() << Q_FUNC_INFO << userMessage;
          }
          qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
-         QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
-                           messageBoxTitle,
-                           messageBoxText};
-         msgBox.exec();
+         // We can get here without a user to show the message to if we are generating screenshots for the manual
+         if (Application::isInteractive()) {
+            QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
+                              messageBoxTitle,
+                              messageBoxText};
+            msgBox.exec();
+         }
       }
 
 

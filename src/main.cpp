@@ -28,6 +28,7 @@
 #include <QCommandLineParser>
 #include <QDate>
 #include <QDebug>
+#include <QDir>
 #include <QMessageBox>
 #include <QSharedMemory>
 
@@ -137,6 +138,20 @@ int main(int argc, char **argv) {
       QString()
    };
    parser.addOption(userDirectoryOption);
+   /*!
+    * \brief Generates the screenshots for the user manual into <directory>, then exits.
+    *
+    * This must be used with --user-dir pointing at an empty directory, so that the screenshots are taken from a fresh
+    * database with just the default content, rather than the user's own data.  See ScreenshotTaker and
+    * docs/manual/screenshots.sh.
+    */
+   QCommandLineOption const screenshotsOption{
+      "screenshots",
+      "Generate the screenshots for the user manual into <directory> and exit (requires --user-dir with no database)",
+      "directory",
+      QString()
+   };
+   parser.addOption(screenshotsOption);
    parser.addHelpOption();
    parser.addVersionOption();
    parser.process(app);
@@ -149,6 +164,23 @@ int main(int argc, char **argv) {
    // the former.  (We _can_ still log before Logging is initialised, it's just that such log messages will only go to
    // Qt's default logging location (eg console on Linux) and won't end up in our log file.)
    //
+   if (parser.isSet(screenshotsOption)) {
+      //
+      // Refuse to run against anything other than a fresh database, so that we never touch the user's real data (and so
+      // that the screenshots always come out the same).
+      //
+      QString const userDir = parser.value(userDirectoryOption);
+      if (userDir.isEmpty() || !QDir{userDir}.exists() || QDir{userDir}.exists(Database::sqliteDbFileName)) {
+         qCritical().noquote() <<
+            "--screenshots requires --user-dir to be set to an existing directory that does not contain a database";
+         return 1;
+      }
+      Application::setScreenshotDir(parser.value(screenshotsOption));
+      Application::setInteractive(false);
+      // Use the same widget style on every platform, so the screenshots look the same wherever they are generated
+      QApplication::setStyle("Fusion");
+   }
+
    PersistentSettings::initialise(parser.value(userDirectoryOption));
    qDebug() << Q_FUNC_INFO << "Persistent Settings initialised";
 

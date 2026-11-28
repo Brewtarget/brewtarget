@@ -218,10 +218,14 @@ namespace {
          }
       }
       qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
-      QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
-                         messageBoxTitle,
-                         messageBoxText};
-      msgBox.exec();
+      // There is no-one to show the message to if we are not interactive (eg when generating screenshots for the
+      // manual, as the default content is then loaded without asking -- see DefaultContentLoader)
+      if (Application::isInteractive()) {
+         QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
+                            messageBoxTitle,
+                            messageBoxText};
+         msgBox.exec();
+      }
       return;
    }
 

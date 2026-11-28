@@ -57,7 +57,7 @@
 #   * make test             -  Run unit tests via CTest
 #
 # Custom make targets:
-#   * make source_doc       -  Makes Doxygen HTML documentation of the source in doc/html
+#   * make source_doc       -  Makes Doxygen HTML documentation of the source in docs/html
 #   * make install-data
 #   * make install-runtime
 #
@@ -135,6 +135,8 @@ string(TOUPPER "${CMAKE_PROJECT_NAME}" CONFIG_APPLICATION_NAME_AC)
 # We use this in the program, to tell users where to get support.
 set(CONFIG_GITHUB_URL "https://github.com/${CONFIG_APPLICATION_NAME_UC}/${projectName}")
 set(CONFIG_WEBSITE_URL "https://www.brewtarget.beer/")
+# NB: The CMake build does not generate the PDF user manual, so About > Manual always opens this online version
+set(CONFIG_MANUAL_URL "https://${projectName}.github.io/${projectName}/latest/")
 set(CONFIG_ORGANIZATION_DOMAIN "brewtarget.beer")
 
 #=======================================================================================================================
@@ -1314,11 +1316,11 @@ add_custom_target(
 # Doxygen Custom Target
 FIND_PROGRAM(DOXYGEN_CMD doxygen)
 if(DOXYGEN_CMD)
-  set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile")
-  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.cmake.in" ${DOXYFILE})
+  set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/docs/Doxyfile")
+  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.cmake.in" ${DOXYFILE})
   add_custom_target(source_doc
                      COMMAND ${DOXYGEN_CMD} ${DOXYFILE}
-                     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/doc"
+                     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs"
                   )
 endif()
 

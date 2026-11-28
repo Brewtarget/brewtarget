@@ -67,6 +67,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/RadarChart.cpp
     ${repoDir}/src/RangedSlider.cpp
     ${repoDir}/src/RecipeFormatter.cpp
+    ${repoDir}/src/ScreenshotTaker.cpp
     ${repoDir}/src/StockFormatter.cpp
     ${repoDir}/src/StockWindow.cpp
     ${repoDir}/src/StyleRangeWidget.cpp

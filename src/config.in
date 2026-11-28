@@ -72,6 +72,7 @@ constexpr char const * CONFIG_BUILD_TIMESTAMP = "${BUILD_TIMESTAMP}";
 // Support info
 constexpr char const * CONFIG_GITHUB_URL      = "${CONFIG_GITHUB_URL}";
 constexpr char const * CONFIG_WEBSITE_URL     = "${CONFIG_WEBSITE_URL}";
+constexpr char const * CONFIG_MANUAL_URL      = "${CONFIG_MANUAL_URL}";
 
 // Data files for unit tests
 constexpr char const * CONFIG_TEST_DATA_DIR   = "${CONFIG_TEST_DATA_DIR}";

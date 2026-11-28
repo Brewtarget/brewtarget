@@ -1,0 +1,50 @@
+
+== Chapter 3: Tools
+
+{app-name} offers a lot of tools to aid the brewer in writing recipes and on
+the brew day itself.
+
+=== OG Correction
+
+This tool helps you to correct the OG when you overshoot or undershoot your
+anticipated efficiency.
+
+To correct this in the boil, choose Tools-{gt}"OG Correction Help". Please note
+that this tool makes the assumption that you are not going to add any water
+post boil. Enter the current SG, temperature of sample, and calibration temp of
+the hydrometer OR the degrees Plato of the wort pre-boil. Then enter the
+pre-boil volume. Click "Calculate" and 3 fields will populate on the output
+half of the window. The first shows you the post-boil OG if you take no action.
+The next shows you how much water to add (or boil off if negative) in order to
+achieve the planned OG. The last shows how much wort you will end up with if
+you take this action.
+
+=== Pitch Rate Calculator
+
+This tool calculates the correct amount of yeast to add.
+
+This tool is located in Tools-{gt}"Pitch Rate Calculator". Enter the wort
+volume, OG and starter OG and select the pitch rate. The pitch rate should be
+0.75-1.00 for most ales and 1.50-2.00 for lagers. The output is the number of
+yeast cells required (in billions), the number of wyeast activator packs or
+White Labs vials needed without a starter, the amount of dry yeast required
+(without starter), and the size of the starter needed to reach the cell count
+at the given starter OG (usually never over 1.030).
+
+=== Priming Calculator
+
+This tool calculates the correct amount of priming agent for the desired
+carbonation level in the finished beer.
+
+Tools-{gt}"Priming Calculator". Put in the required input values, select a
+priming agent, and press calculate.
+
+=== Refractometer
+
+This tool performs several conversions related to refractometers.
+
+Tools-{gt}"Refractometer Tools". Here, you can find OG and current SG by using
+refractometer readings. You must always enter the current Plato and either the
+original Plato or the OG. If you just want to find out what specific gravity
+11.2 Plato corresponds to, enter 11.2 in both the original Plato and current
+Plato fields.

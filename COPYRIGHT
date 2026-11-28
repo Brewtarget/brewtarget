@@ -1,37 +1,98 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Comment: This file is needed for creating .deb packages on Linux - see https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ for format
+Source: https://github.com/Brewken/brewken
+
 Files: *
-Copyright: 2009-2016, Philip G. Lee <rocketman768@gmail.com>
-License: GPL-3
+Copyright:
+   2018      Adam Hawes <ach@hawes.net.au>
+   2015-2016 Aidan Roberts <aidanr67@gmail.com>
+   2012      A.J. Drobnich <aj.drobnich@gmail.com>
+   2021      Artem Martynov <martynov-a@polyplastic.by>
+   2016-2018 Blair Bonnett <blair.bonnett@gmail.com>
+   2017      Brian Rower <brian.rower@gmail.com>
+   2016      Carles Muñoz Gorriz <carlesmu@internautas.org>
+   2012      Christopher Hamilton <marker5a@gmail.com>
+   2015      Chris Pavetto <chrispavetto@gmail.com>
+   2019-2021 Chris Speck <cgspeck@gmail.com>
+   2010-2013 Dan Cavanagh <dan@dancavanagh.com>
+   2015-2020 Daniel Pettersson <pettson81@gmail.com>
+   2013      David Grundberg <individ@acc.umu.se>
+   2010      Eric Tamme <etamme@gmail.com>
+   2016      Greg Greenaae <ggreenaae@gmail.com>
+   2015-2017 Greg Meess <Daedalus12@gmail.com>
+   2019      Idar Lund <idarlund@gmail.com>
+   2016-2020 Iman Ahmadvand &lf;iman72411@gmail.com>
+   2017-2019 Jamie Daws <jdelectronics1@gmail.com>
+   2019      Jean-Baptiste Wons <wonsjb@gmail.com>
+   2011      Jeff Bailey <skydvr38@verizon.net>
+   2015      Jerry Jacobs <jerry@xor-gate.org>
+   2019      Joe Aczel <jaczel@fastmail.com.au>
+   2017-2018 Jonatan Pålsson <jonatan.p@gmail.com>
+   2017-2018 Jonathon Harding <github@jrhardin.net>
+   2015      Julian Volodia <julianvolodia@gmail.com>
+   2012-2015 Kregg Kemper <gigatropolis@yahoo.com>
+   2012      Luke Vincent <luke.r.vincent@gmail.com>
+   2018      Marcel Koek <koek.marcel@gmail.com>
+   2016      Mark de Wever <koraq@xs4all.nl>
+   2015      Markus Mårtensson <mackan.90@gmail.com>
+   2017      Matt Anderson <matt.anderson@is4s.com>
+   2020-2022 Mattias Måhl <mattias@kejsarsten.com>
+   2020-2026 Matt Young <mfsy@yahoo.com>
+   2014-2017 Maxime Lavigne <duguigne@gmail.com>
+   2018      Medic Momcilo <medicmomcilo@gmail.com>
+   2016      Mike Evans <mikee@saxicola.co.uk>
+   2010-2023 Mik Firestone <mikfire@gmail.com>
+   2016      Mikhail Gorbunov <mikhail@sirena2000.ru>
+   2016      Mitch Lillie <mitch@mitchlillie.com>
+   2017      Padraic Stack <padraic.stack@gmail.com>>
+   2013      Peter Buelow <goballstate@gmail.com>
+   2018-2020 Peter Urbanec <git.user@urbanec.net>>
+   2009-2018 Philip Greggory Lee <rocketman768@gmail.com>
+   2009-2010 Rob Taylor <robtaylor@floopily.org>
+   2016-2018 Ryan Hoobler <rhoob@yahoo.com>
+   2014-2015 Samuel Östling <MrOstling@gmail.com>
+   2016      Scott Peshak <scott@peshak.net>
+   2009      Ted Wright <tedwright@users.sourceforge.net>
+   2015-2016 Théophane Martin <theophane.m@gmail.com>
+   2013      Tim Payne <swstim@gmail.com>
+   2016      Tyler Cipriani <tcipriani@wikimedia.org>
+License: GPL-3+
 
-Files: cmake/modules/FindPhonon.cmake
-Copyright: 2008 Matthias Kretz <kretz@kde.org>, 2012 Philip G. Lee <rocketman768@gmail.com>
-License: BSD-2-clause
+Files: docs/manual/*
+Copyright:
+   2026      Matt Young <mfsy@yahoo.com>
+   2015-2022 Maxime Lavigne <duguigne@gmail.com>
+   2022      Mik Firestone <mikfire@gmail.com>
+   2016      Mike Evans <mikee@saxicola.co.uk>
+   2015      Philip G. Lee <rocketman768@gmail.com>
+License: GFDL-NIV-1.3+
 
-Files: data/sounds/*
-Copyright: 2011, Jay Cummings <finalgravitypodcast@gmail.com>
-License: GPL-3
+License: GPL-3+
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this package;if not, write to the Free Software Foundation,
+ Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA, or visit
+ http://www.gnu.org/copyleft/gpl.html
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-3'.
 
-Files: images/*
-Copyright: 2009-2016, Philip G. Lee <rocketman768@gmail.com>
-           2009-2010, Eric Tamme
-License: WTFPL-2
-
-Files: images/flag* images/bubbles.svg images/convert.svg
-       images/clipboard.svg images/refractometer.svg
-       images/restore.svg images/yeastVial.svg
-Copyright: 2012, Philip G. Lee <rocketman768@gmail.com>
-License: WTFPL-2
-
-Files: images/grain2glass.svg
-Copyright: 2021-2028, Mik Firestone <mikfire@gmail.com>
-License: WTFPL-2
-
-Files: images/edit-copy.png images/document-print-preview.png
-       images/merge.png images/preferences-other.png
-       images/printer.png images/server-database.png
-       images/kbruch.png images/help-contents.png
-Copyright: David Vignoni et al. <www.oxygen-icons.org>
-License: CC-BY-SA-3.0 or LGPL-3.0
-
-Files: images/backup.png
-Copyright: David Vignoni <www.icon-king.com/projects/nuvola>
-License: LGPL-2.1
+License: GFDL-NIV-1.3+
+ Permission is granted to copy, distribute and/or modify this document
+ under the terms of the GNU Free Documentation License, Version 1.3
+ or any later version published by the Free Software Foundation;
+ with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+ A copy of the license is included in the section entitled "GNU
+ Free Documentation License".
+ .
+ On Debian systems, the complete text of the GNU Free Documentation
+ License, version 1.3, can be found in `/usr/share/common-licenses/GFDL-1.3'.

@@ -1,0 +1,108 @@
+#-----------------------------------------------------------------------------------------------------------------------
+# .github/workflows/manual.yml is part of Brewtarget, and is copyright the following authors 2026:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#-----------------------------------------------------------------------------------------------------------------------
+#
+# Builds the user manual (docs/manual) as HTML and PDF and publishes it to GitHub Pages, via the gh-pages branch.
+#
+# We only publish one manual online: the one for the latest release.  (The PDF shipped with each release covers that
+# release.)  So each run replaces the whole site with index.html, the images it needs, and the PDF.  This is the URL
+# the program opens from About > Manual if it doesn't have a local PDF -- see CONFIG_MANUAL_URL in meson.build.
+#
+# The workflow runs automatically when a release is published.  You can also run it by hand ("Run workflow" on the
+# Actions tab), eg to republish after fixing a mistake in the manual.  If you do, choose the release tag (or a branch
+# that doesn't document unreleased features) in the "Use workflow from" box, as whatever you pick becomes the online
+# manual.
+#
+# One-off setup in the repository settings:
+#    - Settings > Pages > Build and deployment: Source = "Deploy from a branch", Branch = gh-pages, folder = / (root).
+#      (The gh-pages branch is created by the first run of this workflow, so run it once by hand first.)
+#    - Optionally, for a custom domain (eg manual.brewtarget.beer): first add a CNAME DNS record pointing the domain at
+#      <owner>.github.io, then set the repository variable MANUAL_CNAME (Settings > Secrets and variables > Actions >
+#      Variables) to the domain.  Don't set the variable before the DNS record exists, as GitHub will then redirect
+#      the github.io URL to a domain that doesn't resolve.
+#
+name: Manual
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions: read-all
+
+# Don't let two runs push to gh-pages at the same time
+concurrency:
+  group: manual-gh-pages
+  cancel-in-progress: false
+
+jobs:
+  manual:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write   # To push to the gh-pages branch
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Asciidoctor
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y asciidoctor ruby-asciidoctor-pdf
+
+      - name: Work out names and version
+        id: names
+        shell: bash
+        run: |
+          # Eg brewken for Brewken/brewken, brewtarget for Brewtarget/brewtarget
+          projectName="${GITHUB_REPOSITORY#*/}"
+          appName="${projectName^}"
+          appVersion="$(sed -n "s/^ *version: '\([0-9.]*\)',$/\1/p" meson.build | head -1)"
+          if [[ -z "${appVersion}" ]]; then
+            echo "Could not find version in meson.build" >&2
+            exit 1
+          fi
+          {
+            echo "projectName=${projectName}"
+            echo "appName=${appName}"
+            echo "appVersion=${appVersion}"
+            echo "pdfName=${appName}-manual.pdf"
+          } >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+      - name: Build HTML and PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          attributes=(
+            --attribute "app-name=${{ steps.names.outputs.appName }}"
+            --attribute "app-version=${{ steps.names.outputs.appVersion }}"
+            --attribute "app-github-url=${{ github.server_url }}/${{ github.repository }}"
+            --attribute "app-logo=${GITHUB_WORKSPACE}/images/${{ steps.names.outputs.projectName }}.svg"
+            --attribute "manual-pdf-name=${{ steps.names.outputs.pdfName }}"
+          )
+          mkdir -p out
+          asciidoctor     "${attributes[@]}" --failure-level WARN --destination-dir out --out-file index.html docs/manual/en/book.adoc
+          cp -r docs/manual/en/assets out/
+          asciidoctor-pdf "${attributes[@]}" --failure-level WARN --out-file "out/${{ steps.names.outputs.pdfName }}" docs/manual/en/book.adoc
+          ls -lR out
+
+      - name: Publish
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          keep_files: false   # Replace everything, so that images no longer used by the manual don't hang around
+          force_orphan: true  # Keep just the latest version of the site in gh-pages, rather than its whole history
+          cname: ${{ vars.MANUAL_CNAME }}
+          commit_message: 'Manual for ${{ steps.names.outputs.appName }} ${{ steps.names.outputs.appVersion }}'
