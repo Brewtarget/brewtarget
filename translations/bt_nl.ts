@@ -894,7 +894,7 @@
     </message>
     <message>
         <source>Micelleneous</source>
-        <translation type="unfinished">Diversen</translation>
+        <translation type="obsolete">Diversen</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -947,6 +947,10 @@
     <message>
         <source>Print</source>
         <translation type="unfinished">Afdrukken</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished">Diversen</translation>
     </message>
 </context>
 <context>
@@ -2865,6 +2869,10 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
         <source>Locked</source>
         <translation type="unfinished">Vergrendeld</translation>
     </message>
+    <message>
+        <source>Folder Path</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -3109,6 +3117,14 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
     <message>
         <source>Batch Size</source>
         <translation type="unfinished">Batchgrootte</translation>
+    </message>
+    <message>
+        <source>Hop Absorption (Leaf)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop Absorption (Pellets)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3938,7 +3954,7 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
     </message>
     <message>
         <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Als het Brewtarget is, kunnen we het repareren...&lt;/em&gt;</translation>
+        <translation type="obsolete">&lt;em&gt;Als het Brewtarget is, kunnen we het repareren...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -5001,6 +5017,42 @@ Als u hulp nodig hebt, meld dan een probleem op %1</translation>
     </message>
     <message>
         <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The mash in this recipe has %1 of water, but needs %2 to give the target pre-boil volume of %3 (allowing for grain absorption and losses in the mash tun).  So you would get less wort than the recipe expects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The mash in this recipe has %1 of water, but only needs %2 to give the target pre-boil volume of %3 (allowing for grain absorption and losses in the mash tun).  So you would get more wort than the recipe expects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash water does not match recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can fix this with Auto-Adjust in the mash editor.  Do you want to brew this recipe anyway?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Pre-Boil Size</source>
+        <translation type="unfinished">Volume vóór het koken wijzigen</translation>
+    </message>
+    <message>
+        <source>Pre-boil size not changed to match the new batch size, because the boil is locked.  You can change it on the Boil tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-boil size not changed to match the new batch size, because the boil is shared with other recipes.  You can change it on the Boil tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to open manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open the user manual.  You can read it online at %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7799,11 +7851,11 @@ Het programma wordt nu afgesloten.</translation>
     </message>
     <message>
         <source>Specific Heat Capacity BTUs per</source>
-        <translation type="unfinished">Soortelijke warmtecapaciteit BTU per</translation>
+        <translation type="obsolete">Soortelijke warmtecapaciteit BTU per</translation>
     </message>
     <message>
         <source>Heat Capacity BTUs per</source>
-        <translation type="unfinished">Warmtecapaciteit BTU per</translation>
+        <translation type="obsolete">Warmtecapaciteit BTU per</translation>
     </message>
     <message>
         <source>Garetz&apos;s approximation</source>
@@ -7848,6 +7900,14 @@ Het programma wordt nu afgesloten.</translation>
     <message>
         <source>Extremely Cloudy</source>
         <translation type="unfinished">Extreem troebel</translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity Btus per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat Capacity Btus per</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8493,6 +8553,24 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Expected Wort Clarity</source>
         <translation type="unfinished">Verwachte helderheid wort</translation>
+    </message>
+    <message>
+        <source>
+You anticipate losing %1 with the hops.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Allow for losing about %1 between the fermenter and packaging (what is left in the fermenter, including with any dry hops, and in any aging or packaging vessel).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Packaged Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>plus %1 extra, which will stay in the hot liquor tank</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9559,7 +9637,19 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Deapparatuur en maisch zijn gereset omdat de maisch temperatuur niet eenvoudig schaalt. Draai de maisch wizard opnieuw a.u.b.</translation>
+        <translation type="vanished">Deapparatuur en maisch zijn gereset omdat de maisch temperatuur niet eenvoudig schaalt. Draai de maisch wizard opnieuw a.u.b.</translation>
+    </message>
+    <message>
+        <source>The recipe has been scaled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The mash is kept in sync with the recipe, so its water amounts and temperatures will be recalculated automatically.  Check the mash editor for any problems.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The amounts of water in the mash have not been changed, so you will probably need to use Auto-Adjust in the mash editor to work out new ones.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12171,6 +12261,42 @@ vaten</translation>
         <source>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
         <translation type="unfinished">Binnendiameter van de opening in de kookketel waardoor stoom kan ontsnappen -- bijv. gelijk aan de binnendiameter als de ketel open is, of kleiner als deze gedeeltelijk is afgedekt.  Wordt samen met de binnendiameter en het wortvolume in de ketel gebruikt om te schatten hoe snel de wort na vlam uit vanzelf afkoelt, voor IBU-formules die isomerisatie na vlam uit modelleren (bijv. mIBU en SMPH).  Als deze niet is ingesteld, wordt 45 cm (ongeveer 18 inch) aangenomen.</translation>
     </message>
+    <message>
+        <source>Hop absorption (pellets)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wort or beer you typically lose with pellet (and powder) hops, per weight of hops, including dry hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop absorption (leaf)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wort or beer you typically lose with leaf (whole cone) and plug hops, per weight of hops, including dry hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The wort or beer you typically lose with hop material, per weight of hops, when you transfer the liquid off the hops -- in addition to the kettle&apos;s (or fermentor&apos;s) own loss, which should therefore not include an allowance for hops.  This depends on your process (eg loose hops or a hop spider, whether you squeeze or drain the hops, whirlpooling) as well as the hops, so it is best measured, eg by weighing the wet hops left behind, or from the shortfall on a hoppy brew.  If left blank, typical values of about 7 ml per gram (6.7 fl oz per oz, or 3.4 qt per lb) for pellets and 5 ml per gram (4.8 fl oz per oz, or 2.4 qt per lb) for leaf hops are used.  (Right-click the field label to change the units shown.)  Wet (fresh) hops and hop extract are not counted.  Kettle hops increase the pre-boil volume a recipe needs; dry hops reduce the volume of beer you can package.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water left behind in the hot liquor tank, if you use one.  It is added to the water to heat in the brew day instructions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer left behind in the fermentor (yeast cake, trub, etc), not counting what dry hops hold (see Hop absorption on the General tab).  Reduces the packaged volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer left behind in the aging vessel, if you use one.  Reduces the packaged volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer left behind in the packaging vessel (eg bottling bucket), if you use one.  Reduces the packaged volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentableEditor</name>
@@ -13242,7 +13368,7 @@ vaten</translation>
     <name>inventoryFermentableEditor</name>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Naam</translation>
+        <translation type="unfinished">Naam</translation>
     </message>
     <message>
         <source>Type</source>
@@ -13262,19 +13388,19 @@ vaten</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="obsolete">Nieuw</translation>
+        <translation type="unfinished">Nieuw</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="obsolete">Opslaan</translation>
+        <translation type="unfinished">Opslaan</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="obsolete">Annuleren</translation>
+        <translation type="unfinished">Annuleren</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation type="obsolete">dd MMM yyyy</translation>
+        <translation type="unfinished">dd MMM yyyy</translation>
     </message>
     <message>
         <source>Date</source>
@@ -13287,6 +13413,34 @@ vaten</translation>
     <message>
         <source>Supplier</source>
         <translation type="obsolete">Leverancier</translation>
+    </message>
+    <message>
+        <source>Fermentable Inventory Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished">Hoofd</translation>
+    </message>
+    <message>
+        <source>Date Ordered</source>
+        <translation type="unfinished">Besteldatum</translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished">ID in database</translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished">U kunt dit normaal gesproken negeren, maar het is soms nuttig bij het debuggen.</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished">Opslaan en sluiten</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished">Verwerpen en sluiten</translation>
     </message>
 </context>
 <context>
@@ -13362,19 +13516,27 @@ vaten</translation>
     <name>inventoryWindow</name>
     <message>
         <source>Inventory</source>
-        <translation type="obsolete">Inventaris</translation>
+        <translation type="unfinished">Inventaris</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="obsolete">Vergistbaren</translation>
+        <translation type="unfinished">Vergistbaren</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="obsolete">Hop</translation>
+        <translation type="unfinished">Hop</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="obsolete">Diversen</translation>
+        <translation type="unfinished">Diversen</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Salts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14076,7 +14238,7 @@ vaten</translation>
     </message>
     <message>
         <source>Calculated preboil volume - See Boil tab below</source>
-        <translation type="unfinished">Berekend volume vóór het koken - zie tabblad Koken hieronder</translation>
+        <translation type="obsolete">Berekend volume vóór het koken - zie tabblad Koken hieronder</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this mash</source>
@@ -14104,6 +14266,18 @@ vaten</translation>
     </message>
     <message>
         <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Packaged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer you can expect to package (bottle or keg): the target batch size, less what is left in the fermenter (including with dry hops) and in any aging or packaging vessel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target pre-boil volume (which follows the target batch size) - See Boil tab below</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

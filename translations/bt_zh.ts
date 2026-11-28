@@ -821,7 +821,7 @@
     </message>
     <message>
         <source>Micelleneous</source>
-        <translation type="unfinished">其他原料</translation>
+        <translation type="obsolete">其他原料</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -874,6 +874,10 @@
     <message>
         <source>Print</source>
         <translation type="unfinished">打印</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2677,6 +2681,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Locked</source>
         <translation type="unfinished">已锁定</translation>
     </message>
+    <message>
+        <source>Folder Path</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -2917,6 +2925,14 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <message>
         <source>Batch Size</source>
         <translation type="unfinished">批次量</translation>
+    </message>
+    <message>
+        <source>Hop Absorption (Leaf)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop Absorption (Pellets)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3677,7 +3693,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;只要是 Brewtarget 的问题，我们就能修好……&lt;/em&gt;</translation>
+        <translation type="obsolete">&lt;em&gt;只要是 Brewtarget 的问题，我们就能修好……&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4634,6 +4650,42 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The mash in this recipe has %1 of water, but needs %2 to give the target pre-boil volume of %3 (allowing for grain absorption and losses in the mash tun).  So you would get less wort than the recipe expects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The mash in this recipe has %1 of water, but only needs %2 to give the target pre-boil volume of %3 (allowing for grain absorption and losses in the mash tun).  So you would get more wort than the recipe expects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash water does not match recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can fix this with Auto-Adjust in the mash editor.  Do you want to brew this recipe anyway?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Pre-Boil Size</source>
+        <translation type="unfinished">更改煮沸前体积</translation>
+    </message>
+    <message>
+        <source>Pre-boil size not changed to match the new batch size, because the boil is locked.  You can change it on the Boil tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-boil size not changed to match the new batch size, because the boil is shared with other recipes.  You can change it on the Boil tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to open manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open the user manual.  You can read it online at %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7235,11 +7287,11 @@ Program will now exit.</source>
     </message>
     <message>
         <source>Specific Heat Capacity BTUs per</source>
-        <translation type="unfinished">比热容（BTU/</translation>
+        <translation type="obsolete">比热容（BTU/</translation>
     </message>
     <message>
         <source>Heat Capacity BTUs per</source>
-        <translation type="unfinished">热容（BTU/</translation>
+        <translation type="obsolete">热容（BTU/</translation>
     </message>
     <message>
         <source>Garetz&apos;s approximation</source>
@@ -7284,6 +7336,14 @@ Program will now exit.</source>
     <message>
         <source>Extremely Cloudy</source>
         <translation type="unfinished">极其浑浊</translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity Btus per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat Capacity Btus per</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7921,6 +7981,24 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Expected Wort Clarity</source>
         <translation type="unfinished">预期麦汁澄清度</translation>
+    </message>
+    <message>
+        <source>
+You anticipate losing %1 with the hops.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Allow for losing about %1 between the fermenter and packaging (what is left in the fermenter, including with any dry hops, and in any aging or packaging vessel).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Packaged Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>plus %1 extra, which will stay in the hot liquor tank</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8768,7 +8846,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>设备和土豆泥已复位由于这样的事实醪的温度不容易扩展。请重新运行醪向导。</translation>
+        <translation type="vanished">设备和土豆泥已复位由于这样的事实醪的温度不容易扩展。请重新运行醪向导。</translation>
+    </message>
+    <message>
+        <source>The recipe has been scaled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The mash is kept in sync with the recipe, so its water amounts and temperatures will be recalculated automatically.  Check the mash editor for any problems.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The amounts of water in the mash have not been changed, so you will probably need to use Auto-Adjust in the mash editor to work out new ones.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11244,6 +11334,42 @@ Tabs</source>
         <source>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
         <translation type="unfinished">煮沸锅上蒸汽可逸出的开口内径 —— 例如，如果煮沸锅不加盖，则与内径相同；如果部分加盖，则更小。对于计算熄火后异构化的 IBU 公式（例如 mIBU 和 SMPH），它与内径和煮沸锅中的麦汁体积一起，用于估算熄火后麦汁自然冷却的速度。如未设置，则假定为 45 cm（约 18 英寸）。</translation>
     </message>
+    <message>
+        <source>Hop absorption (pellets)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wort or beer you typically lose with pellet (and powder) hops, per weight of hops, including dry hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop absorption (leaf)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wort or beer you typically lose with leaf (whole cone) and plug hops, per weight of hops, including dry hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The wort or beer you typically lose with hop material, per weight of hops, when you transfer the liquid off the hops -- in addition to the kettle&apos;s (or fermentor&apos;s) own loss, which should therefore not include an allowance for hops.  This depends on your process (eg loose hops or a hop spider, whether you squeeze or drain the hops, whirlpooling) as well as the hops, so it is best measured, eg by weighing the wet hops left behind, or from the shortfall on a hoppy brew.  If left blank, typical values of about 7 ml per gram (6.7 fl oz per oz, or 3.4 qt per lb) for pellets and 5 ml per gram (4.8 fl oz per oz, or 2.4 qt per lb) for leaf hops are used.  (Right-click the field label to change the units shown.)  Wet (fresh) hops and hop extract are not counted.  Kettle hops increase the pre-boil volume a recipe needs; dry hops reduce the volume of beer you can package.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water left behind in the hot liquor tank, if you use one.  It is added to the water to heat in the brew day instructions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer left behind in the fermentor (yeast cake, trub, etc), not counting what dry hops hold (see Hop absorption on the General tab).  Reduces the packaged volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer left behind in the aging vessel, if you use one.  Reduces the packaged volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer left behind in the packaging vessel (eg bottling bucket), if you use one.  Reduces the packaged volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentableEditor</name>
@@ -12307,19 +12433,19 @@ Tabs</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="obsolete">新New</translation>
+        <translation type="unfinished">新New</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="obsolete">节省Save</translation>
+        <translation type="unfinished">节省Save</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="obsolete">取消</translation>
+        <translation type="unfinished">取消</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation type="obsolete">dd MMM yyyy</translation>
+        <translation type="unfinished">dd MMM yyyy</translation>
     </message>
     <message>
         <source>Date</source>
@@ -12328,6 +12454,38 @@ Tabs</source>
     <message>
         <source>Supplier</source>
         <translation type="obsolete">提供者Supplier</translation>
+    </message>
+    <message>
+        <source>Fermentable Inventory Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished">主要</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Ordered</source>
+        <translation type="unfinished">订购日期</translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished">数据库中的 ID</translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished">通常可以忽略此项，但有时对调试有用。</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished">保存并关闭</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished">放弃并关闭</translation>
     </message>
 </context>
 <context>
@@ -12391,19 +12549,27 @@ Tabs</source>
     <name>inventoryWindow</name>
     <message>
         <source>Fermentables</source>
-        <translation type="obsolete">发酵物Fermentables</translation>
+        <translation type="unfinished">发酵物Fermentables</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="obsolete">酒花Hops</translation>
+        <translation type="unfinished">酒花Hops</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="obsolete">杂项Miscellaneous</translation>
+        <translation type="unfinished">杂项Miscellaneous</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="obsolete">酵母菌Yeasts</translation>
+        <translation type="unfinished">酵母菌Yeasts</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">库存</translation>
+    </message>
+    <message>
+        <source>Salts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13113,7 +13279,7 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated preboil volume - See Boil tab below</source>
-        <translation type="unfinished">计算得出的煮沸前体积 - 参见下方“煮沸”选项卡</translation>
+        <translation type="obsolete">计算得出的煮沸前体积 - 参见下方“煮沸”选项卡</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this mash</source>
@@ -13141,6 +13307,18 @@ Tabs</source>
     </message>
     <message>
         <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Packaged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beer you can expect to package (bottle or keg): the target batch size, less what is left in the fermenter (including with dry hops) and in any aging or packaging vessel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target pre-boil volume (which follows the target batch size) - See Boil tab below</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

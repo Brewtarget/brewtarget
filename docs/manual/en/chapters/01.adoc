@@ -5,7 +5,7 @@ Best Bitter brewed on a Grainfather G30, but the steps are the same whatever you
 Nothing here depends on getting the details right first time: every change can be undone, and you can come back to any
 step later.
 
-// SCREENSHOT: mainWindow.png -- whole main window with the example recipe open
+image::screenshots/mainWindow.png["The main window with the example recipe open",pdfwidth=100%]
 
 === The Main Window
 
@@ -43,7 +43,7 @@ Open menu:View[Equipments].  This lists the equipment profiles in your database,
 number of all-in-one systems (Grainfather, BrewZilla, Braumeister and others) and a basic cooler mash tun set-up.  If
 yours is there, select it and click the edit button; otherwise create a new one with the button next to it.
 
-// SCREENSHOT: equipmentEditor.png -- Equipment editor, General tab, for the Grainfather G30
+image::screenshots/equipmentEditor.png["The General tab of the Equipment editor",pdfwidth=75%]
 
 The editor has a tab for each vessel, plus a *General* tab and a *Mash* tab.  Most fields have an explanation beneath
 them, so this section only covers the ones that matter most.
@@ -78,7 +78,7 @@ click btn:[Save].
 Choose menu:File[New Recipe] (or press kbd:[Ctrl+N]), and give the recipe a name.  It appears in the recipe tree and
 opens on the Recipe tab.
 
-// SCREENSHOT: recipeTab.png -- Recipe tab after choosing style and equipment, before adding ingredients
+image::screenshots/recipeTab.png["The Recipe tab of the new recipe, before adding ingredients",pdfwidth=100%]
 
 If you did not set default equipment, choose it from the *Equipment* drop-down.  {app-name} asks whether to set the
 recipe's batch size and pre-boil volume from the equipment; say yes unless you are brewing an unusual batch size.
@@ -102,7 +102,7 @@ with no amount, so double-click in the *Amount* column to set one.  As you do, t
 update.  Aim for something like 92% pale malt and 8% crystal by weight, and adjust the total to put the OG in the middle
 of the style's range.
 
-// SCREENSHOT: fermentablesTab.png -- Fermentables tab with the two malts
+image::screenshots/fermentablesTab.png["The Fermentables tab",pdfwidth=100%]
 
 If something is not in the catalogue, create it with the new-item button at the bottom of the catalogue.  The most
 important fields are the yield and the colour, which you can usually get from the maltster's specification sheet.
@@ -155,7 +155,7 @@ in, click the edit button next to the drop-down to open the mash editor, then:
   around 2.5--3 L/kg is typical for most systems.
 . Click btn:[Auto-Adjust].
 
-// SCREENSHOT: mashEditor.png -- Mash editor after Auto-Adjust
+image::screenshots/mashEditor.png["The mash editor after Auto-Adjust",pdfwidth=75%]
 
 The supplied profiles are locked, so that they stay available for other recipes.  {app-name} asks whether to make a
 copy for this recipe; say yes, and it adjusts the copy instead.  It works out the strike water, sparge water and
@@ -188,7 +188,7 @@ want.  It needs the water amounts from the mash, which is why it comes after the
   default.
 . Click btn:[Auto-Adjust].
 
-// SCREENSHOT: waterTab.png -- Water tab after Auto-Adjust
+image::screenshots/waterTab.png["The Water tab after Auto-Adjust",pdfwidth=100%]
 
 The salts and acid it chooses appear in the *Water Agents* table and on the Miscellaneous tab.  The figures under
 *Actual* show what you will end up with, and the chart compares this with the base and target profiles.  It is rarely
@@ -211,7 +211,7 @@ and length -- eg 19°C for ten days -- and add more steps if you do, eg, a diace
 Go back to the *Recipe* tab and check the figures against the style.  The bars show the style's range, with a marker
 for the recipe's own value; if a value is outside the range, adjust the ingredients.
 
-// SCREENSHOT: recipeTabDone.png -- Recipe tab with the finished recipe
+image::screenshots/recipeTabDone.png["The Recipe tab of the finished recipe",pdfwidth=100%]
 
 Under *Batch Size*, *Target* is the volume into the fermenter, *Calculated* is what the equipment and recipe actually
 give you, and *Packaged* is what you can expect to bottle or keg once the fermenter losses and any dry hops have taken
@@ -224,7 +224,8 @@ from the recipe.  You can edit, add, remove and reorder the steps.
 
 To print the recipe or the brew day instructions, or save them as PDF or HTML, use menu:File[Print and preview].
 
-When you brew, choose menu:Recipe[Brew It!] (also on the toolbar).  This:
+When you brew, click *Brew It!* at the right-hand end of the toolbar, or right-click the recipe in the tree and
+choose *Brew It!*.  This:
 
 * creates a brew log for today, which opens as a new tab next to the Recipe tab and also appears under the recipe in
   the tree;
@@ -232,7 +233,7 @@ When you brew, choose menu:Recipe[Brew It!] (also on the toolbar).  This:
 * warns you if the mash water doesn't match the recipe -- eg because you changed the grain bill after adjusting the
   mash, and didn't keep it in sync.
 
-// SCREENSHOT: brewLog.png -- Brew log tab with some measurements entered
+image::screenshots/brewLog.png["A brew log",pdfwidth=100%]
 
 As you brew, fill in the brew log: the volumes and gravities you measure, the mash temperatures, the date fermentation
 finished and so on.  It calculates the efficiency into the kettle, the brewhouse efficiency and the attenuation, and

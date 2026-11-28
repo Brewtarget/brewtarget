@@ -219,12 +219,18 @@ public slots:
    void editRecipeFermentation();
 
    /**
-    * \brief Create a new recipe in the database.
+    * \brief Ask the user for a name, then create a new recipe in the database (see \c createRecipe).
     *
     *        Note that this cannot have a parameter (even a defaultable one), otherwise we won't be able to connect
     *        \c actionNewRecipe to it.
     */
    std::shared_ptr<Recipe> newRecipe();
+
+   /**
+    * \brief Create a new recipe called \c name in the database, with a boil, a fermentation, the default sizes, and the
+    *        default equipment (if any), and make it the current recipe.
+    */
+   std::shared_ptr<Recipe> createRecipe(QString const & name);
    std::shared_ptr<Recipe> newRecipeInFolder(Folder<Recipe> const * folder);
    //! \brief Export current recipe to BeerXML or BeerJSON.
    void exportRecipe();

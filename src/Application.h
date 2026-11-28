@@ -115,6 +115,19 @@ namespace Application {
    //! \brief Set the mode to an interactive or non-interactive state
    void setInteractive(bool val);
 
+   /**
+    * \brief Set by the --screenshots command-line option, to make the program generate the screenshots for the user
+    *        manual into the given directory and then exit (see \c ScreenshotTaker).  This also makes the program
+    *        non-interactive (see \c isInteractive), except that new default content is loaded without asking.
+    */
+   void setScreenshotDir(QString const & dir);
+
+   //! \return The directory set by \c setScreenshotDir, or an empty string if we are not generating screenshots
+   QString const & screenshotDir();
+
+   //! \return \c true if we are generating screenshots for the manual
+   bool isScreenshotMode();
+
    void checkAgainstLatestRelease(QVersionNumber const latestRelease);
 
    //! \brief Call this to quit after an error

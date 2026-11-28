@@ -2511,7 +2511,10 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
    if (name.isEmpty()) {
       return nullptr;
    }
+   return this->createRecipe(name);
+}
 
+std::shared_ptr<Recipe> MainWindow::createRecipe(QString const & name) {
    std::shared_ptr<Recipe> newRec = std::make_shared<Recipe>(name);
 
    // bad things happened -- let somebody know
@@ -2573,7 +2576,10 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
 
 std::shared_ptr<Recipe> MainWindow::newRecipeInFolder(Folder<Recipe> const * folder) {
    auto newRec = this->newRecipe();
-   newRec->setContainedInFolder(folder);
+   // newRec will be null if the user cancelled when asked for the recipe name
+   if (newRec) {
+      newRec->setContainedInFolder(folder);
+   }
    return newRec;
 }
 

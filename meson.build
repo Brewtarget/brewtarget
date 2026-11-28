@@ -839,6 +839,7 @@ commonSourceFiles = files([
    'src/RadarChart.cpp',
    'src/RangedSlider.cpp',
    'src/RecipeFormatter.cpp',
+   'src/ScreenshotTaker.cpp',
    'src/StockFormatter.cpp',
    'src/StockWindow.cpp',
    'src/StyleRangeWidget.cpp',
